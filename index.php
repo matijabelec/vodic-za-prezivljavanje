@@ -1,5 +1,6 @@
 <?php
 include_once('app/AppMain.php');
+include_once('app/library/database.php');
 
 class Website extends AppMain {
     public function __construct() {}
@@ -17,6 +18,8 @@ class Website extends AppMain {
         echo '  <p>Test paragraph.</p>';
         echo '</body>';
         echo '</html>';
+        $conn = Database::connect('localhost', 'default', 'root', 'belec');
+        Database::disconnect();
     }
 }
 
