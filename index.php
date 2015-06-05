@@ -1,4 +1,8 @@
 <?php
+
+session_name('APP_USERID');
+session_start();
+
 include_once('app/AppMain.php');
 include_once('app/library/database.php');
 
