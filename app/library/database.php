@@ -17,10 +17,10 @@ class Database {
         return self::$instance;
     }
     
-    static public function connect($host, $db, $user, $pw) {
+    static public function connect($host, $db, $user, $pw, $arr=array(PDO::ATTR_PERSISTENT=>true)) {
         if(is_null(self::$conn) ) {
             try {
-                self::$conn = new PDO("mysql:host=$host;dbname=$db", $user, $pw);
+                self::$conn = new PDO("mysql:host=$host;dbname=$db", $user, $pw, $arr);
             } catch(PDOException $e) {
                 //print "Error!: " . $e->getMessage() . "<br/>";
                 die();
