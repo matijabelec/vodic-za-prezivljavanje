@@ -19,7 +19,7 @@ class Router {
     protected function __construct() {}
     protected function __destruct() {}
     
-    static public function route($url) {
+    public static function route($url) {
         if(isset($url) && ''!=$url && '/'!='$url') {
             if('/' == substr($url, -1, 1) )
                 $url = substr($url, 0, -1);
