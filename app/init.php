@@ -21,6 +21,8 @@ require_once(DIR_LIBRARY.'functions.php');
 require_once(DIR_LIBRARY.'router.php');
 
 function Start() {
+    SecureSessionStart('USER_ID');
+    
     $url = isset($_GET['url']) ? $_GET['url'] : null;
     
     spl_autoload_register('Autoloader');
