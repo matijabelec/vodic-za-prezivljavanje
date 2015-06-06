@@ -1,7 +1,9 @@
 <section class="main-section">
-    <h2>Logout</h2>
+    <h2>Login</h2>
     <div>
-        <p>forma..</p>
-        <input type="button" value="Logout">
+        <form name="frm-logout" action="/auth/logout" method="post">
+            <input type="hidden" name="logout" value="yes">
+            <input type="submit" value="Logout">
+        </form>
     </div>
 </section>

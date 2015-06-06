@@ -12,6 +12,12 @@ class Auth_view extends Webpage_view {
         $page->set('title', $this->get_title() );
         $page->set('body', $content->fill() );
         
+        $page->set('option1', ' selected');
+        $page->set('option2', '');
+        $page->set('option3', '');
+        $page->set('option4', '');
+        $page->set('option5', '');
+        
         return $page->fill();
     }
     
@@ -25,6 +31,12 @@ class Auth_view extends Webpage_view {
         $page->set('head-data', $this->get_head_data() );
         $page->set('title', $this->get_title() );
         $page->set('body', $content->fill() );
+        
+        $page->set('option1', ' selected');
+        $page->set('option2', '');
+        $page->set('option3', '');
+        $page->set('option4', '');
+        $page->set('option5', '');
         
         return $page->fill();
     }

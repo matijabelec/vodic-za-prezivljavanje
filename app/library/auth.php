@@ -26,18 +26,21 @@ class Auth {
     //    return self::$instance;
     //}
     
-    public static function login() {
+    public static function login($username='', $password='') {
         self::$user = null;
         if(self::login_check() == false) {
-            $user = [
-                'userid' => 12,
-                'username' => 'matijabelec',
-                'key' => 'fe6752348a67c78c3eef2aa3'
-            ];
-            $_SESSION['user'] = $user;
-            return true;
+            if($username == 'matija' && $password == 'belec') {
+                $user = [
+                    'userid' => 12,
+                    'username' => 'matijabelec',
+                    'key' => 'fe6752348a67c78c3eef2aa3'
+                ];
+                $_SESSION['user'] = $user;
+                return true;
+            }
+            return false;
         }
-        return false;
+        return true;
     }
     public static function login_check() {
         self::$user = null;
