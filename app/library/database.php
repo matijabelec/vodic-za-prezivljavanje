@@ -1,48 +1,48 @@
 <?php
 
 /*
- *  Author: Matija Belec
- *    Date: 05.06.2015
+ *
+ *  Filename: database.php
+ *  Author: Matija Belec (hackerma3x@gmail.com)
+ *  Date: 6 March 2015
+ *  Description:
+ *      - singleton used to connect to database from single point
+ *  Requirements:
+ *      - config.php
+ *  
+ *  Copyright 2015. Matija Belec. All Rights reserved.
+ *  
  */
 
 class Database {
-    protected static $instance = null;
-    protected static $conn = null;
+    private static $conn = null;
     
-    protected function __construct() {}
+    protected function __construct() {
+        trigger_error('[Database]: Not allowed.', E_USER_ERROR);
+    }
+    
     protected function __destruct() {
-        if(!is_null($instance) && !is_null($conn) )
-            disconnect();
+        if(!is_null(self::$conn) )
+            self::$conn = null;
     }
     
-    static public function getInstance() {
-        if(is_null(self::$instance) ) {
-            self::$instance = new AppMain();
-        }
-        return self::$instance;
-    }
-    
-    static public function connect($host, $db, $user, $pw, $arr=array(PDO::ATTR_PERSISTENT=>true)) {
+    public static function connect( $db_username = DEFAULT_DB_USERNAME,
+                                    $db_password = DEFAULT_DB_PASSWORD,
+                                    $db_database = DEFAULT_DB_DATABASE,
+                                    $db_hostname = DEFAULT_DB_HOSTNAME) {
         if(is_null(self::$conn) ) {
             try {
-                self::$conn = new PDO("mysql:host=$host;dbname=$db", $user, $pw, $arr);
-            } catch(PDOException $e) {
-                //print "Error!: " . $e->getMessage() . "<br/>";
-                die();
-                //return null;
+                self::$conn = new PDO("mysql:host=$db_hostname;dbname=$db_database", $db_username, $db_password);
+            } catch(PDOException $pdo_e) {
+                die($pdo_e->getMessage() );
             }
         }
         return self::$conn;
     }
     
-    static public function disconnect() {
-        if(!is_null(self::$conn) ) {
+    public static function disconnect() {
+        if(!is_null(self::$conn) )
             self::$conn = null;
-        }
-    }
-    
-    static public function query($query) {
-        
     }
 }
 

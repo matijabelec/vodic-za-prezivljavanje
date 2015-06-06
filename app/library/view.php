@@ -1,19 +1,21 @@
 <?php
 
 /*
- *  Author: Matija Belec
- *    Date: 05.06.2015
+ *
+ *  Filename: view.php
+ *  Author: Matija Belec (hackerma3x@gmail.com)
+ *  Date: 6 March 2015
+ *  Description:
+ *      - default view class in MVC
+ *  Requirements:
+ *      - [none]
+ *  
+ *  Copyright 2015. Matija Belec. All Rights reserved.
+ *  
  */
 
 class View {
-    protected $template = null;
-    
-    public function __construct() {}
-    public function __destruct() {}
-    
-    //public function load() {}
-    //public function fill() {}
-    //public function show() {}
+    public function output() {}
 }
 
 ?>
