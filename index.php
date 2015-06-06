@@ -6,7 +6,7 @@ session_start();
 include_once('app/AppMain.php');
 include_once('app/library/database.php');
 
-class Website extends AppMain {
+/*class Website extends AppMain {
     public function __construct() {}
     public function __destruct() {}
     
@@ -25,7 +25,7 @@ class Website extends AppMain {
         $conn = Database::connect('localhost', 'default', 'root', 'belec');
         Database::disconnect();
     }
-}
+}*/
 
 $app = new Website();
 $app->show();
