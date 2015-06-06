@@ -7,6 +7,14 @@ class Index_view extends Webpage_view {
         
         $content = new Template('body/index');
         
+        if(Auth::login_check() == true) {
+            $content->set('auth-option', 'logout');
+            $content->set('auth-option-info', 'Odjava');
+        } else {
+            $content->set('auth-option', 'login');
+            $content->set('auth-option-info', 'Prijava');
+        }
+        
         $page = new Template('page/standard');
         $page->set('head-data', $this->get_head_data() );
         $page->set('title', $this->get_title() );
@@ -26,6 +34,14 @@ class Index_view extends Webpage_view {
         //$this->add_js('jquery-2.1.3.min');
         
         $content = new Template('body/index');
+        
+        if(Auth::login_check() == true) {
+            $content->set('auth-option', 'logout');
+            $content->set('auth-option-info', 'Odjava');
+        } else {
+            $content->set('auth-option', 'login');
+            $content->set('auth-option-info', 'Prijava');
+        }
         
         $page = new Template('page/standard');
         $page->set('head-data', $this->get_head_data() );
