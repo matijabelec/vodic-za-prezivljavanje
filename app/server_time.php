@@ -1,7 +1,11 @@
 <?php
 
+/*
+ *  Author: Matija Belec
+ *    Date: 06.06.2015
+ */
 
-class ServerTime {
+class Server_time {
     protected static $instance = null;
     protected static $url = "http://arka.foi.hr/PzaWeb/PzaWeb2004/config/pomak.xml";
     protected static $hours = null;

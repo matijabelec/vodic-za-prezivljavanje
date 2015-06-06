@@ -1,10 +1,11 @@
 <?php
 
-session_name('APP_USERID');
-session_start();
+/*
+ *  Author: Matija Belec
+ *    Date: 05.06.2015
+ */
 
-include_once('app/AppMain.php');
-include_once('app/library/database.php');
+include_once('app/app_init.php');
 
 /*class Website extends AppMain {
     public function __construct() {}

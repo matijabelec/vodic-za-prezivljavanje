@@ -1,5 +1,10 @@
 <?php
 
+/*
+ *  Author: Matija Belec
+ *    Date: 05.06.2015
+ */
+
 class Database {
     protected static $instance = null;
     protected static $conn = null;

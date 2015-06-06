@@ -1,5 +1,10 @@
 <?php
 
+/*
+ *  Author: Matija Belec
+ *    Date: 05.06.2015
+ */
+
 class Template {
     protected $filename = null;
     protected $data = null;
