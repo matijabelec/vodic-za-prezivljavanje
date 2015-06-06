@@ -17,10 +17,7 @@
 class Database {
     private static $conn = null;
     
-    protected function __construct() {
-        trigger_error('[Database]: Not allowed.', E_USER_ERROR);
-    }
-    
+    protected function __construct() {}
     protected function __destruct() {
         if(!is_null(self::$conn) )
             self::$conn = null;

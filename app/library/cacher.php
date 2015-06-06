@@ -19,9 +19,8 @@
 class Cacher {
     static private $files = [];
     
-    public function __construct() {
-        trigger_error("[Cacher]: Not allowed.", E_USER_ERROR);
-    }
+    protected function __construct() {}
+    protected function __destruct() {}
     
     static public function load($filename) {
         // check if template is already cached

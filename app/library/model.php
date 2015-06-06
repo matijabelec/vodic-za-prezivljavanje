@@ -14,6 +14,8 @@
  *  
  */
 
-class Model {}
+class Model {
+    
+}
     
 ?>

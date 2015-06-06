@@ -16,9 +16,8 @@
  */
 
 class Router {
-    public function __construct() {
-        trigger_error("[Router]: Not allowed.", E_USER_ERROR);
-    }
+    protected function __construct() {}
+    protected function __destruct() {}
     
     static public function route($url) {
         if(isset($url) && ''!=$url && '/'!='$url') {
