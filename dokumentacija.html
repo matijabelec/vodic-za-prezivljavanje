@@ -5,23 +5,97 @@
  *    Date: 05.06.2015
  */
 
-include_once('app/app_init.php');
-
 ?><!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dokumentacija</title>
+    
+    <link rel="stylesheet" href="site/css/style.css"/>
 </head>
 <body>
-    <h1>Dokumentacija projekta</h1>
-    <ol>
-        <li>opis projektnog zadatka</li>
-        <li>opis projektnog rješenja</li>
-        <li>bitne odrednice projektnog rješenja (ERA model)</li>
-        <li>popis i opis skripata, mapa mjesta, navigacijski dijagram</li>
-        <li>popis i opis korištenih tehnologija i alata</li>
-        <li>popis  i  opis  vanjskih  (tuđih)  modula/biblioteka  i  njihovo  korištenje u  skriptama i sl.</li>
-    </ol>
+    <header id="header">
+        Dokumentacija
+    </header>
+    <nav id="nav">
+        <ul id="main-menu" class="menu-list">
+            <li><a class="menu-option" href="index">Početna</a></li>
+            <li><a class="menu-option selected" href="dokumentacija.html">Dokumentacija</a></li>
+            <li><a class="menu-option" href="o_autoru.html">O autoru</a></li>
+        </ul>
+    </nav>
+    <div id="main" style="text-align:left">
+        <h1>Dokumentacija projekta</h1>
+        <ol>
+            <li>
+                <section>
+                    <h2>opis projektnog zadatka</h2>
+                    <p>...</p>
+                </section>
+            </li>
+            <li>
+                <section>
+                    <h2>opis projektnog rješenja</h2>
+                    <p>...</p>
+                </section>
+            </li>
+            <li>
+                <section>
+                    <h2>bitne odrednice projektnog rješenja (ERA model)</h2>
+                    <p>...</p>
+                </section>
+            </li>
+            <li>
+                <section>
+                    <h2>popis i opis skripata, mapa mjesta, navigacijski dijagram</h2>
+                    <p>...</p>
+                    
+                    <section>
+                        <h3>Stvarni direktoriji</h3>
+                    </section>
+                    
+                    <section>
+                        <h3>Url linkovi</h3>
+                        <ul>
+                            <li>
+                                <p>index</p>
+                            </li>
+                            <li>
+                                <p>auth</p>
+                                <ul>
+                                    <li>login</li>
+                                    <li>logout</li>
+                                    <li>registration</li>
+                                    <li>activation</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <p>dokumentacija.html</p>
+                            </li>
+                            <li>
+                                <p>o_autoru.html</p>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+            </li>
+            <li>
+                <section>
+                    <h2>popis i opis korištenih tehnologija i alata</h2>
+                    <p>...</p>
+                </section>
+            </li>
+            <li>
+                <section>
+                    <h2>popis  i  opis  vanjskih  (tuđih)  modula/biblioteka  i  njihovo  korištenje u  skriptama i sl.</h2>
+                    <p>...</p>
+                </section>
+            </li>
+        </ol>
+    </div>
+    <footer id="footer">
+        <div id="copyright-info">Copyright &copy; 2015. <a href="https://plus.google.com/100603684622190187147?rel=author">Matija Belec</a>. Sva prava zadržana.</div>
+    </footer>
 </body>
 </html>

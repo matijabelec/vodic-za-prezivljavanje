@@ -5,16 +5,38 @@
  *    Date: 05.06.2015
  */
 
-include_once('app/app_init.php');
-
 ?><!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>O autoru</title>
+    
+    <link rel="stylesheet" href="site/css/style.css"/>
 </head>
 <body>
-    <h1>O autoru</h1>
-    <!--TODO:O autoru-->
+    <header id="header">
+        O autoru
+    </header>
+    <nav id="nav">
+        <ul id="main-menu" class="menu-list">
+            <li><a class="menu-option" href="index">Početna</a></li>
+            <li><a class="menu-option" href="dokumentacija.html">Dokumentacija</a></li>
+            <li><a class="menu-option selected" href="o_autoru.html">O autoru</a></li>
+        </ul>
+    </nav>
+    <div id="main" style="text-align:left">
+        <h1>O autoru</h1>
+        <h2>informacije</h2>
+        <address>
+            <img src="netocna-putanja" alt="[slika]"><br>
+            Matija Belec,<br>
+            broj indeksa: 39912/11-R,<br>
+            e-mail: <a href="mailto:mbelec@foi.hr">mbelec@foi.hr</a><br>
+        </address>
+    </div>
+    <footer id="footer">
+        <div id="copyright-info">Copyright &copy; 2015. <a href="https://plus.google.com/100603684622190187147?rel=author">Matija Belec</a>. Sva prava zadržana.</div>
+    </footer>
 </body>
 </html>

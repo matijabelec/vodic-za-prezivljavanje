@@ -21,6 +21,9 @@ body{
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     text-align: center;
 }
+li{
+    padding-left: 20px;
+}
 
 
   /**********/

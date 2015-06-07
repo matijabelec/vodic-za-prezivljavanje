@@ -118,6 +118,12 @@ class Auth {
         }
         echo 'activation has wrong identification data';
     }
+    
+    public static function user_role_check($role) {
+        if(!is_null($user) && isset($user['role']) && $user['role'] == $role)
+            return true;
+        return false;
+    }
 }
 
 ?>
