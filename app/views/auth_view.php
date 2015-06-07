@@ -5,12 +5,14 @@ class Auth_view extends Webpage_view {
         $this->set_title('/ Login');
         //$this->add_js('jquery-2.1.3.min');
         
-        $content = new Template('body/login');
-        
         $page = new Template('page/standard');
         $page->set('head-data', $this->get_head_data() );
         $page->set('title', $this->get_title() );
+        
+        $content = new Template('body/login');
         $page->set('body', $content->fill() );
+        
+        $page->set('user-profile-menu', '');
         
         $page->set('option1', ' selected');
         $page->set('option2', '');
@@ -25,12 +27,15 @@ class Auth_view extends Webpage_view {
         $this->set_title('/ Logout');
         //$this->add_js('jquery-2.1.3.min');
         
-        $content = new Template('body/logout');
-        
         $page = new Template('page/standard');
         $page->set('head-data', $this->get_head_data() );
         $page->set('title', $this->get_title() );
+        
+        $content = new Template('body/logout');
         $page->set('body', $content->fill() );
+        
+        $userprofile = new Template('data/user_profile_menu_login');
+        $page->set('user-profile-menu', $userprofile->fill() );
         
         $page->set('option1', ' selected');
         $page->set('option2', '');

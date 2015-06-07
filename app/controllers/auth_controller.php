@@ -36,12 +36,10 @@ class Auth_controller extends Webpage_controller {
     
     public function logout() {
         if(Auth::login_check() == true) {
-            if(isset($_POST['logout']) ) {
-                Auth::logout();
-                Redirect('/');
-            } else {
-                echo $this->view->logout();
-            }
+            Auth::logout();
+            Redirect('/auth/login');
+            //    echo $this->view->logout();
+        
         // if user is NOT logged in
         } else {
             Redirect('/');
