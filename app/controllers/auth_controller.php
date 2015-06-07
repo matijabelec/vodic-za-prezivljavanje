@@ -40,6 +40,24 @@ class Auth_controller extends Webpage_controller {
             
         // if user is NOT logged in
         } else {
+            if(isset($_POST['username']) ) {
+                if(Auth::register($userdata) == true) {
+                    Redirect('/auth/activation');
+                } else {
+                    Redirect('/auth/registration?reg=failed');
+                }
+            }
+            
+            echo $this->view->registration();
+        }
+    }
+    
+    public function activation($id=null) {
+        if(Auth::register($userdata) == true) {
+            Redirect('/auth/activation');
+            
+        // if user is NOT logged in
+        } else {
             echo $this->view->registration();
         }
     }

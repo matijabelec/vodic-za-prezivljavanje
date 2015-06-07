@@ -10,6 +10,8 @@
  *      - it uses database from which user data is pulled
  *  Requirements:
  *      - database.php
+ *      - config.php
+ *      - project_data.php
  *  
  *  Copyright 2015. Matija Belec. All Rights reserved.
  *  
@@ -88,6 +90,36 @@ class Auth {
         }
         session_destroy();
         return $user_logouted;
+    }
+    
+    public static function register($userdata=array() ) {
+        if(!isset($userdata['activation_data']) || !isset($userdata['email']) ) {
+            return false;
+        }
+        
+        $link =  WEBSITE_ROOT_PATH . '/auth/activate?id=' . $userdata['activation_data'];
+        
+        $mail_to = $userdata['email'];
+        $mail_from = 'From: ' . PROJECT_REGISTRATION_EMAIL_FROM;
+        $mail_subject = PROJECT_REGISTRATION_EMAIL_SUBJECT;
+        $mail_body = 'Aktivirajte svoj računa za "Priručnik za preživljavanje".\r\n' .
+                     'Link za aktivaciju: ' . $link . ' \r\n' .
+                     'Aktivacijski link vrijedi 24 sata.';
+        
+        if(mail($mail_to, $mail_subject, $mail_body, $mail_from) ) {
+            echo("Poslana poruka za: '$mail_to'!");
+            return true;
+        } else {
+            echo("Problem kod poruke za: '$mail_to'!");
+        }
+        return false;
+    }
+    
+    public static function activate($id=null) {
+        if(isset($id) && !is_null($id) ) {
+            echo $id;
+        }
+        echo 'activation has wrong identification data';
     }
 }
 
