@@ -22,7 +22,7 @@ class Index_view extends Webpage_view {
         $userprofile->set('username-link', $user['username']);
         $userprofile->set('username', $user['username']);
         
-        $page = new Standard_template('Početna -- admin pogled', '', 
+        $page = new Standard_template('Početna -- registrirani korisnik', '', 
                                       $content->fill(), 
                                       $userprofile->fill() );
         $page->set('option1', ' selected');

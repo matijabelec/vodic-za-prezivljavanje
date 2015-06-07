@@ -17,6 +17,7 @@
 define('DIR_APP', __DIR__.DS);
 
 require_once(DIR_APP.'config.php');
+require_once(DIR_APP.'project_data.php');
 require_once(DIR_LIBRARY.'functions.php');
 require_once(DIR_LIBRARY.'router.php');
 
