@@ -7,6 +7,8 @@ class Index_view extends Webpage_view {
         
         $content = new Template('body/index');
         
+        $content->set('user-info', '');
+        
         if(Auth::login_check() == true) {
             $content->set('auth-option', 'logout');
             $content->set('auth-option-info', 'Odjava');
@@ -30,12 +32,15 @@ class Index_view extends Webpage_view {
     }
     
     public function admin() {
-        $this->set_title('Početna - admin');
+        $this->set_title('Početna - admin pogled');
         //$this->add_js('jquery-2.1.3.min');
         
         $content = new Template('body/index');
         
+        $content->set('user-info', '');
+        
         if(Auth::login_check() == true) {
+            $content->set('user-info', Auth::get_user()['username']);
             $content->set('auth-option', 'logout');
             $content->set('auth-option-info', 'Odjava');
         } else {

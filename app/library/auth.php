@@ -7,8 +7,9 @@
  *  Date: 5 June 2015
  *  Description:
  *      - singleton that represents an login/logout module for users in app
+ *      - it uses database from which user data is pulled
  *  Requirements:
- *      -
+ *      - database.php
  *  
  *  Copyright 2015. Matija Belec. All Rights reserved.
  *  
@@ -26,18 +27,47 @@ class Auth {
     //    return self::$instance;
     //}
     
+    public static function get_user() {
+        return self::$user;
+    }
+    
     public static function login($username='', $password='') {
         self::$user = null;
         if(self::login_check() == false) {
+            //TODO: add database connection
             if($username == 'matija' && $password == 'belec') {
                 $user = [
                     'userid' => 12,
                     'username' => 'matijabelec',
+                    'role' => 3,
                     'key' => 'fe6752348a67c78c3eef2aa3'
                 ];
                 $_SESSION['user'] = $user;
                 return true;
             }
+            
+            if($username == 'ivan' && $password == 'belec') {
+                $user = [
+                    'userid' => 12,
+                    'username' => 'ivan1',
+                    'role' => 1,
+                    'key' => '1e6752348a67c78c3eef2aa3'
+                ];
+                $_SESSION['user'] = $user;
+                return true;
+            }
+            
+            if($username == 'roko' && $password == 'bel') {
+                $user = [
+                    'userid' => 12,
+                    'username' => 'roko1',
+                    'role' => 2,
+                    'key' => '5e6752348a67c78c3eef2aa3'
+                ];
+                $_SESSION['user'] = $user;
+                return true;
+            }
+            
             return false;
         }
         return true;

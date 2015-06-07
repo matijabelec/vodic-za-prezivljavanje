@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{@title}</title>
     
-    <link rel="shortcut icon" href="/picek.ico"/>
+    <!--<link rel="shortcut icon" href="/picek.ico"/>-->
     
     <link rel="stylesheet" href="/site/css/newstyle.css"/>
     <link rel="stylesheet" href="/site/css/newstyle-mobile.css" media="screen and (max-width: 400px)"/>
@@ -13,7 +13,7 @@
     {@head-data}
 </head>
 <body>
-    <header id="header">I piceki to znaju</header>
+    <header id="header">Priručnik za preživljavanje</header>
     <nav id="nav">
         <script>function showmenu(){var m=document.getElementById('main-menu');m.className.match(/(?:^|\s)show-menu(?!\S)/)?m.className=m.className.replace(/(?:^|\s)show-menu(?!\S)/g ,''):m.className=m.className+' show-menu';}</script>
         <span id="show-nav" onclick="showmenu()"></span>
@@ -35,7 +35,7 @@
         </div>
         <div id="copyright-info">
             <p>Copyright &copy; 2015 <a href="https://plus.google.com/100603684622190187147?rel=author">Matija Belec</a>.</p>
-            <p>All Rights Reserved.</p>
+            <p>Sva prava zadržana.</p>
         </div>
     </footer>
 </body>
