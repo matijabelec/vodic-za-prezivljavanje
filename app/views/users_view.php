@@ -27,19 +27,22 @@ class Users_view extends Webpage_view {
             $userprofile->set('username',$user['username']);
         }
         
-        $content = '<table>';
-        $content .= '<tr>';
-        foreach($users[0] as $key=>$val)
-            $content .= '<th>' . $key . '</th>';
-        $content .= '</tr>';
-        
-        foreach($users as $user) {
+        $content = '';
+        if(count($users) > 0) {
+            $content = '<table>';
             $content .= '<tr>';
-            foreach($user as $key=>$val)
-                $content .= '<td>' . $val . '</td>';
+            foreach($users[0] as $key=>$val)
+                $content .= '<th>' . $key . '</th>';
             $content .= '</tr>';
+            
+            foreach($users as $user) {
+                $content .= '<tr>';
+                foreach($user as $key=>$val)
+                    $content .= '<td>' . $val . '</td>';
+                $content .= '</tr>';
+            }
+            $content .= '</table>';
         }
-        $content .= '</table>';
         
         $page = new Standard_template('Početna', '', 
                                       $content,//->fill(), 
