@@ -29,7 +29,7 @@ class Database {
                                     $db_hostname = DEFAULT_DB_HOSTNAME) {
         if(is_null(self::$conn) ) {
             try {
-                self::$conn = new PDO("mysql:host=$db_hostname;dbname=$db_database", $db_username, $db_password);
+                self::$conn = new PDO("mysql:host=$db_hostname;dbname=$db_database;charset=utf8", $db_username, $db_password);
             } catch(PDOException $pdo_e) {
                 die($pdo_e->getMessage() );
             }
@@ -46,7 +46,7 @@ class Database {
         $db = self::connect();
         $st = $db->prepare($sql);
         $st->execute($args);
-        $res = $st->fetchAll();
+        $res = $st->fetchAll(PDO::FETCH_ASSOC);
         self::disconnect();
         return $res;
     }
