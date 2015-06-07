@@ -34,7 +34,7 @@
             <a class="sociallink-img sociallink-yt" target="_blank" href="https://www.youtube.com/channel/UCcE7QFv3Aqb8xNvURSXgylg/"></a>
         </div>
         <div id="copyright-info">
-            <p>Copyright &copy; 2015 <a href="https://plus.google.com/100603684622190187147?rel=author">Matija Belec</a>.</p>
+            <p>Copyright &copy; 2015. <a href="https://plus.google.com/100603684622190187147?rel=author">Matija Belec</a>.</p>
             <p>Sva prava zadržana.</p>
         </div>
     </footer>

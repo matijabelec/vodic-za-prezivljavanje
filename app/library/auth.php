@@ -45,7 +45,6 @@ class Auth {
                 $_SESSION['user'] = $user;
                 return true;
             }
-            
             if($username == 'ivan' && $password == 'belec') {
                 $user = [
                     'userid' => 12,
@@ -56,7 +55,6 @@ class Auth {
                 $_SESSION['user'] = $user;
                 return true;
             }
-            
             if($username == 'roko' && $password == 'bel') {
                 $user = [
                     'userid' => 12,
