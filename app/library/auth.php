@@ -97,7 +97,7 @@ class Auth {
             return false;
         }
         
-        $link =  WEBSITE_ROOT_PATH . '/auth/activate?id=' . $userdata['activation_data'];
+        $link =  WEBSITE_ROOT_NAME . WEBSITE_ROOT_PATH . '/auth/activate?id=' . $userdata['activation_data'];
         
         $mail_to = $userdata['email'];
         $mail_from = 'From: ' . PROJECT_REGISTRATION_EMAIL_FROM;
@@ -107,10 +107,7 @@ class Auth {
                      'Aktivacijski link vrijedi 24 sata.';
         
         if(mail($mail_to, $mail_subject, $mail_body, $mail_from) ) {
-            echo("Poslana poruka za: '$mail_to'!");
             return true;
-        } else {
-            echo("Problem kod poruke za: '$mail_to'!");
         }
         return false;
     }

@@ -40,7 +40,13 @@ class Auth_controller extends Webpage_controller {
             
         // if user is NOT logged in
         } else {
-            if(isset($_POST['username']) ) {
+            if(isset($_POST['username']) && $_POST['username']!='' &&
+               isset($_POST['email']) && $_POST['email']!='' ) {
+                $userdata = array(
+                    'username' => $_POST['username'],
+                    'email' => $_POST['email']
+                );
+                
                 if(Auth::register($userdata) == true) {
                     Redirect('/auth/activation');
                 } else {

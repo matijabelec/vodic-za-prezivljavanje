@@ -48,6 +48,7 @@ define('RET_OK',     1);
 define('RET_ERR',   -1);
 
 
+define('WEBSITE_ROOT_NAME', 'https://localhost/');
 define('WEBSITE_ROOT_PATH', '');//DS.'WebDiP'.DS.'2014_projekti'.DS.'WebDiP2014x004');
 
 ?>
