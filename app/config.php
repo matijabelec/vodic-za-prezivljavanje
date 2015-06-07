@@ -47,6 +47,16 @@ define('DIR_SITE_FILES',    DIR_SITE.'files'.DS);
 define('RET_OK',     1);
 define('RET_ERR',   -1);
 
+define('URL_ARGUMENTS_NONE', 2);
+define('URL_ARGUMENTS_1', 3);
+define('URL_ARGUMENTS_2', 4);
+define('URL_ARGUMENTS_3', 5);
+
+define('URL_INDEX_ARGUMENTS_NONE', 1);
+define('URL_INDEX_ARGUMENTS_1', 2);
+define('URL_INDEX_ARGUMENTS_2', 3);
+define('URL_INDEX_ARGUMENTS_3', 4);
+
 
 define('WEBSITE_ROOT_NAME', 'https://localhost/');
 define('WEBSITE_ROOT_PATH', '');//DS.'WebDiP'.DS.'2014_projekti'.DS.'WebDiP2014x004');

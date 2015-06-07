@@ -41,6 +41,15 @@ class Database {
         if(!is_null(self::$conn) )
             self::$conn = null;
     }
+    
+    public static function query($sql, $args=array() ) {
+        $db = self::connect();
+        $st = $db->prepare($sql);
+        $st->execute($args);
+        $res = $st->fetchAll();
+        self::disconnect();
+        return $res;
+    }
 }
 
 ?>
