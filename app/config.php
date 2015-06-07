@@ -18,7 +18,7 @@ define('ENVIRONMENT_DEVELOPMENT', true);
 
 // database connection informations
 define('DEFAULT_DB_HOSTNAME',   'localhost');
-define('DEFAULT_DB_DATABASE',   'webdipdb');
+define('DEFAULT_DB_DATABASE',   'WebDiP2014x004');
 define('DEFAULT_DB_USERNAME',   'root');
 define('DEFAULT_DB_PASSWORD',   'belec');
 

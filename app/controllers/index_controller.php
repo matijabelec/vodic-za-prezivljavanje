@@ -7,7 +7,9 @@ class Index_controller extends Webpage_controller {
     
     public function index() {
         if(Auth::login_check() == true) {
-            echo $this->view->admin();
+            if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+                echo $this->view->admin();
+            }
         } else {
             echo $this->view->output();
         }
