@@ -7,7 +7,7 @@
     
     <!--<link rel="shortcut icon" href="/picek.ico"/>-->
     
-    <link rel="stylesheet" href="/site/css/style.css"/>
+    <link rel="stylesheet" href="{@project_root_path}/site/css/style.css"/>
     {@head-data}
 </head>
 <body>
