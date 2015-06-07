@@ -17,7 +17,7 @@
  */
 
 class Cacher {
-    static private $files = [];
+    static private $files = array();
     
     protected function __construct() {}
     protected function __destruct() {}
@@ -31,7 +31,7 @@ class Cacher {
         // check if template exists
         if(file_exists($filename) ) {
             $data = file_get_contents($filename);
-            self::$files[] = ['filename'=>$filename, 'data'=>$data];
+            self::$files[] = array('filename'=>$filename, 'data'=>$data);
             return $data;
         }
         

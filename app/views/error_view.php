@@ -16,9 +16,11 @@ class Error_view extends Webpage_view {
             $userprofile = new Template('data/user_profile_menu_login');
             $page->set('user-profile-menu', $userprofile->fill() );
         } else {
+            $user = Auth::get_user();
+            
             $userprofile = new Template('data/user_profile_menu');
-            $userprofile->set('username-link', Auth::get_user()['username']);
-            $userprofile->set('username', Auth::get_user()['username']);
+            $userprofile->set('username-link', $user['username']);
+            $userprofile->set('username',$user['username']);
             $page->set('user-profile-menu', $userprofile->fill() );
         }
         

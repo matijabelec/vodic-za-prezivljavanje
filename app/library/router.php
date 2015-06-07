@@ -36,7 +36,7 @@ class Router {
         $class = ucfirst($controller) . '_controller';
         $method = $action;
         
-        if(class_exists($class) && method_exists($class, $method) && is_callable([$class, $method]) ) {
+        if(class_exists($class) && method_exists($class, $method) && is_callable(array($class, $method) ) ) {
             $obj = new $class;
             //if(true === is_a($obj, "Webpage_controller") ) {
                 $status = $obj->$method($args);
@@ -46,7 +46,8 @@ class Router {
         
         $class = ucfirst(CONTROLLER_ERROR) . '_controller';
         $method = ACTION_DEFAULT;
-        (new $class)->$method(null);
+        $obj = new $class;
+        $obj->$method(null);
     }
 }
 

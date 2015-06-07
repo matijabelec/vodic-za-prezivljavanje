@@ -1,4 +1,4 @@
 <ul id="user-menu">
-    <li><a href="/user/view/{@username-link}">{@username}</a></li>
-    <li><a href="/auth/logout">Odjava</a></li>
+    <li><a href="{@project_root_path}/user/view/{@username-link}">{@username}</a></li>
+    <li><a href="{@project_root_path}/auth/logout">Odjava</a></li>
 </ul>

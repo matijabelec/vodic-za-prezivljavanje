@@ -47,4 +47,7 @@ define('DIR_SITE_FILES',    DIR_SITE.'files'.DS);
 define('RET_OK',     1);
 define('RET_ERR',   -1);
 
+
+define('WEBSITE_ROOT_PATH', '');//DS.'WebDiP'.DS.'2014_projekti'.DS.'WebDiP2014x004');
+
 ?>

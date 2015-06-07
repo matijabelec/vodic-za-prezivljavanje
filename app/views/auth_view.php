@@ -20,6 +20,8 @@ class Auth_view extends Webpage_view {
         $page->set('option4', '');
         $page->set('option5', '');
         
+        $page->set('project_root_path', WEBSITE_ROOT_PATH);
+        
         return $page->fill();
     }
     
@@ -42,6 +44,8 @@ class Auth_view extends Webpage_view {
         $page->set('option3', '');
         $page->set('option4', '');
         $page->set('option5', '');
+        
+        $page->set('project_root_path', WEBSITE_ROOT_PATH);
         
         return $page->fill();
     }

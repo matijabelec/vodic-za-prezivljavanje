@@ -1,3 +1,3 @@
 <ul id="user-menu">
-    <li><a href="/auth/login">Prijava</a></li>
+    <li><a href="{@project_root_path}/auth/login">Prijava</a></li>
 </ul>

@@ -72,7 +72,10 @@ function RemoveMQ() {
     }
 }
 
-function Redirect($url) {
+function Redirect($url, $relative=true) {
+    if($relative)
+        $url = WEBSITE_ROOT_PATH . $url;
+    
     if(headers_sent() ) {
         die('<script type="text/javascript">window.location=\'' . $url . '\';</script>');
     } else {

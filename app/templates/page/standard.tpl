@@ -16,9 +16,9 @@
     </header>
     <nav id="nav">
         <ul id="main-menu" class="menu-list">
-            <li><a class="menu-option{@option1}" href="/">Početna</a></li>
-            <li><a class="menu-option{@option4}" href="/dokumentacija.html">Dokumentacija</a></li>
-            <li><a class="menu-option{@option5}" href="/o_autoru.html">O autoru</a></li>
+            <li><a class="menu-option{@option1}" href="{@project_root_path}/">Početna</a></li>
+            <li><a class="menu-option{@option4}" href="{@project_root_path}/dokumentacija.html">Dokumentacija</a></li>
+            <li><a class="menu-option{@option5}" href="{@project_root_path}/o_autoru.html">O autoru</a></li>
         </ul>
         
         {@user-profile-menu}

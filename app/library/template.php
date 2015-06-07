@@ -19,7 +19,7 @@
 class Template {
     private $inline = null;
     private $filename = null;
-    private $data = [];
+    private $data = array();
     
     public function __construct($template, $inline=false) {
         if(false === $inline) {

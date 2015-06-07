@@ -21,10 +21,14 @@ class Index_view extends Webpage_view {
         $page->set('option4', '');
         $page->set('option5', '');
         
+        $page->set('project_root_path', WEBSITE_ROOT_PATH);
+        
         return $page->fill();
     }
     
     public function admin() {
+        $user = Auth::get_user();
+        
         $this->set_title('Početna -- admin pogled');
         //$this->add_js('jquery-2.1.3.min');
         
@@ -36,8 +40,9 @@ class Index_view extends Webpage_view {
         $page->set('body', $content->fill() );
         
         $userprofile = new Template('data/user_profile_menu');
-        $userprofile->set('username-link', Auth::get_user()['username']);
-        $userprofile->set('username', Auth::get_user()['username']);
+        
+        $userprofile->set('username-link', $user['username']);
+        $userprofile->set('username', $user['username']);
         $page->set('user-profile-menu', $userprofile->fill() );
         
         $page->set('option1', ' selected');
@@ -45,6 +50,8 @@ class Index_view extends Webpage_view {
         $page->set('option3', '');
         $page->set('option4', '');
         $page->set('option5', '');
+        
+        $page->set('project_root_path', WEBSITE_ROOT_PATH);
         
         return $page->fill();
     }

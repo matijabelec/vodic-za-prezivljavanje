@@ -36,32 +36,32 @@ class Auth {
         if(self::login_check() == false) {
             //TODO: add database connection
             if($username == 'matija' && $password == 'belec') {
-                $user = [
+                $user = array(
                     'userid' => 12,
                     'username' => 'matijabelec',
                     'role' => 3,
                     'key' => 'fe6752348a67c78c3eef2aa3'
-                ];
+                );
                 $_SESSION['user'] = $user;
                 return true;
             }
             if($username == 'ivan' && $password == 'belec') {
-                $user = [
+                $user = array(
                     'userid' => 12,
                     'username' => 'ivan1',
                     'role' => 1,
                     'key' => '1e6752348a67c78c3eef2aa3'
-                ];
+                );
                 $_SESSION['user'] = $user;
                 return true;
             }
             if($username == 'roko' && $password == 'bel') {
-                $user = [
+                $user = array(
                     'userid' => 12,
                     'username' => 'roko1',
                     'role' => 2,
                     'key' => '5e6752348a67c78c3eef2aa3'
-                ];
+                );
                 $_SESSION['user'] = $user;
                 return true;
             }
