@@ -34,6 +34,16 @@ class Auth_controller extends Webpage_controller {
         }
     }
     
+    public function registration() {
+        if(Auth::login_check() == true) {
+            Redirect('/');
+            
+        // if user is NOT logged in
+        } else {
+            echo $this->view->registration();
+        }
+    }
+    
     public function logout() {
         if(Auth::login_check() == true) {
             Auth::logout();

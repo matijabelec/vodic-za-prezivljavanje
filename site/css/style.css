@@ -1,3 +1,8 @@
+/*
+ *  author: Matija Belec
+ *    date: 7 June 2015
+ */
+
 *{
     margin: 0;
     padding: 0;
@@ -17,30 +22,64 @@ body{
     text-align: center;
 }
 
+
+  /**********/
+ /* header */
+/**********/
 #header{
     box-sizing: border-box;
     display: block;
     padding: 14px 12px 8px;
     text-align: left;
     font-size: 18pt;
+    padding: 80px 5px 10px 20px;
 }
 
+
+  /**************/
+ /* navigation */
+/**************/
 #nav{
     box-sizing: border-box;
     display: block;
     position: relative;
     font-size: 12pt;
     text-align: center;
+    border-top: 3px solid #eeeeee;
     border-bottom: 3px solid #eeeeee;
     z-index: 900;
+    height: 30px;
+}
+#nav>ul{
+    display: inline-block;
+    list-style: none;
+}
+#nav>ul>li{
+    display: inline-block;
 }
 
+#main-menu{
+    position: absolute;
+    top: 2px;
+    left: 10px;
+}
+#user-menu{
+    position: absolute;
+    top: 2px;
+    right: 10px;
+}
+
+
+  /**********/
+ /* footer */
+/**********/
 #footer{
     box-sizing: border-box;
     display: block;
     position: relative;
     text-align: center;
-    padding-top: 16px;
+    margin-top: 16px;
+    border-top: 3px solid #eeeeee;
 }
 #copyright-info{
     padding: 10px 8px 12px;
@@ -50,6 +89,10 @@ body{
     display: inline-block;
 }
 
+
+  /****************/
+ /* main content */
+/****************/
 #main{
     position: relative;
     box-sizing: border-box;
@@ -77,6 +120,37 @@ body{
     font-weight: lighter;
     font-size: 14pt;
     padding-bottom: 8pt;
+}
+
+#main form{
+    display: inline-block;
+    position: relative;
+    margin: 20px 2px;
+    max-width: 700px;
+}
+#main form label,
+#main form input,
+#main form textarea, 
+#main form select{
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-size: 14pt;
+}
+#main form label{
+    width: 40%;
+    text-align: right;
+    white-space: nowrap;
+}
+#main form input,
+#main form textarea, 
+#main form select{
+    width: 55%;
+}
+#main form input[type=submit]{
+    display: block;
+    width: 100%;
 }
 
 .left{float: left;}
