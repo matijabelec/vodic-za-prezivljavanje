@@ -84,6 +84,19 @@ function Redirect($url, $relative=true) {
     }
 }
 
+function UseSecureConnection() {
+    if(!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS']!=='on') {
+        $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        if(!headers_sent() ) {
+            die('<script type="text/javascript">window.location=\'' . $url . '\';</script>');
+        } else {
+            header("Status: 301 Moved Permanently");
+            header('Location: ' . $url);
+            die();
+        }
+    }
+}
+
 function SecureSessionStart($session_name='NEW_SESSION_ID') {
     session_name($session_name);
     session_start();

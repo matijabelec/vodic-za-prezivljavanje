@@ -10,6 +10,8 @@ class Auth_controller extends Webpage_controller {
     }
     
     public function login() {
+        UseSecureConnection();
+        
         // if user is NOT logged in
         if(Auth::login_check() == false) {
             if(isset($_POST['username']) && isset($_POST['password']) ) {
@@ -35,6 +37,8 @@ class Auth_controller extends Webpage_controller {
     }
     
     public function registration() {
+        UseSecureConnection();
+        
         if(Auth::login_check() == true) {
             Redirect('/');
             
@@ -59,6 +63,8 @@ class Auth_controller extends Webpage_controller {
     }
     
     public function activation($id=null) {
+        UseSecureConnection();
+        
         if(Auth::register($userdata) == true) {
             Redirect('/auth/activation');
             
@@ -69,6 +75,8 @@ class Auth_controller extends Webpage_controller {
     }
     
     public function logout() {
+        UseSecureConnection();
+        
         if(Auth::login_check() == true) {
             Auth::logout();
             Redirect('/auth/login');
