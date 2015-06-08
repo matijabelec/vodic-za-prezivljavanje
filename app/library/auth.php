@@ -82,20 +82,28 @@ class Auth {
     }
     
     public static function register($userdata=array() ) {
-        if(!isset($userdata['activation_data']) || !isset($userdata['email']) ) {
+        if(!isset($userdata['username']) || $userdata['username']=='' || 
+           !isset($userdata['email']) || $userdata['email']=='' || 
+           !isset($userdata['activation_data']) || $userdata['activation_data']=='') {
             return false;
         }
         
-        $link =  WEBSITE_ROOT_NAME . WEBSITE_ROOT_PATH . '/auth/activate?id=' . $userdata['activation_data'];
+        $link = 'https://' . WEBSITE_ROOT_NAME . WEBSITE_ROOT_PATH . '/auth/activate?' . $userdata['activation_data'];
+        $username = $userdata['username'];
         
         $mail_to = $userdata['email'];
-        $mail_from = 'From: ' . PROJECT_REGISTRATION_EMAIL_FROM;
-        $mail_subject = PROJECT_REGISTRATION_EMAIL_SUBJECT;
-        $mail_body = 'Aktivirajte svoj računa za "Priručnik za preživljavanje".\r\n' .
-                     'Link za aktivaciju: ' . $link . ' \r\n' .
-                     'Aktivacijski link vrijedi 24 sata.';
         
-        if(mail($mail_to, $mail_subject, $mail_body, $mail_from) ) {
+        $mail_headers  = 'MIME-Version: 1.0' . "\r\n";
+        $mail_headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+        $mail_headers .= 'From: ' . PROJECT_REGISTRATION_EMAIL_FROM . "\r\n";
+
+        $mail_subject = PROJECT_REGISTRATION_EMAIL_SUBJECT;
+        $mail_body = 'Aktivirajte svoj računa za "Priručnik za preživljavanje".' . "\r\n" .
+                     'Korisničko ime: ' . $username . " \r\n" .
+                     'Link za aktivaciju: ' . $link . " \r\n" .
+                     'Aktivacijski link vrijedi 24 sata.' . "\r\n";
+        
+        if(mail($mail_to, $mail_subject, $mail_body, $mail_headers) ) {
             return true;
         }
         return false;

@@ -46,9 +46,17 @@ class Auth_controller extends Webpage_controller {
         } else {
             if(isset($_POST['username']) && $_POST['username']!='' &&
                isset($_POST['email']) && $_POST['email']!='' ) {
+                
+                // check if username is available
+                $users = Database::query('SELECT korisnicko_ime FROM korisnici WHERE korisnicko_ime = :usname', array('usname'=>$username) );
+                if(count($users) != 0) {
+                    Redirect('/auth/registration?reg=failed&info=username-not-available');
+                }
+                
                 $userdata = array(
                     'username' => $_POST['username'],
-                    'email' => $_POST['email']
+                    'email' => $_POST['email'],
+                    'activation_data' => 'id=' . $_POST['username']
                 );
                 
                 if(Auth::register($userdata) == true) {
@@ -65,13 +73,7 @@ class Auth_controller extends Webpage_controller {
     public function activation($id=null) {
         UseSecureConnection();
         
-        if(Auth::register($userdata) == true) {
-            Redirect('/auth/activation');
-            
-        // if user is NOT logged in
-        } else {
-            echo $this->view->registration();
-        }
+        Redirect('/');
     }
     
     public function logout() {

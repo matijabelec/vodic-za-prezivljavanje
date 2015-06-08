@@ -58,7 +58,7 @@ define('URL_INDEX_ARGUMENTS_2', 3);
 define('URL_INDEX_ARGUMENTS_3', 4);
 
 
-define('WEBSITE_ROOT_NAME', 'https://localhost/');
+define('WEBSITE_ROOT_NAME', 'localhost');
 define('WEBSITE_ROOT_PATH', '');//DS.'WebDiP'.DS.'2014_projekti'.DS.'WebDiP2014x004');
 
 ?>

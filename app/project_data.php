@@ -17,8 +17,8 @@
 define('PROJECT_TITLE', 'Vodič za preživljavanje');
 define('PROJECT_COPYRIGHT_INFO', 'Copyright &copy; 2015. <a href="https://plus.google.com/100603684622190187147?rel=author">Matija Belec</a>. Sva prava zadržana.');
 
-define('PROJECT_REGISTRATION_EMAIL_FROM', 'WebDiP@foi.hr');
-define('PROJECT_REGISTRATION_EMAIL_SUBJECT', 'Aktivacija korisničkog računa');
+define('PROJECT_REGISTRATION_EMAIL_FROM', 'matijaarka@gmail.com');//'WebDiP@foi.hr');
+define('PROJECT_REGISTRATION_EMAIL_SUBJECT', 'WebDiP2015_projekt004 - Aktivacija');
 
 
 define('PROJECT_USER_ROLE_GUEST', '0');
