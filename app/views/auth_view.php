@@ -15,8 +15,14 @@
  */
 
 class Auth_view extends Webpage_view {
-    public function login() {
+    public function login($reg=null, $info=null) {
         $content = new Template('body/login');
+        
+        $content->set('errors', '');
+        if(!is_null($reg) && $reg!='') {
+            $error_info = 'Neuspjela prijava! Provjerite unesene podatke.';
+            $content->set('errors', $error_info);
+        }
         
         $userprofile = new Template('data/user_profile_menu_login');
         

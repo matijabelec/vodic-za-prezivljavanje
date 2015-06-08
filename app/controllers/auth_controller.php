@@ -12,6 +12,19 @@ class Auth_controller extends Webpage_controller {
     public function login() {
         UseSecureConnection();
         
+        // if user is logged in
+        if(Auth::login_check() != false)
+            Redirect('/');
+        
+        // if login fails (0. argument is 'url' always)
+        if(count($_GET) != 1) {
+            $reg = (isset($_GET['reg']) ? $_GET['reg'] : null);
+            $info = (isset($_GET['info']) ? $_GET['info'] : null);
+            
+            echo $this->view->login($reg, $info);
+            return;
+        }
+        
         // if user is NOT logged in
         if(Auth::login_check() == false) {
             if(isset($_POST['username']) && isset($_POST['password']) ) {
@@ -24,16 +37,12 @@ class Auth_controller extends Webpage_controller {
                     Redirect('/');
                 } else {
                     // user is NOT logged in - WRONG user data
-                    Redirect('/auth/login');
+                    Redirect('/auth/login?reg=failed');
                 }
-            } else {
-                echo $this->view->login();
             }
-        
-        // if user is logged in
-        } else {
-            Redirect('/');
         }
+        
+        echo $this->view->login();
     }
     
     public function registration($args) {

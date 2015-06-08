@@ -1,5 +1,6 @@
 <section class="main-section">
     <h2>Prijava</h2>
+    <div id="div-errors">{@errors}</div>
     <div>
         <form name="frm-login" action="{@project_root_path}/auth/login" method="post">
             <label for="username">Korisničko ime: </label>
