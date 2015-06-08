@@ -36,9 +36,7 @@ class Auth {
     public static function login($username='', $password='') {
         self::$user = null;
         if(self::login_check() == false) {
-            //TODO: add database connection
             $users = Database::query('SELECT id_korisnika AS "userid", korisnicko_ime AS "username", lozinka AS "password", id_tipa_korisnika AS "role", "status" AS "status" FROM korisnici WHERE korisnicko_ime = :usname', array('usname'=>$username) );
-            
             if(count($users) != 1)
                 return false;
             
@@ -50,8 +48,7 @@ class Auth {
                 self::$user = array(
                     'userid' => $us['userid'],
                     'username' => $us['username'],
-                    'role' => $us['role'],
-                    'key' => 'fe6752348a67c78c3eef2aa3'
+                    'role' => $us['role']
                 );
                 $_SESSION['user'] = self::$user;
                 return true;
@@ -112,13 +109,19 @@ class Auth {
     
     public static function activate($id=null) {
         if(isset($id) && !is_null($id) ) {
+            //TODO: check activation with database
+            
             return true;
         }
         return false;
     }
     
-    public static function user_role_check($role) {
-        if(!is_null(self::$user) && isset(self::$user['role']) && self::$user['role'] == $role) {
+    public static function user_role_check($role=null) {
+        if(!is_null(self::$user) && 
+           isset(self::$user['role']) && 
+           self::$user['role'] == $role) {
+            //TODO: check user with database
+            
             return true;
         }
         return false;
