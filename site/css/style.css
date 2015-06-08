@@ -165,5 +165,20 @@ li{
     width: 100%;
 }
 
+#main table{
+    display: inline-block;
+    margin: 16px 4px 12px;
+    border-collapse: collapse;
+}
+#main table th,
+#main table td{
+    border: 1px solid #535353;
+    padding: 1pt 2pt;
+}
+#main table th{
+    background-color: #dadada;
+    color: #232323;
+}
+
 .left{float: left;}
 .right{float: right;}

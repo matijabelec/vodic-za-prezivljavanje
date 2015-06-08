@@ -26,4 +26,7 @@ define('PROJECT_USER_ROLE_REGISTERED', '3');
 define('PROJECT_USER_ROLE_MODERATOR', '2');
 define('PROJECT_USER_ROLE_ADMIN', '1');
 
+define('PROJECT_USE_OLD_CHARSET', true);
+define('PROJECT_USE_HTTPS', true);
+
 ?>

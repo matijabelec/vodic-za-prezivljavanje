@@ -85,6 +85,9 @@ function Redirect($url, $relative=true) {
 }
 
 function UseSecureConnection() {
+    if(PROJECT_USE_HTTPS==false)
+        return;
+    
     if(!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS']!=='on') {
         $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         if(!headers_sent() ) {

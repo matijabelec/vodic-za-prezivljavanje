@@ -29,7 +29,12 @@ class Database {
                                     $db_hostname = DEFAULT_DB_HOSTNAME) {
         if(is_null(self::$conn) ) {
             try {
-                self::$conn = new PDO("mysql:host=$db_hostname;dbname=$db_database;charset=utf8", $db_username, $db_password);
+                if(PROJECT_USE_OLD_CHARSET != true) {
+                    self::$conn = new PDO("mysql:host=$db_hostname;dbname=$db_database;charset=utf8", $db_username, $db_password);
+                } else {
+                    self::$conn = new PDO("mysql:host=$db_hostname;dbname=$db_database", $db_username, $db_password);
+                    self::$conn->exec("set names utf8");
+                }
             } catch(PDOException $pdo_e) {
                 die($pdo_e->getMessage() );
             }
