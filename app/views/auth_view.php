@@ -1,5 +1,19 @@
 <?php
 
+/*
+ *
+ *  Filename: auth_view.php
+ *  Author: Matija Belec (matijabelec1@gmail.com)
+ *  Date: 5 June 2015
+ *  Description:
+ *      - [no-decsription]
+ *  Requirements:
+ *      - [none]
+ *  
+ *  Copyright 2015. Matija Belec. All Rights reserved.
+ *  
+ */
+
 class Auth_view extends Webpage_view {
     public function login() {
         $content = new Template('body/login');

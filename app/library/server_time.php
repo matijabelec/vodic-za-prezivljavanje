@@ -1,8 +1,17 @@
 <?php
 
 /*
- *  Author: Matija Belec
- *    Date: 06.06.2015
+ *
+ *  Filename: server_time.php
+ *  Author: Matija Belec (matijabelec1@gmail.com)
+ *  Date: 6 June 2015
+ *  Description:
+ *      - [no-decsription]
+ *  Requirements:
+ *      - [none]
+ *  
+ *  Copyright 2015. Matija Belec. All Rights reserved.
+ *  
  */
 
 class Server_time {
