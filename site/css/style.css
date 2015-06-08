@@ -24,6 +24,10 @@ body{
 li{
     padding-left: 20px;
 }
+#user-type-identification{
+    height: 4px;
+    background-color: #000000;
+}
 
 
   /**********/
@@ -53,11 +57,13 @@ li{
     z-index: 900;
     height: 30px;
 }
-#nav>ul{
+#nav>ul,
+#footer>ul{
     display: inline-block;
     list-style: none;
 }
-#nav>ul>li{
+#nav>ul>li,
+#footer>ul>li{
     display: inline-block;
 }
 
@@ -70,6 +76,9 @@ li{
     position: absolute;
     top: 2px;
     right: 10px;
+}
+.menu-option.selected {
+    background-color: #ededed;
 }
 
 

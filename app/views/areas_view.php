@@ -1,19 +1,18 @@
 <?php
 
-class Users_view extends Webpage_view {
+class Areas_view extends Webpage_view {
     public function output() {
-        //$content = new Template('body/index');
         $userprofile = new Template('data/user_profile_menu_login');
         
-        $page = new Standard_template('Početna', '', 
+        $page = new Standard_template('Područja', '', 
                                       'Korisnici...',//$content->fill(), 
                                       $userprofile->fill() );
-        $page->set('option-users', ' selected');
+        $page->set('option-areas', ' selected');
         
         return $page->fill();
     }
     
-    public function view($users=array() ) {
+    public function view($areas=array() ) {
         //$content = new Template('body/index');
         
         $userprofile = '';
@@ -28,26 +27,26 @@ class Users_view extends Webpage_view {
         }
         
         $content = '';
-        if(count($users) > 0) {
+        if(count($areas) > 0) {
             $content = '<table>';
             $content .= '<tr>';
-            foreach($users[0] as $key=>$val)
+            foreach($areas[0] as $key=>$val)
                 $content .= '<th>' . $key . '</th>';
             $content .= '</tr>';
             
-            foreach($users as $user) {
+            foreach($areas as $area) {
                 $content .= '<tr>';
-                foreach($user as $key=>$val)
+                foreach($area as $key=>$val)
                     $content .= '<td>' . $val . '</td>';
                 $content .= '</tr>';
             }
             $content .= '</table>';
         }
         
-        $page = new Standard_template('Početna', '', 
+        $page = new Standard_template('Područja', '', 
                                       $content,//->fill(), 
                                       $userprofile->fill() );
-        $page->set('option-users', ' selected');
+        $page->set('option-areas', ' selected');
         
         return $page->fill();
     }

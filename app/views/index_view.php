@@ -8,7 +8,7 @@ class Index_view extends Webpage_view {
         $page = new Standard_template('Početna', '', 
                                       $content->fill(), 
                                       $userprofile->fill() );
-        $page->set('option1', ' selected');
+        $page->set('option-home', ' selected');
         
         return $page->fill();
     }
@@ -25,7 +25,7 @@ class Index_view extends Webpage_view {
         $page = new Standard_template('Početna -- registrirani korisnik', '', 
                                       $content->fill(), 
                                       $userprofile->fill() );
-        $page->set('option1', ' selected');
+        $page->set('option-home', ' selected');
         
         return $page->fill();
     }

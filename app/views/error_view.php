@@ -18,8 +18,6 @@ class Error_view extends Webpage_view {
         $page = new Standard_template('Kriva adresa', '', 
                                       $content->fill(), 
                                       $userprofile->fill() );
-        $page->set('option1', ' selected');
-        
         return $page->fill();
     }
 }

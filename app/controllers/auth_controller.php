@@ -45,7 +45,7 @@ class Auth_controller extends Webpage_controller {
         echo $this->view->login();
     }
     
-    public function registration($args) {
+    public function registration() {
         UseSecureConnection();
         
         // if user is logged in

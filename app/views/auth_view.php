@@ -28,9 +28,7 @@ class Auth_view extends Webpage_view {
         
         $page = new Standard_template('Login', '', 
                                       $content->fill(), 
-                                      $userprofile->fill() );
-        $page->set('option1', ' selected');
-        
+                                      $userprofile->fill() );        
         return $page->fill();
     }
     
@@ -54,8 +52,6 @@ class Auth_view extends Webpage_view {
         $page = new Standard_template('Registracija novog korisnika', '', 
                                       $content->fill(), 
                                       $userprofile->fill() );
-        $page->set('option1', ' selected');
-        
         return $page->fill();
     }
     
@@ -71,8 +67,6 @@ class Auth_view extends Webpage_view {
         $page = new Standard_template('Logout', '', 
                                       $content->fill(), 
                                       $userprofile->fill() );
-        $page->set('option1', ' selected');
-        
         return $page->fill();*/
     }
 }
