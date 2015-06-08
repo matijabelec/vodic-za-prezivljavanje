@@ -88,17 +88,18 @@ class Auth {
             return false;
         }
         
-        $link = 'https://' . WEBSITE_ROOT_NAME . WEBSITE_ROOT_PATH . '/auth/activate?' . $userdata['activation_data'];
         $username = $userdata['username'];
-        
         $mail_to = $userdata['email'];
         
+        $link = 'https://' . WEBSITE_ROOT_NAME . WEBSITE_ROOT_PATH . '/auth/activate?' . $userdata['activation_data'];
+        
+        //utf-8 fix
         $mail_headers  = 'MIME-Version: 1.0' . "\r\n";
         $mail_headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
         $mail_headers .= 'From: ' . PROJECT_REGISTRATION_EMAIL_FROM . "\r\n";
-
+        
         $mail_subject = PROJECT_REGISTRATION_EMAIL_SUBJECT;
-        $mail_body = 'Aktivirajte svoj računa za "Priručnik za preživljavanje".' . "\r\n" .
+        $mail_body = 'Aktivirajte svoj račun za "Priručnik za preživljavanje".' . "\r\n" .
                      'Korisničko ime: ' . $username . " \r\n" .
                      'Link za aktivaciju: ' . $link . " \r\n" .
                      'Aktivacijski link vrijedi 24 sata.' . "\r\n";

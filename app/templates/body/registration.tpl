@@ -1,5 +1,6 @@
 <section class="main-section">
     <h2>Registracija</h2>
+    <div id="div-errors">{@errors}</div>
     <div>
         <form name="frm-registration" action="{@project_root_path}/auth/registration" method="post">
             <label for="username">Korisničko ime: </label>

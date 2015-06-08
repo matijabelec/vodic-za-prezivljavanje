@@ -36,38 +36,55 @@ class Auth_controller extends Webpage_controller {
         }
     }
     
-    public function registration() {
+    public function registration($args) {
         UseSecureConnection();
         
+        // if user is logged in
         if(Auth::login_check() == true) {
             Redirect('/');
+        }
+        
+        // if registration fails (0. argument is 'url' always)
+        if(count($_GET) != 1) {
+            $reg = (isset($_GET['reg']) ? $_GET['reg'] : null);
+            $info = (isset($_GET['info']) ? $_GET['info'] : null);
             
-        // if user is NOT logged in
-        } else {
-            if(isset($_POST['username']) && $_POST['username']!='' &&
-               isset($_POST['email']) && $_POST['email']!='' ) {
-                
-                // check if username is available
-                $users = Database::query('SELECT korisnicko_ime FROM korisnici WHERE korisnicko_ime = :usname', array('usname'=>$username) );
-                if(count($users) != 0) {
-                    Redirect('/auth/registration?reg=failed&info=username-not-available');
-                }
-                
-                $userdata = array(
-                    'username' => $_POST['username'],
-                    'email' => $_POST['email'],
-                    'activation_data' => 'id=' . $_POST['username']
-                );
-                
-                if(Auth::register($userdata) == true) {
-                    Redirect('/auth/activation');
-                } else {
-                    Redirect('/auth/registration?reg=failed');
-                }
+            echo $this->view->registration($reg, $info);
+            return;
+        }
+        
+        // check if registration data is available
+        if(isset($_POST['username']) && $_POST['username']!='' &&
+           isset($_POST['email']) && $_POST['email']!='' ) {
+            $username = $_POST['username'];
+            $email = $_POST['email'];
+            
+            // check if username is available
+            $users = Database::query('SELECT korisnicko_ime FROM korisnici WHERE korisnicko_ime = :usname', array('usname'=>$username) );
+            if(count($users) != 0) {
+                Redirect('/auth/registration?reg=failed&info=username-not-available');
             }
             
-            echo $this->view->registration();
+            // check if e-mail is available
+            $mails = Database::query('SELECT mail FROM korisnici WHERE mail = :usmail', array('usmail'=>$email) );
+            if(count($mails) != 0) {
+                Redirect('/auth/registration?reg=failed&info=email-not-available');
+            }
+            
+            $userdata = array(
+                'username' => $username,
+                'email' => $email,
+                'activation_data' => 'id=' . $username
+            );
+            
+            if(Auth::register($userdata) == true) {
+                Redirect('/auth/activation');
+            } else {
+                Redirect('/auth/registration?reg=failed');
+            }
         }
+        
+        echo $this->view->registration();
     }
     
     public function activation($id=null) {
