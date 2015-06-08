@@ -37,34 +37,23 @@ class Auth {
         self::$user = null;
         if(self::login_check() == false) {
             //TODO: add database connection
-            if($username == 'matija' && $password == 'belec') {
-                $user = array(
-                    'userid' => 12,
-                    'username' => 'matijabelec',
-                    'role' => 3,
+            $users = Database::query('SELECT id_korisnika AS "userid", korisnicko_ime AS "username", lozinka AS "password", id_tipa_korisnika AS "role", "status" AS "status" FROM korisnici WHERE korisnicko_ime = :usname', array('usname'=>$username) );
+            
+            if(count($users) != 1)
+                return false;
+            
+            $us = $users[0];
+            if($us['status'] == '0')
+                return false;
+            
+            if($us['username']==$username && $us['password']==$password) {
+                self::$user = array(
+                    'userid' => $us['userid'],
+                    'username' => $us['username'],
+                    'role' => $us['role'],
                     'key' => 'fe6752348a67c78c3eef2aa3'
                 );
-                $_SESSION['user'] = $user;
-                return true;
-            }
-            if($username == 'ivan' && $password == 'belec') {
-                $user = array(
-                    'userid' => 12,
-                    'username' => 'ivan1',
-                    'role' => 1,
-                    'key' => '1e6752348a67c78c3eef2aa3'
-                );
-                $_SESSION['user'] = $user;
-                return true;
-            }
-            if($username == 'roko' && $password == 'bel') {
-                $user = array(
-                    'userid' => 12,
-                    'username' => 'roko1',
-                    'role' => 2,
-                    'key' => '5e6752348a67c78c3eef2aa3'
-                );
-                $_SESSION['user'] = $user;
+                $_SESSION['user'] = self::$user;
                 return true;
             }
             
@@ -114,14 +103,15 @@ class Auth {
     
     public static function activate($id=null) {
         if(isset($id) && !is_null($id) ) {
-            echo $id;
+            return true;
         }
-        echo 'activation has wrong identification data';
+        return false;
     }
     
     public static function user_role_check($role) {
-        if(!is_null(self::$user) && isset(self::$user['role']) && self::$user['role'] == $role)
+        if(!is_null(self::$user) && isset(self::$user['role']) && self::$user['role'] == $role) {
             return true;
+        }
         return false;
     }
 }
