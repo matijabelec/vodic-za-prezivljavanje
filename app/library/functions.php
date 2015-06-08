@@ -90,7 +90,7 @@ function UseSecureConnection() {
         if(!headers_sent() ) {
             die('<script type="text/javascript">window.location=\'' . $url . '\';</script>');
         } else {
-            header("Status: 301 Moved Permanently");
+            header('Status: 301 Moved Permanently');
             header('Location: ' . $url);
             die();
         }
