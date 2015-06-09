@@ -18,16 +18,12 @@
  */
 
 class Auth {
-    //protected static $instance = null;
     protected static $user = null;
+    protected static $login_fail_count = 0;
+    protected static $status = 0;
     
     protected function __construct() {}
     protected function __destruct() {}
-    
-    //public static function getInstance() {
-    //    if(is_null(self::$instance) ) self::$instance = new Auth();
-    //    return self::$instance;
-    //}
     
     public static function get_user() {
         return self::$user;
@@ -41,9 +37,39 @@ class Auth {
                 return false;
             
             $us = $users[0];
-            if($us['status'] == '0')
-                return false;
             
+            // check if user is deleted
+            if($us['status'] == PROJECT_DATA_USER_STATUS_DELETED) {
+                self::$status = PROJECT_DATA_USER_STATUS_DELETED;
+                return false;
+            }
+            
+            // check if user is registered (not activated)
+            if($us['status'] == PROJECT_DATA_USER_STATUS_REGISTERED) {
+                self::$status = PROJECT_DATA_USER_STATUS_REGISTERED;
+                return false;
+            }
+
+            
+            // check if user is blocked
+            if($us['status'] == PROJECT_DATA_USER_STATUS_BLOCKED) {
+                self::$status = PROJECT_DATA_USER_STATUS_BLOCKED;
+                return false;
+            }
+            
+            // check if wrong password is supplied
+            if($us['username']==$username && $us['password']!=$password) {
+                self::$login_fail_count += 1;
+                if(self::$login_fail_count >= 3) {
+                    self::$login_fail_count = 3;
+                    Database::query('UPDATE TABLE korisnici SET status = :status WHERE korisnicko_ime = :usname',
+                                    array('status'=>PROJECT_DATA_USER_STATUS_BLOCKED,'usname'=>$username) );
+                    self::$status = PROJECT_DATA_USER_STATUS_BLOCKED;
+                }
+                return false;
+            }
+            
+            // check if username and password are correct
             if($us['username']==$username && $us['password']==$password) {
                 self::$user = array(
                     'userid' => $us['userid'],
@@ -51,10 +77,9 @@ class Auth {
                     'role' => $us['role']
                 );
                 $_SESSION['user'] = self::$user;
+                self::$status = 0;
                 return true;
             }
-            
-            return false;
         }
         return true;
     }
@@ -120,8 +145,6 @@ class Auth {
         if(!is_null(self::$user) && 
            isset(self::$user['role']) && 
            self::$user['role'] == $role) {
-            //TODO: check user with database
-            
             return true;
         }
         return false;

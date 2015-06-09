@@ -126,12 +126,19 @@ li{
 #main .main-section>h2:after{
     clear: both;
 }
+#main .main-section>h3{
+    display: block;
+    text-align: left;
+    margin: 12px 10px 6px 18px;
+    padding: 4px 2px 2px 20px;
+}
 #main .main-section>p{
     text-align: justify;
     line-height: 1.5;
     font-weight: lighter;
     font-size: 14pt;
     padding-bottom: 8pt;
+    margin: 4px 30px;
 }
 
 #main form{

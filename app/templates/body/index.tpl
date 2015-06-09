@@ -9,3 +9,11 @@
         &mdash; opis projekta
     </div>
 </section>
+<section class="main-section">
+    <h2>Prijava/registracija</h2>
+    <div>Već imaš svoj profil?<br>
+        <a href="{@project_root_path}/auth/login">Prijavi se</a><br><br>
+        Ako nemaš profil onda se
+        <a href="{@project_root_path}/auth/registration">registriraj</a>
+    </div>
+</section>

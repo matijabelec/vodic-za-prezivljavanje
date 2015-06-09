@@ -34,6 +34,29 @@ class Webpage_view extends View {
         $main_section->set('class', 'class="centered"');
         return $main_section->fill();
     }
+    
+    protected function create_table($data='', $headers=true) {
+        $table = '';
+        if(count($data) > 0) {
+            $table = '<table>';
+            if($headers == true) {
+                $table .= '<tr>';
+                foreach($data[0] as $key=>$val)
+                    $table .= '<th>' . $key . '</th>';
+                $table .= '</tr>';
+            }
+            
+            foreach($data as $d) {
+                $table .= '<tr>';
+                foreach($d as $key=>$val)
+                    $table .= '<td>' . $val . '</td>';
+                $table .= '</tr>';
+            }
+            $table .= '</table>';
+        }
+        return $table;
+    }
+    
 }
 
 ?>
