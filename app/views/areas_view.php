@@ -13,8 +13,6 @@ class Areas_view extends Webpage_view {
     }
     
     public function view($areas=array() ) {
-        //$content = new Template('body/index');
-        
         $userprofile = '';
         if(Auth::login_check() == false) {
             $userprofile = new Template('data/user_profile_menu_login');
@@ -26,25 +24,28 @@ class Areas_view extends Webpage_view {
             $userprofile->set('username',$user['username']);
         }
         
-        $content = '';
+        $content = new Body_table_template('Područja');
+        
+        $table = '';
         if(count($areas) > 0) {
-            $content = '<table>';
-            $content .= '<tr>';
+            $table = '<table>';
+            $table .= '<tr>';
             foreach($areas[0] as $key=>$val)
-                $content .= '<th>' . $key . '</th>';
-            $content .= '</tr>';
+                $table .= '<th>' . $key . '</th>';
+            $table .= '</tr>';
             
             foreach($areas as $area) {
-                $content .= '<tr>';
+                $table .= '<tr>';
                 foreach($area as $key=>$val)
-                    $content .= '<td>' . $val . '</td>';
-                $content .= '</tr>';
+                    $table .= '<td>' . $val . '</td>';
+                $table .= '</tr>';
             }
-            $content .= '</table>';
+            $table .= '</table>';
         }
+        $content->set_tabledata($table);
         
         $page = new Standard_template('Područja', '', 
-                                      $content,//->fill(), 
+                                      $content->fill(), 
                                       $userprofile->fill() );
         $page->set('option-areas', ' selected');
         
