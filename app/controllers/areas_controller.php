@@ -14,8 +14,16 @@ class Areas_controller extends Webpage_controller {
     }
     
     public function view($args) {
-        if(count($args) != URL_ARGUMENTS_NONE)
+        $args_n = count($args);
+        if($args_n > URL_ARGUMENTS_1)
             return RET_ERR;
+        
+        if($args_n == URL_ARGUMENTS_1) {
+            switch($args[URL_ARG_1]) {
+                case 'create':
+                    break;
+            }
+        }
         
         $user = null;
         if(Auth::login_check() != false) {

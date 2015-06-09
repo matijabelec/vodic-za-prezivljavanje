@@ -52,10 +52,20 @@ define('URL_ARGUMENTS_1', 3);
 define('URL_ARGUMENTS_2', 4);
 define('URL_ARGUMENTS_3', 5);
 
+define('URL_ARG_1', 2);
+define('URL_ARG_2', 3);
+define('URL_ARG_3', 4);
+
+
 define('URL_INDEX_ARGUMENTS_NONE', 1);
 define('URL_INDEX_ARGUMENTS_1', 2);
 define('URL_INDEX_ARGUMENTS_2', 3);
 define('URL_INDEX_ARGUMENTS_3', 4);
+
+define('URL_INDEX_ARG_1', 1);
+define('URL_INDEX_ARG_2', 2);
+define('URL_INDEX_ARG_3', 3);
+
 
 
 define('WEBSITE_ROOT_NAME', 'localhost');
