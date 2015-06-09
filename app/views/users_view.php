@@ -30,14 +30,7 @@ class Users_view extends Webpage_view {
     }
     
     public function output() {
-        $userprofile = new Template('data/user_profile_menu_login');
         
-        $page = new Standard_template('Početna', '', 
-                                      '',
-                                      $userprofile->fill() );
-        $page->set('option-users', ' selected');
-        
-        return $page->fill();
     }
     
     public function view($users=array() ) {
@@ -65,7 +58,7 @@ class Users_view extends Webpage_view {
             '<h3>Blokirani korisnici</h3>' . $table3 . 
             '<h3>Izbrisani korisnici</h3>' . $table4);
         
-        $page = new Standard_template('Početna', '', 
+        $page = new Standard_template('Korisnici', '', 
                                       $content->fill(), 
                                       $userprofile->fill() );
         $page->set('option-users', ' selected');

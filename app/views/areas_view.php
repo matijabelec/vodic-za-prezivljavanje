@@ -30,14 +30,7 @@ class Areas_view extends Webpage_view {
     }
     
     public function output() {
-        $userprofile = new Template('data/user_profile_menu_login');
         
-        $page = new Standard_template('Područja', '', 
-                                      '', 
-                                      $userprofile->fill() );
-        $page->set('option-areas', ' selected');
-        
-        return $page->fill();
     }
     
     public function view($areas=array() ) {

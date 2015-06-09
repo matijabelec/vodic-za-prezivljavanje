@@ -16,7 +16,7 @@ class Index_view extends Webpage_view {
     public function admin() {
         $user = Auth::get_user();
         
-        $content = new Template('body/index');
+        $content = new Template('body/index-auth');
         
         $userprofile = new Template('data/user_profile_menu');
         $userprofile->set('username-link', $user['username']);
