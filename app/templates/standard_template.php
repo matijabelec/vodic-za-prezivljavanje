@@ -41,6 +41,10 @@ class Standard_template extends Template {
             $this->set('style-user-type-id', '');
         }
     }
+    
+    public function set_body($body) {
+        $this->set('body', $body);
+    }
 }
 
 ?>
