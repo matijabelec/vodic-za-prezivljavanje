@@ -24,14 +24,7 @@ class Server_time {
     protected function __construct() {}
     protected function __destruct() {}
     
-    static public function getInstance() {
-        if(is_null(self::$instance) ) {
-            self::$instance = new ServerTime();
-        }
-        return self::$instance;
-    }
-    
-    function setTime() {
+    public static function set_time() {
         if(!($fp = fopen(self::$url, 'r') ) ) {
             echo "Error: url '$url' is not reachable!";
             exit;
@@ -51,17 +44,30 @@ class Server_time {
                     self::$hours = $val->value;
         }
         
-        self::$server_time = time();
-        self::$system_time = $vrijeme_servera + (self::$hours * 3600);
+        //Database::query("CREATE IF NOT EXISTS TABLE vrijeme_sustava(id SERIAL PRIMARY KEY, trenutno_vrijeme INTEGER)");
+        Database::query("UPDATE TABLE vrijeme_sustava SET trenutno_vrijeme = :time WHERE id = 1", array('time'=>self::$hours) );
     }
     
-    function getVirtualTime() {
+    public static function get_virtualTime() {
+        self::$server_time = time();
+        self::$system_time = self::$server_time + (self::$hours * 3600);
         if(!is_null(self::$hours) )
             return self::$system_time;
     }
-    function getRealTime() {
+    public static function get_realTime() {
+        self::$server_time = time();
         if(!is_null(self::$hours) )
             return self::$server_time;
+    }
+    
+    public static function get_saved_time() {
+        $result = Database::query("SELECT trenutno_vrijeme FROM vrijeme_sustava");
+        if(count($result) == 1) {
+            $time = $result[0];
+            self::$hours = $time['trenutno_vrijeme'];
+            return self::get_virtualTime();
+        }
+        exit;
     }
 }
 
