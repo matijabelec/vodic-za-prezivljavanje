@@ -30,8 +30,8 @@ class Areas_view extends Webpage_view {
         
         $crud_create = '<div style="text-align:right">' . Crud::get_html_c('/areas') . '</div>';
         
-        $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE, true);
-        $table2 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_DELETED, true);
+        $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE, 'rud');
+        $table2 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_DELETED, 'ru');
         $content1 = new Body_table_template('Područja');
         $content1->set_tabledata(
             $crud_create . 
@@ -100,7 +100,10 @@ class Areas_view extends Webpage_view {
                     foreach($d as $key=>$val)
                         $table .= '<td>' . $val . '</td>';
                     if($crud != false) {
-                        $table .= '<td>' . Crud::get_html_rud('/areas', '/'.$d['ID']) . '</td>';
+                        if($crud=='rud')
+                            $table .= '<td>' . Crud::get_html_rud('/areas', '/'.$d['ID']) . '</td>';
+                        else
+                            $table .= '<td>' . Crud::get_html_ru('/areas', '/'.$d['ID']) . '</td>';
                     }
                     $table .= '</tr>';
                     $cnt++;
