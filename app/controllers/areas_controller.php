@@ -17,31 +17,28 @@ class Areas_controller extends Webpage_controller {
         if(count($args) != URL_ARGUMENTS_NONE)
             return RET_ERR;
         
-        $user = null;
+        // if user is logged in
         if(Auth::login_check() != false) {
-            $user = Auth::get_user();
+            Redirect('/areas/crud');
         }
         
+        // show page
         $areas = $this->model->get_areas();
-        
-        if(is_null($user) ) {
-            echo $this->view->view($areas);
-        } else {
-            echo $this->view->edit_auth($user, $areas);
-        }
+        echo $this->view->view($areas);
     }
     
     public function crud($args) {
+        // check if user is not logged in
         if(Auth::login_check() == false) {
             Redirect('/areas/view');
         }
         
-        if(count($args) == URL_ARGUMENTS_NONE) {
-            Redirect('/areas/view');
-        }
-        
+        // get logged user's data
         $user = Auth::get_user();
+        
+        // get areas
         $areas = $this->model->get_areas();
+        
         
         if(count($args) == URL_ARGUMENTS_1) {
             if($args[URL_ARG_1] == 'create') {
@@ -52,7 +49,7 @@ class Areas_controller extends Webpage_controller {
         }
         
         if(count($args) >= URL_ARGUMENTS_2) {
-            $data_korisnik = Database::query('SELECT * FROM korisnici WHERE id_korisnika = :id', array('id'=>$args[URL_ARG_2]) );
+            $data_korisnik = Database::query('SELECT * FROM podrucja WHERE id_podrucja = :id', array('id'=>$args[URL_ARG_2]) );
             switch($args[URL_ARG_1]) {
                 case 'read':
                 case 'update':
@@ -68,7 +65,7 @@ class Areas_controller extends Webpage_controller {
             return;
         }
         
-        echo $this->view->edit_auth($user, $areas);
+        echo $this->view->crud($user, $areas);
     }
 }
 

@@ -25,36 +25,16 @@ class Areas_view extends Webpage_view {
         return $page->fill();
     }
     
-    public function view_auth($user, $areas=array() ) {
+    public function crud($user, $areas=array() ) {
         $page = $this->view_auth_prepare($user);
         
-        $content0 = new Template('<a style="text-align:right;display:block;padding-right:30px" href="{@project_root_path}/areas/crud">CRUD</a>', true);
+        $crud_create = '<div style="text-align:right">' . Crud::get_html_c('/areas') . '</div>';
         
-        $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE);
-        $table2 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_DELETED);
+        $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE, true);
+        $table2 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_DELETED, true);
         $content1 = new Body_table_template('Područja');
         $content1->set_tabledata(
-            $content0->fill() .
-            '<h3>Aktivna područja</h3>' . $table1 . 
-            '<h3>Izbrisana područja</h3>' . $table2);
-        
-        $content = $content1->fill();
-        
-        $page->set_body($content);
-        
-        return $page->fill();
-    }
-    
-    public function edit_auth($user, $areas=array() ) {
-        $page = $this->view_auth_prepare($user);
-        
-        $content0 = new Template('<a style="text-align:right;display:block;padding-right:30px" href="{@project_root_path}/areas/crud/create">Kreiraj</a>', true);
-        
-        $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE);
-        $table2 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_DELETED);
-        $content1 = new Body_table_template('Područja');
-        $content1->set_tabledata(
-            $content0->fill() . 
+            $crud_create . 
             '<h3>Aktivna područja</h3>' . $table1 . 
             '<h3>Izbrisana područja</h3>' . $table2);
         
@@ -67,35 +47,39 @@ class Areas_view extends Webpage_view {
     
     public function crud_create($user) {
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::create('table-korisnici-crud-c'), true);
+        $content = new Template(Crud::create('table-podrucja-crud-c'), true);
+        $content->set('link-back', 'areas/crud');
         $content->set('link', 'areas/crud/create');
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_read($user, $data) {
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::read('table-korisnici-crud-rd', $data), true);
+        $content = new Template(Crud::read('table-podrucja-crud-r', $data), true);
+        $content->set('link-back', 'areas/crud');
         $content->set('link', 'areas/crud/read');
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_update($user, $data) {
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::update('table-korisnici-crud-u', $data), true);
+        $content = new Template(Crud::update('table-podrucja-crud-u', $data), true);
+        $content->set('link-back', 'areas/crud');
         $content->set('link', 'areas/crud/update');
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_delete($user, $data) {
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::delete('table-korisnici-crud-rd', $data), true);
+        $content = new Template(Crud::delete('table-podrucja-crud-d', $data), true);
+        $content->set('link-back', 'areas/crud');
         $content->set('link', 'areas/crud/delete');
         $page->set_body($content->fill() );
         return $page->fill();
     }
     
     
-    protected function create_table_areas($data='', $type=PROJECT_DATA_STATUS_ACTIVE, $headers=true) {
+    protected function create_table_areas($data='', $type=PROJECT_DATA_STATUS_ACTIVE, $crud=false, $headers=true) {
         $table = '';
         $cnt = 0;
         if(count($data) > 0) {
@@ -104,6 +88,9 @@ class Areas_view extends Webpage_view {
                 $table .= '<tr>';
                 foreach($data[0] as $key=>$val)
                     $table .= '<th>' . $key . '</th>';
+                if($crud != false) {
+                    $table .= '<th>CRUD</th>';
+                }
                 $table .= '</tr>';
             }
             
@@ -112,6 +99,9 @@ class Areas_view extends Webpage_view {
                     $table .= '<tr>';
                     foreach($d as $key=>$val)
                         $table .= '<td>' . $val . '</td>';
+                    if($crud != false) {
+                        $table .= '<td>' . Crud::get_html_rud('/areas', '/'.$d['ID']) . '</td>';
+                    }
                     $table .= '</tr>';
                     $cnt++;
                 }

@@ -21,7 +21,6 @@ class Crud {
     
     public static function create($template) {
         $dt = new Template('data/' . $template);
-        
         $cr = new Template('data/crud-create');
         $cr->set('data', $dt->fill() );
         return $cr->fill();
@@ -33,7 +32,6 @@ class Crud {
                 $dt->set($key, $val);
             }
         }
-        
         $cr = new Template('data/crud-create');
         $cr->set('data', $dt->fill() );
         return $cr->fill();
@@ -45,7 +43,6 @@ class Crud {
                 $dt->set($key, $val);
             }
         }
-        
         $cr = new Template('data/crud-create');
         $cr->set('data', $dt->fill() );
         return $cr->fill();
@@ -57,26 +54,25 @@ class Crud {
                 $dt->set($key, $val);
             }
         }
-        
         $cr = new Template('data/crud-create');
         $cr->set('data', $dt->fill() );
         return $cr->fill();
     }
     
-    public static function view() {
-        
+    public static function view($template, $data) {
+        return '';
     }
     
     
-    protected static function get_html_c($url) {
-        $btn_create = '<a class="btn" href="' . $url . '/crud/create">Create</a>';
+    public static function get_html_c($url) {
+        $btn_create = '<a class="btn" href="' . $url . '/crud/create">Dodaj</a>';
         return $btn_create;
     }
-    protected static function get_html_rud($url) {
-        $btn_read = '<a class="btn" href="' . $url . '/crud/read">Read</a>';
-        $btn_update = '<a class="btn" href="' . $url . '/crud/update">Update</a>';
-        $btn_delete = '<a class="btn" href="' . $url . '/crud/delete">Delete</a>';
-        return $btn_read . $btn_update . $btn_delete;
+    public static function get_html_rud($url, $id) {
+        $btn_read = '<a class="btn" href="' . $url . '/crud/read' . $id . '">R</a>';
+        $btn_update = '<a class="btn" href="' . $url . '/crud/update' . $id . '">U</a>';
+        $btn_delete = '<a class="btn" href="' . $url . '/crud/delete' . $id . '">D</a>';
+        return $btn_read . ' ' . $btn_update . ' ' . $btn_delete;
     }
 }
 
