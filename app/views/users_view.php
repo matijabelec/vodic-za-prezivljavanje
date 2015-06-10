@@ -59,33 +59,36 @@ class Users_view extends Webpage_view {
     
     public function crud_create($user) {
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::create('table-podrucja-crud-c'), true);
+        $content = new Template(Crud::create('table-korisnici-crud-c'), true);
         $content->set('link-back', 'users/crud');
         $content->set('link', 'users/crud/create');
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_read($user, $data) {
+        $d = $data[0];
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::read('table-podrucja-crud-r', $data), true);
+        $content = new Template(Crud::read('table-korisnici-crud-rd', $data), true);
         $content->set('link-back', 'users/crud');
-        $content->set('link', 'users/crud/read');
+        $content->set('link', 'users/crud/read/'.$d['id_korisnika']);
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_update($user, $data) {
+        $d = $data[0];
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::update('table-podrucja-crud-u', $data), true);
+        $content = new Template(Crud::update('table-korisnici-crud-u', $data), true);
         $content->set('link-back', 'users/crud');
-        $content->set('link', 'users/crud/update');
+        $content->set('link', 'users/crud/update/'.$d['id_korisnika']);
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_delete($user, $data) {
+        $d = $data[0];
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::delete('table-podrucja-crud-d', $data), true);
+        $content = new Template(Crud::delete('table-korisnici-crud-rd', $data), true);
         $content->set('link-back', 'users/crud');
-        $content->set('link', 'users/crud/delete');
+        $content->set('link', 'users/crud/delete/'.$d['id_korisnika']);
         $page->set_body($content->fill() );
         return $page->fill();
     }

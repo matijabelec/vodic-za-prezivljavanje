@@ -52,8 +52,26 @@ class Users_controller extends Webpage_controller {
             $data_korisnik = Database::query('SELECT * FROM korisnici WHERE id_korisnika = :id', array('id'=>$args[URL_ARG_2]) );
             switch($args[URL_ARG_1]) {
                 case 'read':
+                    break;
                 case 'update':
+                    if(isset($_POST['id_korisnika']) &&
+                       isset($_POST['status'])) {
+                        $id_kor = $_POST['id_korisnika'];
+                        $st = $_POST['status'];
+                        if($st >= 0 && $st <=3) {
+                            Database::query('UPDATE korisnici SET status = :status WHERE id_korisnika = :id',
+                            array('id' => $id_kor,
+                                  'status' => $st) );
+                            Redirect('/users/crud');
+                        }
+                    }
+                    break;
                 case 'delete':
+                    if(isset($_POST['id_korisnika']) ) {
+                        $id_kor = $_POST['id_korisnika'];
+                        Database::query('UPDATE korisnici SET status = 0 WHERE id_korisnika = :id', array('id'=>$id_kor) );
+                        Redirect('/users/crud');
+                    }
                     break;
                 default:
                     Redirect('/users/view');
