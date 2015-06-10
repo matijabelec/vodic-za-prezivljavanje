@@ -173,8 +173,8 @@ li{
 }
 
 #main table{
-    display: inline-block;
-    margin: 16px 4px 12px;
+    width: 95%;
+    margin: 16px auto 12px;
     border-collapse: collapse;
 }
 #main table th,
@@ -189,3 +189,18 @@ li{
 
 .left{float: left;}
 .right{float: right;}
+
+
+.btn{
+    display: inline-block;
+    margin: 2px;
+    padding: 2px 4px;
+    border: 1px solid #464646;
+    background-color: #efefef;
+    color: #de3131;
+    border-radius: 4px;
+}
+.btn:hover{
+    background-color: #662200;
+    color: #ddeede;
+}

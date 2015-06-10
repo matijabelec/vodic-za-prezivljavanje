@@ -72,12 +72,12 @@ class Crud {
         $btn_read = '<a class="btn" href="' . $url . '/crud/read' . $id . '">R</a>';
         $btn_update = '<a class="btn" href="' . $url . '/crud/update' . $id . '">U</a>';
         $btn_delete = '<a class="btn" href="' . $url . '/crud/delete' . $id . '">D</a>';
-        return $btn_read . ' ' . $btn_update . ' ' . $btn_delete;
+        return $btn_read . $btn_update . $btn_delete;
     }
     public static function get_html_ru($url, $id) {
         $btn_read = '<a class="btn" href="' . $url . '/crud/read' . $id . '">R</a>';
         $btn_update = '<a class="btn" href="' . $url . '/crud/update' . $id . '">U</a>';
-        return $btn_read . ' ' . $btn_update;
+        return $btn_read . $btn_update;
     }
 }
 
