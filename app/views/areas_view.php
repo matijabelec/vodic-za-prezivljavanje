@@ -96,9 +96,9 @@ class Areas_view extends Webpage_view {
                         $table .= '<td>' . $val . '</td>';
                     if($crud != false) {
                         if($crud=='rud')
-                            $table .= '<td>' . Crud::get_html_rud('/areas', '/'.$d['ID']) . '</td>';
+                            $table .= '<td style="white-space: nowrap">' . Crud::get_html_rud('/areas', '/'.$d['ID']) . '</td>';
                         else
-                            $table .= '<td>' . Crud::get_html_ru('/areas', '/'.$d['ID']) . '</td>';
+                            $table .= '<td style="white-space: nowrap">' . Crud::get_html_ru('/areas', '/'.$d['ID']) . '</td>';
                     }
                     $table .= '</tr>';
                     $cnt++;

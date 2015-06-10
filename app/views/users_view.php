@@ -18,13 +18,11 @@ class Users_view extends Webpage_view {
         $table1 = $this->create_table_users($users, PROJECT_DATA_USER_STATUS_ACTIVATED);
         $table2 = $this->create_table_users($users, PROJECT_DATA_USER_STATUS_REGISTERED);
         $table3 = $this->create_table_users($users, PROJECT_DATA_USER_STATUS_BLOCKED);
-        $table4 = $this->create_table_users($users, PROJECT_DATA_USER_STATUS_DELETED);
         
         $content->set_tabledata(
             '<h3>Aktivirani korisnici</h3>' . $table1 . 
             '<h3>Registrirani korisnici</h3>' . $table2 . 
-            '<h3>Blokirani korisnici</h3>' . $table3 . 
-            '<h3>Izbrisani korisnici</h3>' . $table4);
+            '<h3>Blokirani korisnici</h3>' . $table3);
         
         $page = new Standard_template('Korisnici', '', 
                                       $content->fill(), 
@@ -59,36 +57,108 @@ class Users_view extends Webpage_view {
     
     public function crud_create($user) {
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::create('table-korisnici-crud-c'), true);
+        $content = new Template(Crud::create('table-korisnici-crud'), true);
         $content->set('link-back', 'users/crud');
         $content->set('link', 'users/crud/create');
+        
+        $content->set('id_korisnika', '0');
+        $content->set('korisnicko_ime', '');
+        $content->set('lozinka', '');
+        $content->set('mail', '');
+        $content->set('ime', '');
+        $content->set('prezime', '');
+        $content->set('slika_korisnika', '');
+        $content->set('datum_registracije', '');
+        
+        $content->set('id_tipa_korisnika-1', '');
+        $content->set('id_tipa_korisnika-2', '');
+        $content->set('id_tipa_korisnika-3', 'selected');
+        
+        $content->set('status-1', 'selected');
+        $content->set('status-2', '');
+        $content->set('status-3', '');
+        $content->set('status-0', '');
+        
+        $content->set('readonly', '');
+        
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_read($user, $data) {
         $d = $data[0];
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::read('table-korisnici-crud-rd', $data), true);
+        $content = new Template(Crud::read('table-korisnici-crud', $data), true);
         $content->set('link-back', 'users/crud');
         $content->set('link', 'users/crud/read/'.$d['id_korisnika']);
+        
+        $content->set('readonly', 'readonly');
+        
+        for($i=1; $i<=3; $i++) {
+            if($d['id_tipa_korisnika'] == $i)
+                $content->set('id_tipa_korisnika-'.$i, 'selected');
+            else
+                $content->set('id_tipa_korisnika-'.$i, '');
+        }
+        
+        for($i=0; $i<=3; $i++) {
+            if($d['status'] == $i)
+                $content->set('status-'.$i, 'selected');
+            else
+                $content->set('status-'.$i, '');
+        }
+        
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_update($user, $data) {
         $d = $data[0];
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::update('table-korisnici-crud-u', $data), true);
+        $content = new Template(Crud::update('table-korisnici-crud', $data), true);
         $content->set('link-back', 'users/crud');
         $content->set('link', 'users/crud/update/'.$d['id_korisnika']);
+        
+        for($i=1; $i<=3; $i++) {
+            if($d['id_tipa_korisnika'] == $i)
+                $content->set('id_tipa_korisnika-'.$i, 'selected');
+            else
+                $content->set('id_tipa_korisnika-'.$i, '');
+        }
+        
+        for($i=0; $i<=3; $i++) {
+            if($d['status'] == $i)
+                $content->set('status-'.$i, 'selected');
+            else
+                $content->set('status-'.$i, '');
+        }
+        
+        $content->set('readonly', '');
+        
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_delete($user, $data) {
         $d = $data[0];
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::delete('table-korisnici-crud-rd', $data), true);
+        $content = new Template(Crud::delete('table-korisnici-crud', $data), true);
         $content->set('link-back', 'users/crud');
         $content->set('link', 'users/crud/delete/'.$d['id_korisnika']);
+        
+        for($i=1; $i<=3; $i++) {
+            if($d['id_tipa_korisnika'] == $i)
+                $content->set('id_tipa_korisnika-'.$i, 'selected');
+            else
+                $content->set('id_tipa_korisnika-'.$i, '');
+        }
+        
+        for($i=0; $i<=3; $i++) {
+            if($d['status'] == $i)
+                $content->set('status-'.$i, 'selected');
+            else
+                $content->set('status-'.$i, '');
+        }
+        
+        $content->set('readonly', '');
+        
         $page->set_body($content->fill() );
         return $page->fill();
     }
@@ -115,9 +185,9 @@ class Users_view extends Webpage_view {
                         $table .= '<td>' . $val . '</td>';
                     if($crud != false) {
                         if($crud=='rud')
-                            $table .= '<td>' . Crud::get_html_rud('/users', '/'.$d['ID']) . '</td>';
+                            $table .= '<td style="white-space: nowrap">' . Crud::get_html_rud('/users', '/'.$d['ID']) . '</td>';
                         else
-                            $table .= '<td>' . Crud::get_html_ru('/users', '/'.$d['ID']) . '</td>';
+                            $table .= '<td style="white-space: nowrap">' . Crud::get_html_ru('/users', '/'.$d['ID']) . '</td>';
                     }
                     $table .= '</tr>';
                     $cnt++;

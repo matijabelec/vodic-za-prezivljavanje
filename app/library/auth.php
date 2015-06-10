@@ -32,7 +32,7 @@ class Auth {
     public static function login($username='', $password='') {
         self::$user = null;
         if(self::login_check() == false) {
-            $users = Database::query('SELECT id_korisnika AS "userid", korisnicko_ime AS "username", lozinka AS "password", id_tipa_korisnika AS "role", "status" AS "status" FROM korisnici WHERE korisnicko_ime = :usname', array('usname'=>$username) );
+            $users = Database::query('SELECT id_korisnika AS "userid", korisnicko_ime AS "username", lozinka AS "password", id_tipa_korisnika AS "role", status FROM korisnici WHERE korisnicko_ime = :usname', array('usname'=>$username) );
             if(count($users) != 1)
                 return false;
             
@@ -49,7 +49,6 @@ class Auth {
                 self::$status = PROJECT_DATA_USER_STATUS_REGISTERED;
                 return false;
             }
-
             
             // check if user is blocked
             if($us['status'] == PROJECT_DATA_USER_STATUS_BLOCKED) {
@@ -81,7 +80,7 @@ class Auth {
                 return true;
             }
         }
-        return true;
+        return false;
     }
     public static function login_check() {
         self::$user = null;

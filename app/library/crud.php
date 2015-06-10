@@ -21,7 +21,8 @@ class Crud {
     
     public static function create($template) {
         $dt = new Template('data/' . $template);
-        $cr = new Template('data/crud-create');
+        $cr = new Template('data/table-crud');
+        $cr->set('title', 'Kreiraj');
         $cr->set('data', $dt->fill() );
         return $cr->fill();
     }
@@ -32,7 +33,8 @@ class Crud {
                 $dt->set($key, $val);
             }
         }
-        $cr = new Template('data/crud-create');
+        $cr = new Template('data/table-crud');
+        $cr->set('title', 'Pročitaj');
         $cr->set('data', $dt->fill() );
         return $cr->fill();
     }
@@ -43,7 +45,8 @@ class Crud {
                 $dt->set($key, $val);
             }
         }
-        $cr = new Template('data/crud-create');
+        $cr = new Template('data/table-crud');
+        $cr->set('title', 'Ažuriraj');
         $cr->set('data', $dt->fill() );
         return $cr->fill();
     }
@@ -54,7 +57,8 @@ class Crud {
                 $dt->set($key, $val);
             }
         }
-        $cr = new Template('data/crud-create');
+        $cr = new Template('data/table-crud');
+        $cr->set('title', 'Izbriši');
         $cr->set('data', $dt->fill() );
         return $cr->fill();
     }
