@@ -1,10 +1,6 @@
 <?php
 
 class Areas_view extends Webpage_view {
-    public function output() {
-        
-    }
-    
     public function view($areas=array() ) {
         $userprofile = new Template('data/user_profile_menu_login');
         
@@ -32,15 +28,14 @@ class Areas_view extends Webpage_view {
         
         $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE, 'rud');
         $table2 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_DELETED, 'ru');
-        $content1 = new Body_table_template('Područja');
-        $content1->set_tabledata(
+        
+        $content = new Body_table_template('Područja');
+        $content->set_tabledata(
             $crud_create . 
             '<h3>Aktivna područja</h3>' . $table1 . 
             '<h3>Izbrisana područja</h3>' . $table2);
         
-        $content = $content1->fill();
-        
-        $page->set_body($content);
+        $page->set_body($content->fill() );
         
         return $page->fill();
     }

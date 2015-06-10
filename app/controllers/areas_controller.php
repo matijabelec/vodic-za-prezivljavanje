@@ -49,7 +49,7 @@ class Areas_controller extends Webpage_controller {
         }
         
         if(count($args) >= URL_ARGUMENTS_2) {
-            $data_korisnik = Database::query('SELECT * FROM podrucja WHERE id_podrucja = :id', array('id'=>$args[URL_ARG_2]) );
+            $data_podrucje = Database::query('SELECT * FROM podrucja WHERE id_podrucja = :id', array('id'=>$args[URL_ARG_2]) );
             switch($args[URL_ARG_1]) {
                 case 'read':
                 case 'update':
@@ -61,7 +61,7 @@ class Areas_controller extends Webpage_controller {
             }
             
             $action = 'crud_' . $args[URL_ARG_1];
-            echo $this->view->$action($user, $data_korisnik);
+            echo $this->view->$action($user, $data_podrucje);
             return;
         }
         

@@ -67,8 +67,10 @@ class Server_time {
             self::$hours = $time['trenutno_vrijeme'];
             return self::get_virtualTime();
         }
-        exit;
     }
+    /*public static function get_saved_time_str() {
+        return date("Y-m-d H:i:s");
+    }*/
 }
 
 ?>
