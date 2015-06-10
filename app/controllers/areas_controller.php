@@ -27,12 +27,16 @@ class Areas_controller extends Webpage_controller {
         if(is_null($user) ) {
             echo $this->view->view($areas);
         } else {
-            echo $this->view->view_auth($user, $areas);
+            echo $this->view->edit_auth($user, $areas);
         }
     }
     
     public function crud($args) {
         if(Auth::login_check() == false) {
+            Redirect('/areas/view');
+        }
+        
+        if(count($args) == URL_ARGUMENTS_NONE) {
             Redirect('/areas/view');
         }
         
@@ -43,7 +47,8 @@ class Areas_controller extends Webpage_controller {
             if($args[URL_ARG_1] == 'create') {
                 echo $this->view->crud_create($user);
                 return;
-            }
+            } else
+                Redirect('/areas/view');
         }
         
         if(count($args) >= URL_ARGUMENTS_2) {
