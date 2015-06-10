@@ -28,7 +28,7 @@ class Areas_view extends Webpage_view {
     public function view_auth($user, $areas=array() ) {
         $page = $this->view_auth_prepare($user);
         
-        $content0 = new Template('<a style="text-align:right;display:block;padding-right:30px" href="{@project_root_path}/areas/edit">Edit</a>', true);
+        $content0 = new Template('<a style="text-align:right;display:block;padding-right:30px" href="{@project_root_path}/areas/crud">CRUD</a>', true);
         
         $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE);
         $table2 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_DELETED);
@@ -48,22 +48,49 @@ class Areas_view extends Webpage_view {
     public function edit_auth($user, $areas=array() ) {
         $page = $this->view_auth_prepare($user);
         
-        /*$content0 = new Template('<a style="text-align:right;display:block;padding-right:30px" href="{@project_root_path}/areas/edit">Edit</a>', true);
+        $content0 = new Template('<a style="text-align:right;display:block;padding-right:30px" href="{@project_root_path}/areas/crud/create">Kreiraj</a>', true);
         
         $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE);
         $table2 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_DELETED);
         $content1 = new Body_table_template('Područja');
         $content1->set_tabledata(
-            //$content0->fill() .
+            $content0->fill() . 
             '<h3>Aktivna područja</h3>' . $table1 . 
             '<h3>Izbrisana područja</h3>' . $table2);
         
-        $content = $content1->fill();*/
+        $content = $content1->fill();
         
-        $content = new Body_table_template('Informacija', '<p>Uređivanje još nije dostupno.</p>');
+        $page->set_body($content);
         
+        return $page->fill();
+    }
+    
+    public function crud_create($user) {
+        $page = $this->view_auth_prepare($user);
+        $content = new Template(Crud::create('table-korisnici-crud-c'), true);
+        $content->set('link', 'areas/crud/create');
         $page->set_body($content->fill() );
-        
+        return $page->fill();
+    }
+    public function crud_read($user, $data) {
+        $page = $this->view_auth_prepare($user);
+        $content = new Template(Crud::read('table-korisnici-crud-rd', $data), true);
+        $content->set('link', 'areas/crud/read');
+        $page->set_body($content->fill() );
+        return $page->fill();
+    }
+    public function crud_update($user, $data) {
+        $page = $this->view_auth_prepare($user);
+        $content = new Template(Crud::update('table-korisnici-crud-u', $data), true);
+        $content->set('link', 'areas/crud/update');
+        $page->set_body($content->fill() );
+        return $page->fill();
+    }
+    public function crud_delete($user, $data) {
+        $page = $this->view_auth_prepare($user);
+        $content = new Template(Crud::delete('table-korisnici-crud-rd', $data), true);
+        $content->set('link', 'areas/crud/delete');
+        $page->set_body($content->fill() );
         return $page->fill();
     }
     
