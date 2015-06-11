@@ -20,6 +20,8 @@ body{
     background-color: #ffffff;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     text-align: center;
+    background-image: url('../gfx/bg-circle.png');
+    background-repeat: repeat;
 }
 li{
     padding-left: 20px;

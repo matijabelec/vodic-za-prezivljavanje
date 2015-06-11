@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{@title}</title>
     
-    <!--<link rel="shortcut icon" href="/picek.ico"/>-->
+    <!--<link rel="shortcut icon" href="/icon.ico"/>-->
     
     <link rel="stylesheet" href="{@project_root_path}/site/css/style.css"/>
     {@head-data}

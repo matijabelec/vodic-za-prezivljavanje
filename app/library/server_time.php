@@ -44,7 +44,8 @@ class Server_time {
                     self::$hours = $val->value;
         }
         
-        //Database::query("CREATE IF NOT EXISTS TABLE vrijeme_sustava(id SERIAL PRIMARY KEY, trenutno_vrijeme INTEGER)");
+        //Database::query("CREATE TABLE IF NOT EXISTS vrijeme_sustava(id SERIAL PRIMARY KEY, trenutno_vrijeme INTEGER)");
+        //Database::query("INSERT INTO vrijeme_sustava(trenutno_vrijeme) VALUES(:time)", array('time'=>self::$hours) );
         Database::query("UPDATE TABLE vrijeme_sustava SET trenutno_vrijeme = :time WHERE id = 1", array('time'=>self::$hours) );
     }
     
