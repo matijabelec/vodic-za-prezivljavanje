@@ -2,16 +2,24 @@
 
 class Users_view extends Webpage_view {
     public function view($users=array() ) {
-        $userprofile = '';
-        if(Auth::login_check() == false) {
-            $userprofile = new Template('data/user_profile_menu_login');
-        } else {
-            $user = Auth::get_user();
-            
-            $userprofile = new Template('data/user_profile_menu');
-            $userprofile->set('username-link', $user['username']);
-            $userprofile->set('username',$user['username']);
-        }
+        $page = $this->view_prepare();
+        
+        $content = new Body_table_template('Korisnici');
+        
+        $table1 = $this->create_table_users($users, PROJECT_DATA_USER_STATUS_ACTIVATED);
+        $table2 = $this->create_table_users($users, PROJECT_DATA_USER_STATUS_REGISTERED);
+        
+        $content->set_tabledata(
+            '<h3>Aktivirani korisnici</h3>' . $table1 . 
+            '<h3>Registrirani korisnici</h3>' . $table2);
+        
+        $page->set_body($content->fill() );
+        
+        return $page->fill();
+    }
+    
+    public function view_2($user, $users=array() ) {
+        $page = $this->view_auth_prepare($user);
         
         $content = new Body_table_template('Korisnici');
         
@@ -24,10 +32,7 @@ class Users_view extends Webpage_view {
             '<h3>Registrirani korisnici</h3>' . $table2 . 
             '<h3>Blokirani korisnici</h3>' . $table3);
         
-        $page = new Standard_template('Korisnici', '', 
-                                      $content->fill(), 
-                                      $userprofile->fill() );
-        $page->set('option-users', ' selected');
+        $page->set_body($content->fill() );
         
         return $page->fill();
     }
@@ -144,9 +149,17 @@ class Users_view extends Webpage_view {
         return $table;
     }
     
-    protected function view_auth_prepare($user) {
-        $user = Auth::get_user();
+    protected function view_prepare() {
+        $userprofile = new Template('data/user_profile_menu_login');
         
+        $page = new Standard_template('Korisnici', '', 
+                                      '', 
+                                      $userprofile->fill() );
+        $page->set('option-users', ' selected');
+        
+        return $page;
+    }
+    protected function view_auth_prepare($user) {
         $userprofile = new Template('data/user_profile_menu');
         $userprofile->set('username-link', $user['username']);
         $userprofile->set('username',$user['username']);

@@ -1,5 +1,33 @@
 <?php
 
+/*
+ *
+ *  Filename: users_controller.php
+ *  Author: Matija Belec (matijabelec1@gmail.com)
+ *  Date: 9 June 2015
+ *  Description:
+ *      - CRUD for table 'korisnici'
+ *      - User roles:
+ *          - Administrator:
+ *              - view users (view all: activated, registered, blocked, deleted)
+ *              - create new user
+ *              - read user
+ *              - update user
+ *              - delete user
+ *          - Moderator:
+ *              - view users (only view: activated, registered)
+ *          - Registered user:
+ *              - view users (only view: activated, registered)
+ *          - Guest:
+ *              - view users (only view: activated, registered)
+ *          - 
+ *  Requirements:
+ *      - [none]
+ *  
+ *  Copyright 2015. Matija Belec. All Rights reserved.
+ *  
+ */
+
 class Users_controller extends Webpage_controller {
     public function __construct() {
         $this->view = new Users_view;
@@ -14,19 +42,31 @@ class Users_controller extends Webpage_controller {
         if(count($args) != URL_ARGUMENTS_NONE)
             return RET_ERR;
         
-        // if user is not admin
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            $users = $this->model->get_users_safe();
-            echo $this->view->view($users);
+        // if user is admin
+        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            // get logged user's data
+            $user = Auth::get_user();
+            
+            // get users
+            $users = $this->model->get_users();
+            echo $this->view->crud($user, $users);
+            return;
+        
+        // if user is registered user or moderator
+        } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) || 
+                 Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
+            // get logged user's data
+            $user = Auth::get_user();
+            
+            // get users
+            $users = $this->model->get_users();
+            echo $this->view->view_2($user, $users);
             return;
         }
         
-        // get logged user's data
-        $user = Auth::get_user();
-        
-        // get users
-        $users = $this->model->get_users();
-        echo $this->view->crud($user, $users);
+        // if user is guest
+        $users = $this->model->get_users_safe();
+        echo $this->view->view($users);
     }
     
     public function create($args) {

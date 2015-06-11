@@ -2,7 +2,7 @@
 
 class Areas_view extends Webpage_view {
     public function view($areas=array() ) {
-        $userprofile = new Template('data/user_profile_menu_login');
+        $page = $this->view_prepare();
         
         $content = new Body_table_template('Područja');
         
@@ -10,10 +10,7 @@ class Areas_view extends Webpage_view {
         
         $content->set_tabledata($table1);
         
-        $page = new Standard_template('Područja', '', 
-                                      $content->fill(), 
-                                      $userprofile->fill() );
-        $page->set('option-areas', ' selected');
+        $page->set_body($content->fill() );
         
         return $page->fill();
     }
@@ -124,9 +121,17 @@ class Areas_view extends Webpage_view {
         return $table;
     }
     
-    protected function view_auth_prepare($user) {
-        $user = Auth::get_user();
+    protected function view_prepare() {
+        $userprofile = new Template('data/user_profile_menu_login');
         
+        $page = new Standard_template('Područja', '', 
+                                      '', 
+                                      $userprofile->fill() );
+        $page->set('option-areas', ' selected');
+        
+        return $page;
+    }
+    protected function view_auth_prepare($user) {
         $userprofile = new Template('data/user_profile_menu');
         $userprofile->set('username-link', $user['username']);
         $userprofile->set('username',$user['username']);
