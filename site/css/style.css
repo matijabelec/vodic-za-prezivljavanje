@@ -148,7 +148,7 @@ li{
     max-width: 700px;
 }
 #main form label,
-#main form input,
+#main form input:not([type='submit']),
 #main form textarea, 
 #main form select{
     display: inline-block;
@@ -162,14 +162,10 @@ li{
     text-align: right;
     white-space: nowrap;
 }
-#main form input,
+#main form input:not([type='submit']),
 #main form textarea, 
 #main form select{
     width: 55%;
-}
-#main form input[type=submit]{
-    display: block;
-    width: 100%;
 }
 
 #main table{
@@ -193,12 +189,16 @@ li{
 
 .btn{
     display: inline-block;
+    box-sizing: border-box;
     margin: 2px;
     padding: 2px 4px;
     border: 1px solid #464646;
     background-color: #efefef;
     color: #de3131;
     border-radius: 4px;
+    border: 1px solid #454545;
+    font-weight: normal;
+    font-size: 14pt;
 }
 .btn:hover{
     background-color: #662200;
