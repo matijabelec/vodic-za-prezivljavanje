@@ -2,12 +2,18 @@
 
 class Error_view extends Webpage_view {
     public function output() {
-        $content = new Template('body/error');
+        $page = $this->view_prepare();
         
-        $page = new Standard_template('Kriva adresa');
+        $content = new Template('body/error');
         $page->set_body($content->fill() );
         
         return $page->fill();
+    }
+    
+    protected function view_prepare() {
+        $page = new Standard_template('Greška');
+        
+        return $page;
     }
 }
 

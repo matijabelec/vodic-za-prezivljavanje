@@ -58,6 +58,7 @@ li{
     border-bottom: 3px solid #eeeeee;
     z-index: 900;
     height: 30px;
+    background-color: #444444;
 }
 #nav>ul,
 #footer>ul{
@@ -80,13 +81,13 @@ li{
     right: 10px;
 }
 .menu-option {
-    color: #424242;
+    color: #ebebeb;
 }
 .menu-option.selected {
-    color: #cc6600;
+    color: #ff9900;
 }
 .menu-option:hover{
-    color: #cc6600;
+    color: #ff9900;
 }
 
 
