@@ -7,11 +7,8 @@ class Areas_view extends Webpage_view {
         $content = new Body_table_template('Područja');
         
         $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE);
-        $table2 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_DELETED);
         
-        $content->set_tabledata(
-            '<h3>Aktivna područja</h3>' . $table1 . 
-            '<h3>Izbrisana područja</h3>' . $table2);
+        $content->set_tabledata($table1);
         
         $page = new Standard_template('Područja', '', 
                                       $content->fill(), 
@@ -42,33 +39,49 @@ class Areas_view extends Webpage_view {
     
     public function crud_create($user) {
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::create('table-podrucja-crud-c'), true);
-        $content->set('link-back', 'areas/crud');
-        $content->set('link', 'areas/crud/create');
+        
+        $content = new Crud_podrucja();
+        $content->set('link-back', 'areas/view');
+        $content->set('link', 'areas/create');
+        
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_read($user, $data) {
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::read('table-podrucja-crud-r', $data), true);
-        $content->set('link-back', 'areas/crud');
-        $content->set('link', 'areas/crud/read');
+        
+        $content = new Crud_podrucja();
+        $content->fill_data($data);
+        $content->set('link-back', 'areas/view');
+        $content->set('link', 'areas/read/'.$data['id_podrucja']);
+        $content->set('status-'.$data['status'], 'selected');
+        $content->set('readonly', 'readonly');
+        
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_update($user, $data) {
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::update('table-podrucja-crud-u', $data), true);
-        $content->set('link-back', 'areas/crud');
-        $content->set('link', 'areas/crud/update');
+        
+        $content = new Crud_podrucja();
+        $content->fill_data($data);
+        $content->set('link-back', 'areas/view');
+        $content->set('link', 'areas/update/'.$data['id_podrucja']);
+        $content->set('status-'.$data['status'], 'selected');
+        
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_delete($user, $data) {
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::delete('table-podrucja-crud-d', $data), true);
-        $content->set('link-back', 'areas/crud');
-        $content->set('link', 'areas/crud/delete');
+        
+        $content = new Crud_podrucja();
+        $content->fill_data($data);
+        $content->set('link-back', 'areas/view');
+        $content->set('link', 'areas/delete/'.$data['id_podrucja']);
+        $content->set('status-'.$data['status'], 'selected');
+        $content->set('readonly', 'readonly');
+        
         $page->set_body($content->fill() );
         return $page->fill();
     }

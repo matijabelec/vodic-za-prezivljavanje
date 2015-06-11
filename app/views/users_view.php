@@ -57,107 +57,51 @@ class Users_view extends Webpage_view {
     
     public function crud_create($user) {
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::create('table-korisnici-crud'), true);
-        $content->set('link-back', 'users/crud');
-        $content->set('link', 'users/crud/create');
         
-        $content->set('id_korisnika', '0');
-        $content->set('korisnicko_ime', '');
-        $content->set('lozinka', '');
-        $content->set('mail', '');
-        $content->set('ime', '');
-        $content->set('prezime', '');
-        $content->set('slika_korisnika', '');
-        $content->set('datum_registracije', '');
-        
-        $content->set('id_tipa_korisnika-1', '');
-        $content->set('id_tipa_korisnika-2', '');
-        $content->set('id_tipa_korisnika-3', 'selected');
-        
-        $content->set('status-1', 'selected');
-        $content->set('status-2', '');
-        $content->set('status-3', '');
-        $content->set('status-0', '');
-        
-        $content->set('readonly', '');
+        $content = new Crud_korisnici();
+        $content->set('link-back', 'users/view');
+        $content->set('link', 'users/create');
         
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_read($user, $data) {
-        $d = $data[0];
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::read('table-korisnici-crud', $data), true);
-        $content->set('link-back', 'users/crud');
-        $content->set('link', 'users/crud/read/'.$d['id_korisnika']);
         
+        $content = new Crud_korisnici();
+        $content->fill_data($data);
+        $content->set('link-back', 'users/view');
+        $content->set('link', 'users/read/'.$data['id_korisnika']);
+        $content->set('id_tipa_korisnika-'.$data['id_tipa_korisnika'], 'selected');
+        $content->set('status-'.$data['status'], 'selected');
         $content->set('readonly', 'readonly');
-        
-        for($i=1; $i<=3; $i++) {
-            if($d['id_tipa_korisnika'] == $i)
-                $content->set('id_tipa_korisnika-'.$i, 'selected');
-            else
-                $content->set('id_tipa_korisnika-'.$i, '');
-        }
-        
-        for($i=0; $i<=3; $i++) {
-            if($d['status'] == $i)
-                $content->set('status-'.$i, 'selected');
-            else
-                $content->set('status-'.$i, '');
-        }
         
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_update($user, $data) {
-        $d = $data[0];
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::update('table-korisnici-crud', $data), true);
-        $content->set('link-back', 'users/crud');
-        $content->set('link', 'users/crud/update/'.$d['id_korisnika']);
         
-        for($i=1; $i<=3; $i++) {
-            if($d['id_tipa_korisnika'] == $i)
-                $content->set('id_tipa_korisnika-'.$i, 'selected');
-            else
-                $content->set('id_tipa_korisnika-'.$i, '');
-        }
-        
-        for($i=0; $i<=3; $i++) {
-            if($d['status'] == $i)
-                $content->set('status-'.$i, 'selected');
-            else
-                $content->set('status-'.$i, '');
-        }
-        
-        $content->set('readonly', '');
+        $content = new Crud_korisnici();
+        $content->fill_data($data);
+        $content->set('link-back', 'users/view');
+        $content->set('link', 'users/update/'.$data['id_korisnika']);
+        $content->set('id_tipa_korisnika-'.$data['id_tipa_korisnika'], 'selected');
+        $content->set('status-'.$data['status'], 'selected');
         
         $page->set_body($content->fill() );
         return $page->fill();
     }
     public function crud_delete($user, $data) {
-        $d = $data[0];
         $page = $this->view_auth_prepare($user);
-        $content = new Template(Crud::delete('table-korisnici-crud', $data), true);
-        $content->set('link-back', 'users/crud');
-        $content->set('link', 'users/crud/delete/'.$d['id_korisnika']);
         
-        for($i=1; $i<=3; $i++) {
-            if($d['id_tipa_korisnika'] == $i)
-                $content->set('id_tipa_korisnika-'.$i, 'selected');
-            else
-                $content->set('id_tipa_korisnika-'.$i, '');
-        }
-        
-        for($i=0; $i<=3; $i++) {
-            if($d['status'] == $i)
-                $content->set('status-'.$i, 'selected');
-            else
-                $content->set('status-'.$i, '');
-        }
-        
-        $content->set('readonly', '');
+        $content = new Crud_korisnici();
+        $content->fill_data($data);
+        $content->set('link-back', 'users/view');
+        $content->set('link', 'users/delete/'.$data['id_korisnika']);
+        $content->set('id_tipa_korisnika-'.$data['id_tipa_korisnika'], 'selected');
+        $content->set('status-'.$data['status'], 'selected');
+        $content->set('readonly', 'readonly');
         
         $page->set_body($content->fill() );
         return $page->fill();

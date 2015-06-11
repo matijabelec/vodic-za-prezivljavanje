@@ -7,9 +7,6 @@ class Areas_controller extends Webpage_controller {
     }
     
     public function index($args) {
-        if(count($args) != URL_INDEX_ARGUMENTS_NONE)
-            return RET_ERR;
-        
         Redirect('/areas/view');
     }
     
@@ -17,20 +14,11 @@ class Areas_controller extends Webpage_controller {
         if(count($args) != URL_ARGUMENTS_NONE)
             return RET_ERR;
         
-        // if user is logged in
-        if(Auth::login_check() != false) {
-            Redirect('/areas/crud');
-        }
-        
-        // show page
-        $areas = $this->model->get_areas();
-        echo $this->view->view($areas);
-    }
-    
-    public function crud($args) {
-        // check if user is not logged in
-        if(Auth::login_check() == false) {
-            Redirect('/areas/view');
+        // if user is not admin
+        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            $areas = $this->model->get_areas();
+            echo $this->view->view($areas);
+            return;
         }
         
         // get logged user's data
@@ -38,34 +26,111 @@ class Areas_controller extends Webpage_controller {
         
         // get areas
         $areas = $this->model->get_areas();
-        
-        
-        if(count($args) == URL_ARGUMENTS_1) {
-            if($args[URL_ARG_1] == 'create') {
-                echo $this->view->crud_create($user);
-                return;
-            } else
-                Redirect('/areas/view');
-        }
-        
-        if(count($args) >= URL_ARGUMENTS_2) {
-            $data_podrucje = Database::query('SELECT * FROM podrucja WHERE id_podrucja = :id', array('id'=>$args[URL_ARG_2]) );
-            switch($args[URL_ARG_1]) {
-                case 'read':
-                case 'update':
-                case 'delete':
-                    break;
-                default:
-                    Redirect('/areas/view');
-                    break;
-            }
-            
-            $action = 'crud_' . $args[URL_ARG_1];
-            echo $this->view->$action($user, $data_podrucje);
-            return;
-        }
-        
         echo $this->view->crud($user, $areas);
+    }
+    
+    public function create($args) {
+        if(count($args) != URL_ARGUMENTS_NONE)
+            return RET_ERR;
+        
+        // if user is not admin
+        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            Redirect('/areas/view');
+        }
+        
+        // get logged user's data
+        $user = Auth::get_user();
+        
+        // check if data sent
+        if(isset($_POST['naziv_podrucja']) && 
+           isset($_POST['status']) ) {
+            $st = $_POST['status'];
+            if($st>=0 && $st<=1) {
+                Database::query('INSERT INTO podrucja(naziv_podrucja, status) VALUES(:title, :status)',
+                array('title' => $_POST['naziv_podrucja'],
+                      'status' => $st) );
+                Redirect('/areas/view');
+            }
+        }
+        
+        echo $this->view->crud_create($user);
+    }
+    
+    public function read($args) {
+        if(count($args) != URL_ARGUMENTS_1)
+            return RET_ERR;
+        
+        // if user is not admin
+        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            Redirect('/areas/view');
+        }
+        
+        // get logged user's data
+        $user = Auth::get_user();
+        
+        // check if data sent
+        if(isset($_POST['id_podrucja']) ) {
+            Redirect('/areas/view');
+        }
+        
+        // get data
+        $areadata = $this->model->get_area_by_id($args[URL_ARG_1]);
+        echo $this->view->crud_read($user, $areadata);
+    }
+    
+    public function update($args) {
+        if(count($args) != URL_ARGUMENTS_1)
+            return RET_ERR;
+        
+        // if user is not admin
+        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            Redirect('/areas/view');
+        }
+        
+        // get logged user's data
+        $user = Auth::get_user();
+        
+        // check if data sent
+        if(isset($_POST['id_podrucja']) && 
+           isset($_POST['naziv_podrucja']) && 
+           isset($_POST['status']) ) {
+            $st = $_POST['status'];
+            if($st>=0 && $st<=1) {
+                Database::query('UPDATE podrucja SET naziv_podrucja=:title, status=:status WHERE id_podrucja=:id',
+                array('id' => $_POST['id_podrucja'],
+                      'title' => $_POST['naziv_podrucja'],
+                      'status' => $st) );
+                Redirect('/areas/view');
+            }
+        }
+        
+        // get data
+        $areadata = $this->model->get_area_by_id($args[URL_ARG_1]);
+        echo $this->view->crud_update($user, $areadata);
+    }
+    
+    public function delete($args) {
+        if(count($args) != URL_ARGUMENTS_1)
+            return RET_ERR;
+        
+        // if user is not admin
+        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            Redirect('/areas/view');
+        }
+        
+        // get logged user's data
+        $user = Auth::get_user();
+        
+        // check if data sent
+        if(isset($_POST['id_podrucja']) ) {
+            $id = $_POST['id_podrucja'];
+            Database::query('UPDATE podrucja SET status = 0 WHERE id_podrucja = :id', array('id'=>$id) );
+            Redirect('/areas/view');
+        }
+        
+        // get data
+        $areadata = $this->model->get_area_by_id($args[URL_ARG_1]);
+        echo $this->view->crud_delete($user, $areadata);
     }
 }
 
