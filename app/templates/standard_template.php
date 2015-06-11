@@ -23,7 +23,6 @@ class Standard_template extends Template {
             $this->set_user_type_style();
         }
         
-        
         if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) ) {
             $userprofile = new Template('data/user_profile_menu_login');
         } else {

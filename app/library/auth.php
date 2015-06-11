@@ -143,7 +143,7 @@ class Auth {
     public static function user_role_check($role=null) {
         if(self::login_check() && self::$user['role'] == $role)
             return true;
-        elseif($role == PROJECT_USER_ROLE_GUEST)
+        elseif(!self::login_check() && $role==PROJECT_USER_ROLE_GUEST)
             return true;
         return false;
     }
