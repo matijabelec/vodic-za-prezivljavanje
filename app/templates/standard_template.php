@@ -17,26 +17,29 @@ class Standard_template extends Template {
         
         
         // prepare user profile preview
-        $user = Auth::get_user();
-        if($user == null) {
+        if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) ) {
             $this->set('style-user-type-id', '');
         } else {
             $this->set_user_type_style();
         }
         
-        if($user == null) {
+        
+        if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) ) {
             $userprofile = new Template('data/user_profile_menu_login');
         } else {
+            $user = Auth::get_user();
             $userprofile = new Template('data/user_profile_menu');
             $userprofile->set('username-link', $user['username']);
             $userprofile->set('username',$user['username']);
         }
+        
         
         // prepare menu
         $mainmenu = new Template('data/main-menu');
         $mainmenu->set('user-profile-menu', $userprofile->fill() );
         $this->set('main-menu', $mainmenu->fill() );
         $this->set('main-menu-options', '');
+        
         
         if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
             $this->create_main_menu(array('Početna', 'Korisnici', 'Područja', 'Admin') );
@@ -47,6 +50,7 @@ class Standard_template extends Template {
         } else {
             $this->create_main_menu(array('Početna', 'Korisnici', 'Područja') );
         }
+        
         
         $this->set('usermenu-registration', '');
         $this->set('usermenu-login', '');
