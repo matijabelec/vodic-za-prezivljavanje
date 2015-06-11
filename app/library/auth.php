@@ -141,11 +141,8 @@ class Auth {
     }
     
     public static function user_role_check($role=null) {
-        if(!is_null(self::$user) && 
-           isset(self::$user['role']) && 
-           self::$user['role'] == $role) {
+        if(self::login_check() && self::$user['role'] == $role)
             return true;
-        }
         return false;
     }
 }
