@@ -18,7 +18,7 @@ class Admin_view extends Webpage_view {
     }
     
     protected function view_prepare() {
-        $page = new Standard_template('Admin panel', '');
+        $page = new Standard_template('Admin panel');
         $page->set('option-admin', ' selected');
         
         return $page;

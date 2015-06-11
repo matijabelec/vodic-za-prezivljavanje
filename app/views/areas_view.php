@@ -136,7 +136,7 @@ class Areas_view extends Webpage_view {
     }
     
     protected function view_prepare() {
-        $page = new Standard_template('Područja', '');
+        $page = new Standard_template('Područja');
         $page->set('option-areas', ' selected');
         
         return $page;

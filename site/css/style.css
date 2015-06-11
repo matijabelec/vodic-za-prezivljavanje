@@ -79,8 +79,14 @@ li{
     top: 2px;
     right: 10px;
 }
+.menu-option {
+    color: #424242;
+}
 .menu-option.selected {
-    background-color: #ededed;
+    color: #cc6600;
+}
+.menu-option:hover{
+    color: #cc6600;
 }
 
 
