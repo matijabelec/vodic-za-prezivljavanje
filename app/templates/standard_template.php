@@ -1,17 +1,16 @@
 <?php
 
 class Standard_template extends Template {
-    public function __construct($title, $head_data='', $body='', $userprofile='') {
+    public function __construct($title) {
         parent::__construct('page/standard');
         
-        $this->set('head-data', $head_data);
+        $this->set('head-data', '');
         $this->set('title', $title);
         
         $this->set('project-title', PROJECT_TITLE);
         $this->set('copyright-info-data', PROJECT_COPYRIGHT_INFO);
         
-        $this->set('body', $body);
-        $this->set('user-profile-menu', $userprofile);
+        $this->set('body', '');
         
         $this->set('option-home', '');
         $this->set('option-users', '');
@@ -20,11 +19,28 @@ class Standard_template extends Template {
         $this->set('option-documentation', '');
         $this->set('option-about-author', '');
         
-        $this->set('style-user-type-id', '');
-        if(Auth::login_check() != false) {
-            $user = Auth::get_user();
+        
+        // prepare user profile preview
+        $user = Auth::get_user();
+        if($user == null) {
+            $this->set('style-user-type-id', '');
+        } else {
             $this->set_user_type_style($user['role']);
         }
+        
+        if($user == null) {
+            $userprofile = new Template('data/user_profile_menu_login');
+        } else {
+            $userprofile = new Template('data/user_profile_menu');
+            $userprofile->set('username-link', $user['username']);
+            $userprofile->set('username',$user['username']);
+        }
+        
+        // prepare menu
+        $mainmenu = new Template('data/main-menu');
+        $mainmenu->set('user-profile-menu', $userprofile->fill() );
+        $this->set('main-menu', $mainmenu->fill() );
+        
         
         $this->set('project_root_path', WEBSITE_ROOT_PATH);
     }
@@ -40,6 +56,10 @@ class Standard_template extends Template {
         } else {
             $this->set('style-user-type-id', '');
         }
+    }
+    
+    public function set_headdata($head) {
+        $this->set('head-data', $head);
     }
     
     public function set_body($body) {

@@ -24,11 +24,9 @@ class Auth_view extends Webpage_view {
             $content->set('errors', $error_info);
         }
         
-        $userprofile = new Template('data/user_profile_menu_login');
+        $page = new Standard_template('Login');
+        $page->set_body($content->fill() );
         
-        $page = new Standard_template('Login', '', 
-                                      $content->fill(), 
-                                      $userprofile->fill() );        
         return $page->fill();
     }
     
@@ -47,26 +45,18 @@ class Auth_view extends Webpage_view {
             $content->set('errors', $error_info);
         }
         
-        $userprofile = new Template('data/user_profile_menu_login');
+        $page = new Standard_template('Registracija');
+        $page->set_body($content->fill() );
         
-        $page = new Standard_template('Registracija novog korisnika', '', 
-                                      $content->fill(), 
-                                      $userprofile->fill() );
         return $page->fill();
     }
     
     public function logout() {
-        /*$user = Auth::get_user();
+        /*$content = new Template('body/logout');
         
-        $userprofile = new Template('data/user_profile_menu');
-        $userprofile->set('username-link', $user['username']);
-        $userprofile->set('username',$user['username']);
+        $page = new Standard_template('Odjava');
+        $page->set_body($content->fill() );
         
-        $content = new Template('body/logout');
-        
-        $page = new Standard_template('Logout', '', 
-                                      $content->fill(), 
-                                      $userprofile->fill() );
         return $page->fill();*/
     }
 }

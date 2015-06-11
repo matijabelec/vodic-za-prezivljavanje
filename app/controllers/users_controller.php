@@ -44,23 +44,17 @@ class Users_controller extends Webpage_controller {
         
         // if user is admin
         if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            // get logged user's data
-            $user = Auth::get_user();
-            
             // get users
             $users = $this->model->get_users();
-            echo $this->view->crud($user, $users);
+            echo $this->view->crud($users);
             return;
         
         // if user is registered user or moderator
         } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) || 
                  Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
-            // get logged user's data
-            $user = Auth::get_user();
-            
             // get users
             $users = $this->model->get_users();
-            echo $this->view->view_2($user, $users);
+            echo $this->view->view_2($users);
             return;
         }
         
@@ -77,9 +71,6 @@ class Users_controller extends Webpage_controller {
         if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
             Redirect('/users/view');
         }
-        
-        // get logged user's data
-        $user = Auth::get_user();
         
         // check if data sent
         if(isset($_POST['id_korisnika']) && 
@@ -106,7 +97,7 @@ class Users_controller extends Webpage_controller {
             }
         }
         
-        echo $this->view->crud_create($user);
+        echo $this->view->crud_create();
     }
     
     public function read($args) {
@@ -118,9 +109,6 @@ class Users_controller extends Webpage_controller {
             Redirect('/users/view');
         }
         
-        // get logged user's data
-        $user = Auth::get_user();
-        
         // check if data sent
         if(isset($_POST['id_korisnika']) ) {
             Redirect('/users/view');
@@ -128,7 +116,7 @@ class Users_controller extends Webpage_controller {
         
         // get data
         $userdata = $this->model->get_user_by_id($args[URL_ARG_1]);
-        echo $this->view->crud_read($user, $userdata);
+        echo $this->view->crud_read($userdata);
     }
     
     public function update($args) {
@@ -139,9 +127,6 @@ class Users_controller extends Webpage_controller {
         if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
             Redirect('/users/view');
         }
-        
-        // get logged user's data
-        $user = Auth::get_user();
         
         // check if data sent
         if(isset($_POST['id_korisnika']) && 
@@ -155,6 +140,9 @@ class Users_controller extends Webpage_controller {
            isset($_POST['status']) ) {
             $id_kor = $_POST['id_korisnika'];
             $st = $_POST['status'];
+            
+            $user = Auth::get_user();
+            
             if($st==0 && $user['userid'] == $id_kor) {
                 
             } else if($st>=0 && $st<=3) {
@@ -174,7 +162,7 @@ class Users_controller extends Webpage_controller {
         
         // get data
         $userdata = $this->model->get_user_by_id($args[URL_ARG_1]);
-        echo $this->view->crud_update($user, $userdata);
+        echo $this->view->crud_update($userdata);
     }
     
     public function delete($args) {
@@ -186,11 +174,10 @@ class Users_controller extends Webpage_controller {
             Redirect('/users/view');
         }
         
-        // get logged user's data
-        $user = Auth::get_user();
-        
         // check if data sent
         if(isset($_POST['id_korisnika']) ) {
+            $user = Auth::get_user();
+            
             $id_kor = $_POST['id_korisnika'];
             if($user['userid'] != $id_kor) {
                 Database::query('UPDATE korisnici SET status = 0 WHERE id_korisnika = :id', array('id'=>$id_kor) );
@@ -200,7 +187,7 @@ class Users_controller extends Webpage_controller {
         
         // get data
         $userdata = $this->model->get_user_by_id($args[URL_ARG_1]);
-        echo $this->view->crud_delete($user, $userdata);
+        echo $this->view->crud_delete($userdata);
     }
 }
 

@@ -15,8 +15,22 @@ class Areas_view extends Webpage_view {
         return $page->fill();
     }
     
-    public function crud($user, $areas=array() ) {
-        $page = $this->view_auth_prepare($user);
+    public function view_2($areas=array() ) {
+        $page = $this->view_prepare();
+        
+        $content = new Body_table_template('Područja');
+        
+        $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE);
+        
+        $content->set_tabledata($table1);
+        
+        $page->set_body($content->fill() );
+        
+        return $page->fill();
+    }
+    
+    public function crud($areas=array() ) {
+        $page = $this->view_prepare();
         
         $crud_create = '<div style="text-align:right">' . Crud::get_html_c('/areas') . '</div>';
         
@@ -34,8 +48,8 @@ class Areas_view extends Webpage_view {
         return $page->fill();
     }
     
-    public function crud_create($user) {
-        $page = $this->view_auth_prepare($user);
+    public function crud_create() {
+        $page = $this->view_prepare();
         
         $content = new Crud_podrucja();
         $content->set('link-back', 'areas/view');
@@ -44,8 +58,8 @@ class Areas_view extends Webpage_view {
         $page->set_body($content->fill() );
         return $page->fill();
     }
-    public function crud_read($user, $data) {
-        $page = $this->view_auth_prepare($user);
+    public function crud_read($data) {
+        $page = $this->view_prepare();
         
         $content = new Crud_podrucja();
         $content->fill_data($data);
@@ -57,8 +71,8 @@ class Areas_view extends Webpage_view {
         $page->set_body($content->fill() );
         return $page->fill();
     }
-    public function crud_update($user, $data) {
-        $page = $this->view_auth_prepare($user);
+    public function crud_update($data) {
+        $page = $this->view_prepare();
         
         $content = new Crud_podrucja();
         $content->fill_data($data);
@@ -69,8 +83,8 @@ class Areas_view extends Webpage_view {
         $page->set_body($content->fill() );
         return $page->fill();
     }
-    public function crud_delete($user, $data) {
-        $page = $this->view_auth_prepare($user);
+    public function crud_delete($data) {
+        $page = $this->view_prepare();
         
         $content = new Crud_podrucja();
         $content->fill_data($data);
@@ -122,23 +136,7 @@ class Areas_view extends Webpage_view {
     }
     
     protected function view_prepare() {
-        $userprofile = new Template('data/user_profile_menu_login');
-        
-        $page = new Standard_template('Područja', '', 
-                                      '', 
-                                      $userprofile->fill() );
-        $page->set('option-areas', ' selected');
-        
-        return $page;
-    }
-    protected function view_auth_prepare($user) {
-        $userprofile = new Template('data/user_profile_menu');
-        $userprofile->set('username-link', $user['username']);
-        $userprofile->set('username',$user['username']);
-        
-        $page = new Standard_template('Područja', '', 
-                                      '', 
-                                      $userprofile->fill() );
+        $page = new Standard_template('Područja', '');
         $page->set('option-areas', ' selected');
         
         return $page;

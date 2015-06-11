@@ -14,19 +14,16 @@ class Areas_controller extends Webpage_controller {
         if(count($args) != URL_ARGUMENTS_NONE)
             return RET_ERR;
         
-        // if user is not admin
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        // if user is admin
+        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            // get areas
             $areas = $this->model->get_areas();
-            echo $this->view->view($areas);
+            echo $this->view->crud($areas);
             return;
         }
         
-        // get logged user's data
-        $user = Auth::get_user();
-        
-        // get areas
         $areas = $this->model->get_areas();
-        echo $this->view->crud($user, $areas);
+        echo $this->view->view($areas);
     }
     
     public function create($args) {
@@ -37,9 +34,6 @@ class Areas_controller extends Webpage_controller {
         if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
             Redirect('/areas/view');
         }
-        
-        // get logged user's data
-        $user = Auth::get_user();
         
         // check if data sent
         if(isset($_POST['naziv_podrucja']) && 
@@ -53,7 +47,7 @@ class Areas_controller extends Webpage_controller {
             }
         }
         
-        echo $this->view->crud_create($user);
+        echo $this->view->crud_create();
     }
     
     public function read($args) {
@@ -65,9 +59,6 @@ class Areas_controller extends Webpage_controller {
             Redirect('/areas/view');
         }
         
-        // get logged user's data
-        $user = Auth::get_user();
-        
         // check if data sent
         if(isset($_POST['id_podrucja']) ) {
             Redirect('/areas/view');
@@ -75,7 +66,7 @@ class Areas_controller extends Webpage_controller {
         
         // get data
         $areadata = $this->model->get_area_by_id($args[URL_ARG_1]);
-        echo $this->view->crud_read($user, $areadata);
+        echo $this->view->crud_read($areadata);
     }
     
     public function update($args) {
@@ -86,9 +77,6 @@ class Areas_controller extends Webpage_controller {
         if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
             Redirect('/areas/view');
         }
-        
-        // get logged user's data
-        $user = Auth::get_user();
         
         // check if data sent
         if(isset($_POST['id_podrucja']) && 
@@ -106,7 +94,7 @@ class Areas_controller extends Webpage_controller {
         
         // get data
         $areadata = $this->model->get_area_by_id($args[URL_ARG_1]);
-        echo $this->view->crud_update($user, $areadata);
+        echo $this->view->crud_update($areadata);
     }
     
     public function delete($args) {
@@ -118,9 +106,6 @@ class Areas_controller extends Webpage_controller {
             Redirect('/areas/view');
         }
         
-        // get logged user's data
-        $user = Auth::get_user();
-        
         // check if data sent
         if(isset($_POST['id_podrucja']) ) {
             $id = $_POST['id_podrucja'];
@@ -130,7 +115,7 @@ class Areas_controller extends Webpage_controller {
         
         // get data
         $areadata = $this->model->get_area_by_id($args[URL_ARG_1]);
-        echo $this->view->crud_delete($user, $areadata);
+        echo $this->view->crud_delete($areadata);
     }
 }
 

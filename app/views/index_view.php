@@ -5,9 +5,8 @@ class Index_view extends Webpage_view {
         $content = new Template('body/index');
         $userprofile = new Template('data/user_profile_menu_login');
         
-        $page = new Standard_template('Početna', '', 
-                                      $content->fill(), 
-                                      $userprofile->fill() );
+        $page = new Standard_template('Početna');
+        $page->set_body($content->fill() );
         $page->set('option-home', ' selected');
         
         return $page->fill();
@@ -22,9 +21,8 @@ class Index_view extends Webpage_view {
         $userprofile->set('username-link', $user['username']);
         $userprofile->set('username', $user['username']);
         
-        $page = new Standard_template('Početna -- registrirani korisnik', '', 
-                                      $content->fill(), 
-                                      $userprofile->fill() );
+        $page = new Standard_template('Početna -- registrirani korisnik');
+        $page->set_body($content->fill() );
         $page->set('option-home', ' selected');
         
         return $page->fill();
