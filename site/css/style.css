@@ -320,11 +320,11 @@ li{
     background-position: left top;
 }
 .article-video-count{
-    background-image: url('/site/gfx/article-attachement-icon-video.png');
+    background-image: url('../gfx/article-attachement-icon-video.png');
 }
 .article-image-count{
-    background-image: url('/site/gfx/article-attachement-icon-image.png');
+    background-image: url('../gfx/article-attachement-icon-image.png');
 }
 .article-document-count{
-    background-image: url('/site/gfx/article-attachement-icon-document.png');
+    background-image: url('../gfx/article-attachement-icon-document.png');
 }
