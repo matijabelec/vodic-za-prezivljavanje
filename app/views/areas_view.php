@@ -52,7 +52,6 @@ class Areas_view extends Webpage_view {
         
         return $page->fill();
     }
-    
     public function crud_create() {
         $page = $this->view_prepare();
         
@@ -76,6 +75,22 @@ class Areas_view extends Webpage_view {
         $page->set_body($content->fill() );
         return $page->fill();
     }
+    public function crud_read_1($data) {
+        $page = $this->view_prepare();
+        
+        $content = new Body_table_template('Područje ' . $data['id_podrucja']);
+        
+        $areatpl = new Template('data/table-podrucja-read-1');
+        foreach($data as $key=>$val) {
+            $areatpl->set($key, $val);
+        }
+        
+        $content->set_tabledata($areatpl->fill() );
+        $page->set_body($content->fill() );
+        return $page->fill();
+    }
+    
+    
     public function crud_update($data) {
         $page = $this->view_prepare();
         

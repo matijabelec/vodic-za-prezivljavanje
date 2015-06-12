@@ -243,10 +243,18 @@ li{
     margin: 6px 4px 8px;
 }
 .area-more-information{
-    display: inline-block;
-    width: 80%;
     margin: 4px;
 }
+
+.area-section .btn{
+    display: block;
+}
+
+.area-section.detailed .area-img{
+    max-width: 90%;
+    max-height: 300px;
+}
+
 @media screen and (max-width: 380px) {
     .area-section{
         width: 100%;

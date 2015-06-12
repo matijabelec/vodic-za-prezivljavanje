@@ -59,18 +59,26 @@ class Areas_controller extends Webpage_controller {
             return RET_ERR;
         
         // if user is not admin
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            // check if data sent
+            if(isset($_POST['id_podrucja']) ) {
+                Redirect('/areas/view');
+            }
+            
+            // get data
+            $areadata = $this->model->get_area_by_id($args[URL_ARG_1]);
+            echo $this->view->crud_read($areadata);
+        } elseif(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) ) {
+            // check if data sent
+            if(isset($_POST['id_podrucja']) ) {
+                Redirect('/areas/view');
+            }
+            
+            // get data
+            $areadata = $this->model->get_area_by_id($args[URL_ARG_1]);
+            echo $this->view->crud_read_1($areadata);
+        } else
             Redirect('/areas/view');
-        }
-        
-        // check if data sent
-        if(isset($_POST['id_podrucja']) ) {
-            Redirect('/areas/view');
-        }
-        
-        // get data
-        $areadata = $this->model->get_area_by_id($args[URL_ARG_1]);
-        echo $this->view->crud_read($areadata);
     }
     
     public function update($args) {
