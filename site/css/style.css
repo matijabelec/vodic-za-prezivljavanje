@@ -213,3 +213,44 @@ li{
     background-color: #662200;
     color: #ddeede;
 }
+
+
+
+  /*********/
+ /* areas */
+/*********/
+.area-section{
+    display: inline-block;
+    box-sizing: border-box;
+    border: 1px solid #dedede;
+    position: relative;
+    width: 50%;
+    margin-top: 10px;
+    margin-bottom: 12px;
+    padding: 8px 4px;
+}
+.area-img{
+    display: inline-block;
+    max-width: 90%;
+    max-height: 100px;
+    margin: 2px auto;
+}
+.area-title{
+    font-size: 22pt;
+}
+.area-desc{
+    font-size: 14pt;
+    margin: 6px 4px 8px;
+}
+.area-more-information{
+    display: inline-block;
+    width: 80%;
+    margin: 4px;
+}
+@media screen and (max-width: 380px) {
+    .area-section{
+        width: 100%;
+        margin-top: 6px;
+        margin-bottom: 8px;
+    }
+}

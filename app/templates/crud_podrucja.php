@@ -9,6 +9,8 @@ class Crud_podrucja extends Template {
         
         $this->set('id_podrucja', '0');
         $this->set('naziv_podrucja', '');
+        $this->set('opis', '');
+        $this->set('slika', '');
         
         $this->set('status-1', '');
         $this->set('status-2', '');

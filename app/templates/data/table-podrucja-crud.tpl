@@ -3,6 +3,12 @@
         <label for="naziv_podrucja">Naziv područja: </label>
         <input type="text" name="naziv_podrucja" value="{@naziv_podrucja}" {@readonly}>
         
+        <label for="opis">Opis: </label>
+        <input type="text" name="opis" value="{@opis}" {@readonly}>
+        
+        <label for="slika">Slika: </label>
+        <input type="text" name="slika" value="{@slika}" {@readonly}>
+        
         <label for="status">Status: </label>
         <select name="status" {@readonly}>
             <option value="1" {@status-1}>Aktivno</option>

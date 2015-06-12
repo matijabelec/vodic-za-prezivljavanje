@@ -22,7 +22,7 @@ class Areas_controller extends Webpage_controller {
             return;
         }
         
-        $areas = $this->model->get_areas();
+        $areas = $this->model->get_active_areas();
         echo $this->view->view($areas);
     }
     
@@ -37,11 +37,15 @@ class Areas_controller extends Webpage_controller {
         
         // check if data sent
         if(isset($_POST['naziv_podrucja']) && 
+           isset($_POST['opis']) && 
+           isset($_POST['slika']) && 
            isset($_POST['status']) ) {
             $st = $_POST['status'];
             if($st>=0 && $st<=1) {
-                Database::query('INSERT INTO podrucja(naziv_podrucja, status) VALUES(:title, :status)',
+                Database::query('INSERT INTO podrucja(naziv_podrucja, opis, slika, status) VALUES(:title, :opis, :slika, :status)',
                 array('title' => $_POST['naziv_podrucja'],
+                      'opis' => $_POST['opis'],
+                      'slika' => $_POST['slika'],
                       'status' => $st) );
                 Redirect('/areas/view');
             }
@@ -81,12 +85,16 @@ class Areas_controller extends Webpage_controller {
         // check if data sent
         if(isset($_POST['id_podrucja']) && 
            isset($_POST['naziv_podrucja']) && 
+           isset($_POST['opis']) && 
+           isset($_POST['slika']) && 
            isset($_POST['status']) ) {
             $st = $_POST['status'];
             if($st>=0 && $st<=1) {
-                Database::query('UPDATE podrucja SET naziv_podrucja=:title, status=:status WHERE id_podrucja=:id',
+                Database::query('UPDATE podrucja SET naziv_podrucja=:title, opis=:opis, slika=:slika, status=:status WHERE id_podrucja=:id',
                 array('id' => $_POST['id_podrucja'],
                       'title' => $_POST['naziv_podrucja'],
+                      'opis' => $_POST['opis'],
+                      'slika' => $_POST['slika'],
                       'status' => $st) );
                 Redirect('/areas/view');
             }

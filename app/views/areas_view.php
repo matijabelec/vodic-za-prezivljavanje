@@ -6,12 +6,17 @@ class Areas_view extends Webpage_view {
         
         $content = new Body_table_template('Područja');
         
-        $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE);
+        $ar = '';
+        $areatpl = new Template('data/table-podrucja-1');
+        foreach($areas as $area) {
+            foreach($area as $key=>$val) {
+                $areatpl->set($key, $val);
+            }
+            $ar .= $areatpl->fill();
+        }
         
-        $content->set_tabledata($table1);
-        
+        $content->set_tabledata($ar);
         $page->set_body($content->fill() );
-        
         return $page->fill();
     }
     
