@@ -196,6 +196,10 @@ li{
 .right{float: right;}
 
 
+
+.btn-out{
+    text-align: right;
+}
 .btn{
     display: inline-block;
     box-sizing: border-box;
@@ -222,18 +226,35 @@ li{
 .area-section{
     display: inline-block;
     box-sizing: border-box;
-    border: 1px solid #dedede;
     position: relative;
-    width: 50%;
+    width: 100%;
     margin-top: 10px;
     margin-bottom: 12px;
     padding: 8px 4px;
+    text-align: left;
+}
+.area-section:not(:last-child){
+    border-bottom: 1px solid #dedede;
+}
+.area-img-out{
+    display: inline-block;
+    box-sizing: border-box;
+    position: relative;
+    width: 30%;
+    text-align: right;
 }
 .area-img{
     display: inline-block;
+    box-sizing: border-box;
     max-width: 90%;
-    max-height: 100px;
-    margin: 2px auto;
+    max-height: 120px;
+    margin: 2px 5%;
+}
+.area-short-desc{
+    display: inline-block;
+    box-sizing: border-box;
+    width: 70%;
+    padding: 4px 8px 8px;
 }
 .area-title{
     font-size: 22pt;
@@ -247,18 +268,63 @@ li{
 }
 
 .area-section .btn{
-    display: block;
+    margin-right: 4px 4px 4px 40px;
 }
 
-.area-section.detailed .area-img{
-    max-width: 90%;
-    max-height: 300px;
-}
-
-@media screen and (max-width: 380px) {
-    .area-section{
+@media screen and (max-width: 380px){
+    .area-img-out{
+        display: block;
         width: 100%;
-        margin-top: 6px;
-        margin-bottom: 8px;
+        text-align: center;
     }
+    .area-short-desc{
+        display: block;
+        width: 100%;
+    }
+}
+
+.area-section-detailed .btn{
+    margin-top: 8px;
+    margin-right: 40px;
+}
+.area-detailed-information{
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    width: 70%;
+    margin: auto;
+}
+.area-detailed-information>h3{
+    text-align: left;
+}
+.area-detailed-information>ul{
+    list-style-type: none;
+}
+
+
+.article-information-small{
+    
+}
+.article-information-small .article-title{
+    font-weight: bold;
+}
+.article-video-count,
+.article-image-count,
+.article-document-count{
+    display: inline-block;
+    font-weight: bold;
+    padding-left:32px;
+    padding-top: 10px;
+    height: 40px;
+    background-repeat: no-repeat;
+    background-position: left top;
+}
+.article-video-count{
+    background-image: url('/site/gfx/article-attachement-icon-video.png');
+}
+.article-image-count{
+    background-image: url('/site/gfx/article-attachement-icon-image.png');
+}
+.article-document-count{
+    background-image: url('/site/gfx/article-attachement-icon-document.png');
 }

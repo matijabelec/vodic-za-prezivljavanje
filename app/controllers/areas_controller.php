@@ -76,7 +76,10 @@ class Areas_controller extends Webpage_controller {
             
             // get data
             $areadata = $this->model->get_area_by_id($args[URL_ARG_1]);
-            echo $this->view->crud_read_1($areadata);
+            
+            $articles = $this->model->get_articles_for_area($args[URL_ARG_1]);
+            
+            echo $this->view->crud_read_1(array('area'=>$areadata, 'articles'=>$articles) );
         } else
             Redirect('/areas/view');
     }
