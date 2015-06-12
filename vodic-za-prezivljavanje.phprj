@@ -1,0 +1,19 @@
+{
+ "m_name": "vodic-za-prezivljavanje",
+ "m_isActive": true,
+ "m_importFileSpec": "*.php;*.html;*.phtml;*.inc;*.css;*.js;.htaccess;*.tpl;robots.txt;*.png",
+ "m_excludeFolders": ".git;.svn;.codelite",
+ "settings": {
+  "m_runAs": 1,
+  "m_phpExe": "/usr/bin/php",
+  "m_indexFile": "/var/www/html/vodic-za-prezivljavanje/app/models/users_model.php",
+  "m_args": "",
+  "m_workingDirectory": "",
+  "m_projectURL": "prezivljavanje.dom",
+  "m_includePath": "",
+  "m_ccIncludePath": "",
+  "m_flags": 5,
+  "m_phpIniFile": "",
+  "m_fileMapping": []
+ }
+}
