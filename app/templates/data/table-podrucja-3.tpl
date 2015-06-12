@@ -5,7 +5,7 @@
         <h2 class="area-title">{@naziv_podrucja}</h2>
         <p class="area-desc">{@opis}</p>
         
-        <a class="btn area-subscribe" href="{@project_root_path}/subscribes/create/{@id_podrucja}">Pretplati se</a>
+        <a class="btn area-subscribe" href="{@project_root_path}/subscribes{@subscribe-link}">{@subscribe}</a>
         <a class="btn area-more-information" href="{@project_root_path}/areas/read/{@id_podrucja}">Više</a>
     </div>
 </section>

@@ -1,13 +1,49 @@
 <?php
 
 class Areas_view extends Webpage_view {
-    public function view($areas=array() ) {
+    public function view_guest($areas=array() ) {
         $page = $this->view_prepare();
         
         $content = new Body_table_template('Područja');
         
         $ar = '';
-        $areatpl = new Template('data/table-podrucja-1');
+        $areatpl = new Template('data/table-podrucja-3');
+        foreach($areas as $area) {
+            foreach($area as $key=>$val) {
+                $areatpl->set($key, $val);
+            }
+            $ar .= $areatpl->fill();
+        }
+        
+        $content->set_tabledata($ar);
+        $page->set_body($content->fill() );
+        return $page->fill();
+    }
+    public function view_registered($areas=array() ) {
+        $page = $this->view_prepare();
+        
+        $content = new Body_table_template('Područja');
+        
+        $ar = '';
+        $areatpl = new Template('data/table-podrucja-3');
+        foreach($areas as $area) {
+            foreach($area as $key=>$val) {
+                $areatpl->set($key, $val);
+            }
+            $ar .= $areatpl->fill();
+        }
+        
+        $content->set_tabledata($ar);
+        $page->set_body($content->fill() );
+        return $page->fill();
+    }
+    public function view_moderator($areas=array() ) {
+        $page = $this->view_prepare();
+        
+        $content = new Body_table_template('Područja');
+        
+        $ar = '';
+        $areatpl = new Template('data/table-podrucja-3');
         foreach($areas as $area) {
             foreach($area as $key=>$val) {
                 $areatpl->set($key, $val);
@@ -20,19 +56,16 @@ class Areas_view extends Webpage_view {
         return $page->fill();
     }
     
-    public function view_2($areas=array() ) {
+    /*public function view_2($areas=array() ) {
         $page = $this->view_prepare();
         
         $content = new Body_table_template('Područja');
-        
         $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE);
         
         $content->set_tabledata($table1);
-        
         $page->set_body($content->fill() );
-        
         return $page->fill();
-    }
+    }*/
     
     public function crud($areas=array() ) {
         $page = $this->view_prepare();
@@ -75,7 +108,65 @@ class Areas_view extends Webpage_view {
         $page->set_body($content->fill() );
         return $page->fill();
     }
-    public function crud_read_1($data) {
+    public function crud_read_moderator($data) {
+        $page = $this->view_prepare();
+        
+        $area_data = $data['area'];
+        
+        $content = new Body_table_template('Područje ' . $area_data['id_podrucja']);
+        
+        $areatpl = new Template('data/table-podrucja-read-2');
+        foreach($area_data as $key=>$val) {
+            $areatpl->set($key, $val);
+        }
+        
+        if(count($data['articles']) > 0) {
+            $article_tpl = new Template('data/table-clanci-small-1');
+            $article_previewdata = '<ul class="area-articles">';
+            foreach($data['articles'] as $article) {
+                foreach($article as $key=>$val)
+                    $article_tpl->set($key, $val);
+                $article_previewdata .= $article_tpl->fill();
+            }
+            $article_previewdata .= '</ul>';
+        } else
+            $article_previewdata = '<p>Nema članaka</p>';
+        $areatpl->set('area-articles', $article_previewdata);
+        
+        $content->set_tabledata($areatpl->fill() );
+        $page->set_body($content->fill() );
+        return $page->fill();
+    }
+    public function crud_read_registered($data) {
+        $page = $this->view_prepare();
+        
+        $area_data = $data['area'];
+        
+        $content = new Body_table_template('Područje ' . $area_data['id_podrucja']);
+        
+        $areatpl = new Template('data/table-podrucja-read-3');
+        foreach($area_data as $key=>$val) {
+            $areatpl->set($key, $val);
+        }
+        
+        if(count($data['articles']) > 0) {
+            $article_tpl = new Template('data/table-clanci-small-1');
+            $article_previewdata = '<ul class="area-articles">';
+            foreach($data['articles'] as $article) {
+                foreach($article as $key=>$val)
+                    $article_tpl->set($key, $val);
+                $article_previewdata .= $article_tpl->fill();
+            }
+            $article_previewdata .= '</ul>';
+        } else
+            $article_previewdata = '<p>Nema članaka</p>';
+        $areatpl->set('area-articles', $article_previewdata);
+        
+        $content->set_tabledata($areatpl->fill() );
+        $page->set_body($content->fill() );
+        return $page->fill();
+    }
+    public function crud_read_guest($data) {
         $page = $this->view_prepare();
         
         $area_data = $data['area'];

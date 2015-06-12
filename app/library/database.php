@@ -55,6 +55,15 @@ class Database {
         self::disconnect();
         return $res;
     }
+    
+    public static function insert($sql, $args=array() ) {
+        $db = self::connect();
+        $st = $db->prepare($sql);
+        $st->execute($args);
+        $ok = $st->rowCount() ? true : false;
+        self::disconnect();
+        return $ok;
+    }
 }
 
 ?>
