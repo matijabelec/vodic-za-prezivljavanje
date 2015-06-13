@@ -14,14 +14,15 @@ class Areas_controller extends Webpage_controller {
         if(count($args) != URL_ARGUMENTS_NONE)
             return RET_ERR;
         
-        // if user is admin
-        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) || 
-           Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) || 
-           Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
+        if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) ) {
+            $areas = $this->model->get_active_areas();
+            echo $this->view->view_guest($areas);
+        } else {
             $user = Auth::get_user();
             
             // get areas
             $areas = $this->model->get_active_areas();
+            $areas2 = $this->model->get_deleted_areas();
             
             $subs = new Subscribes_model;
             foreach($areas as &$area) {
@@ -36,12 +37,13 @@ class Areas_controller extends Webpage_controller {
                 }
             }
             
-            echo $this->view->view_registered($areas);
-        
-        // if user is guest
-        } else {
-            $areas = $this->model->get_active_areas();
-            echo $this->view->view_guest($areas);
+            if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+                $areas2 = $this->model->get_deleted_areas();
+                
+                echo $this->view->view_registered($areas, $areas2);
+            } else {
+                echo $this->view->view_registered($areas);
+            }
         }
     }
     

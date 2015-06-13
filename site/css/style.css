@@ -271,6 +271,12 @@ form input.btn{
     padding: 8px 4px;
     text-align: left;
 }
+.area-section.area-active{
+    background-color: #77ee77;
+}
+.area-section.area-deleted{
+    background-color: #ee7777;
+}
 .area-section:not(:last-child){
     border-bottom: 1px solid #dedede;
 }
@@ -308,6 +314,7 @@ form input.btn{
 .area-section .btn{
     margin-right: 4px 4px 4px 40px;
 }
+
 
 @media screen and (max-width: 380px){
     .area-img-out{

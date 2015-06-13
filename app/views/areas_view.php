@@ -19,18 +19,35 @@ class Areas_view extends Webpage_view {
         $page->set_body($content->fill() );
         return $page->fill();
     }
-    public function view_registered($areas=array() ) {
+    public function view_registered($areas=array(), $areas2=null) {
         $page = $this->view_prepare();
         
         $content = new Body_table_template('Područja');
         
         $ar = '';
+        
+        if(!is_null($areas2) ) {
+            $ar .= '<h3>Aktivna područja</h3>';
+        }
+        
         $areatpl = new Template('data/table-podrucja-3');
         foreach($areas as $area) {
             foreach($area as $key=>$val) {
                 $areatpl->set($key, $val);
             }
             $ar .= $areatpl->fill();
+        }
+        
+        if(!is_null($areas2) ) {
+            $ar .= '<h3>Izbrisana područja</h3>';
+            
+            $areatpl = new Template('data/table-podrucja-2');
+            foreach($areas2 as $area) {
+                foreach($area as $key=>$val) {
+                    $areatpl->set($key, $val);
+                }
+                $ar .= $areatpl->fill();
+            }
         }
         
         $content->set_tabledata($ar);

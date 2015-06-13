@@ -1,6 +1,6 @@
-<section class="area-section">
+<section class="area-section area-active">
     <div class="area-img-out">
-        <img class="area-img" src="{@slika}" alt="[slika područja {@naziv_podrucja}]">
+        <img class="area-img" src="{@slika}" onerror="if(this.src!='{@project_root_path}/site/gfx/area-error-img.png') this.src='{@project_root_path}/site/gfx/area-error-img.png';" alt="[slika područja {@naziv_podrucja}]">
     </div><div class="area-short-desc">
         <h2 class="area-title">{@naziv_podrucja}</h2>
         <p class="area-desc">{@opis}</p>
