@@ -1,6 +1,6 @@
 <?php
 
-class Areas_controller extends Webpage_controller {
+class Areas_controller extends Controller {
     public function __construct() {
         $this->view = new Areas_view;
         $this->model = new Areas_model;

@@ -1,6 +1,6 @@
 <?php
 
-class Index_controller extends Webpage_controller {
+class Index_controller extends Controller {
     public function __construct() {
         $this->view = new Index_view;
     }

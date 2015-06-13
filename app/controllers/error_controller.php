@@ -1,6 +1,6 @@
 <?php
 
-class Error_controller extends Webpage_controller {
+class Error_controller extends Controller {
     public function __construct() {
         $this->view = new Error_view;
     }

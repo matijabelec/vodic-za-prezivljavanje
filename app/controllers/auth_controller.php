@@ -1,6 +1,6 @@
 <?php
 
-class Auth_controller extends Webpage_controller {
+class Auth_controller extends Controller {
     public function __construct() {
         $this->view = new Auth_view;
     }

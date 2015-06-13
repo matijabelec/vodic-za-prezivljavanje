@@ -28,7 +28,7 @@
  *  
  */
 
-class Users_controller extends Webpage_controller {
+class Users_controller extends Controller {
     public function __construct() {
         $this->view = new Users_view;
         $this->model = new Users_model;

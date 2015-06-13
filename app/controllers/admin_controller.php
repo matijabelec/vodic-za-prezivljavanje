@@ -1,6 +1,6 @@
 <?php
 
-class Admin_controller extends Webpage_controller {
+class Admin_controller extends Controller {
     public function __construct() {
         $this->view = new Admin_view;
         $this->model = new Admin_model;

@@ -1,6 +1,6 @@
 <?php
 
-class Subscribes_controller extends Webpage_controller {
+class Subscribes_controller extends Controller {
     public function __construct() {
         $this->model = new Subscribes_model;
     }
