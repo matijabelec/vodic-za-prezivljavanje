@@ -68,7 +68,7 @@ define('URL_INDEX_ARG_3', 3);
 
 
 
-define('WEBSITE_ROOT_NAME', 'localhost');
+define('WEBSITE_ROOT_NAME', 'localhost');//'http://arka.foi.hr'
 define('WEBSITE_ROOT_PATH', '');//DS.'WebDiP'.DS.'2014_projekti'.DS.'WebDiP2014x004');
 
 ?>
