@@ -7,6 +7,8 @@
     
     <!--<link rel="shortcut icon" href="/icon.ico"/>-->
     
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>-->
+    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{@project_root_path}/site/css/style.css"/>
     {@head-data}
 </head>
@@ -22,10 +24,12 @@
         {@body}
     </div>
     <footer id="footer">
-        <ul id="footer-menu" class="menu-list">
-            <li><a class="menu-option{@option-documentation}" href="{@project_root_path}/dokumentacija.html">Dokumentacija</a></li>
-            <li><a class="menu-option{@option-about-author}" href="{@project_root_path}/o_autoru.html">O autoru</a></li>
-        </ul>
+        <div class="footnav">
+            <ul id="footer-menu" class="menu-list">
+                <li><a class="menu-option{@option-documentation}" href="{@project_root_path}/dokumentacija.html">Dokumentacija</a></li>
+                <li><a class="menu-option{@option-about-author}" href="{@project_root_path}/o_autoru.html">O autoru</a></li>
+            </ul>
+        </div>
         <div id="copyright-info">{@copyright-info-data}</div>
     </footer>
 </body>

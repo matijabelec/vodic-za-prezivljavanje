@@ -3,13 +3,19 @@
     <div id="div-errors">{@errors}</div>
     <div>
         <form name="frm-login" action="{@project_root_path}/auth/login" method="post">
-            <label for="username">Korisničko ime: </label>
-            <input type="text" name="username"><br>
+            <div>
+                <input type="text" name="username"><br>
+                <label for="username">Korisničko ime: </label>
+            </div>
             
-            <label for="password">Lozinka: </label>
-            <input type="password" name="password"><br>
+            <div>
+                <input type="password" name="password"><br>
+                <label for="password">Lozinka: </label>
+            </div>
             
-            <input type="submit" value="Prijavi se">
+            <div>
+                <input type="submit" value="Prijavi se">
+            </div>
         </form>
     </div>
 </section>

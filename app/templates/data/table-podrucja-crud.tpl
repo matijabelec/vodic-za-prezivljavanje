@@ -1,19 +1,27 @@
-<div>
+<section class="frm-areas">
     <form action="{@project_root_path}/{@link}" method="post">
-        <label for="naziv_podrucja">Naziv područja: </label>
-        <input type="text" name="naziv_podrucja" value="{@naziv_podrucja}" {@readonly}>
+        <div>
+            <input type="text" name="naziv_podrucja" value="{@naziv_podrucja}" {@readonly}>
+            <label for="naziv_podrucja">Naziv područja: </label>
+        </div>
         
-        <label for="opis">Opis: </label>
-        <input type="text" name="opis" value="{@opis}" {@readonly}>
+        <div>
+            <textarea name="opis" {@readonly}>{@opis}</textarea>
+            <label for="opis">Opis: </label>
+        </div>
         
-        <label for="slika">Slika: </label>
-        <input type="text" name="slika" value="{@slika}" {@readonly}>
+        <div>
+            <input type="text" name="slika" value="{@slika}" {@readonly}>
+            <label for="slika">Slika: </label>
+        </div>
         
-        <label for="status">Status: </label>
-        <select name="status" {@readonly}>
-            <option value="1" {@status-1}>Aktivno</option>
-            <option value="0" {@status-0}>Izbrisano</option>
-        </select>
+        <div>
+            <select name="status" {@readonly}>
+                <option value="1" {@status-1}>Aktivno</option>
+                <option value="0" {@status-0}>Izbrisano</option>
+            </select>
+            <label for="status">Status: </label>
+        </div>
         
         <input type="hidden" name="id_podrucja" value='{@id_podrucja}' {@readonly}>
         
@@ -22,4 +30,4 @@
             <input class="btn" type="submit" value="{@btn-submit}">
         </div>
     </form>
-</div>
+</section>

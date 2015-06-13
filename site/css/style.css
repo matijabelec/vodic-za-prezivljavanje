@@ -18,7 +18,8 @@ a:hover{
 body{
     color: #000000;
     background-color: #ffffff;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    /*font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;*/
+    font-family: 'PT Sans', sans-serif;
     text-align: center;
     background-image: url('../gfx/bg-circle.png');
     background-repeat: repeat;
@@ -48,25 +49,31 @@ li{
   /**************/
  /* navigation */
 /**************/
-#nav{
+#nav,
+#footer>.footnav{
     box-sizing: border-box;
     display: block;
     position: relative;
-    font-size: 12pt;
+    font-size: 14pt;
     text-align: center;
     border-top: 3px solid #eeeeee;
     border-bottom: 3px solid #eeeeee;
     z-index: 900;
-    height: 30px;
     background-color: #444444;
+    padding: 4px;
+    height: 38px;
+    overflow: hidden;
+}
+#footer>.footnav{
+    padding-top: 2px;
 }
 #nav>ul,
-#footer>ul{
+#footer .footnav>ul{
     display: inline-block;
     list-style: none;
 }
 #nav>ul>li,
-#footer>ul>li{
+#footer .footnav>ul>li{
     display: inline-block;
 }
 
@@ -150,32 +157,63 @@ li{
     margin: 4px 30px;
 }
 
-#main form{
-    display: inline-block;
+
+form{
+    display: block;
     position: relative;
-    margin: 20px 2px;
-    max-width: 700px;
-}
-#main form label,
-#main form input:not([type='submit']),
-#main form textarea, 
-#main form select{
-    display: inline-block;
     box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    font-size: 14pt;
+    padding: 20px 10px;
 }
-#main form label{
-    width: 40%;
-    text-align: right;
-    white-space: nowrap;
+form>div{
+    position: relative;
+    overflow: hidden;
 }
-#main form input:not([type='submit']),
-#main form textarea, 
-#main form select{
-    width: 55%;
+form>div>label{
+    display: block;
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    font-size: 16px;
+    color: #cc6600;
 }
+form input,
+form textarea,
+form select{
+    display: block;
+    box-sizing: border-box;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border: 1px solid #aaaaaa; 
+    background: none;
+    padding: 32px 12px 10px;
+    margin-bottom: 8px;
+    outline: 0;
+    z-index: 5;
+    font-size: 24px;
+    font-family: ;
+}
+form textarea{
+  resize: vertical;
+}
+form input:focus,
+form textarea:focus,
+form select:focus{
+    padding-left: 40px;
+    transition: 100ms;
+}
+form input[type=submit]{
+    background-color: #00bb66;
+    color: #dedede;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 8px 10px;
+}
+form input.btn{
+    width: inherit;
+}
+
 
 #main table{
     width: 95%;
@@ -283,10 +321,6 @@ li{
     }
 }
 
-.area-section-detailed .btn{
-    margin-top: 8px;
-    margin-right: 40px;
-}
 .area-detailed-information{
     display: inline-block;
     position: relative;
@@ -327,4 +361,16 @@ li{
 }
 .article-document-count{
     background-image: url('../gfx/article-attachement-icon-document.png');
+}
+
+
+
+
+
+
+.frm-areas{
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    width: 80%;
 }
