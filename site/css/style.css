@@ -32,6 +32,11 @@ li{
     background-color: #000000;
 }
 
+h1,h2,h3,h4,h5{
+    text-align: left;
+}
+
+
 
   /**********/
  /* header */
@@ -132,21 +137,28 @@ li{
     padding: 24px 8px 12px;
     text-align: center;
 }
-#main .main-section>h2{
+#main .main-section h2{
     display: block;
     text-align: left;
     border-bottom: 1px solid #aaaaaa;
     margin: 12px 10px 6px;
     padding: 4px 2px 2px 12px;
 }
-#main .main-section>h2:after{
+#main .main-section h2:after{
     clear: both;
 }
-#main .main-section>h3{
+#main .main-section h3{
+    display: block;
+    text-align: left;
+    border-bottom: 1px solid #cccccc;
+    margin: 12px 10px 6px 18px;
+    padding: 4px 2px 2px 20px;
+}
+#main .main-section h4{
     display: block;
     text-align: left;
     margin: 12px 10px 6px 18px;
-    padding: 4px 2px 2px 20px;
+    padding: 4px 2px 2px 32px;
 }
 #main .main-section>p{
     text-align: justify;
@@ -372,12 +384,13 @@ form input.btn{
 
 
 
-
-
-
 .frm-areas{
     display: inline-block;
     position: relative;
     box-sizing: border-box;
     width: 80%;
 }
+
+
+
+
