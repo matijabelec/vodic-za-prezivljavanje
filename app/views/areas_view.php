@@ -7,7 +7,7 @@ class Areas_view extends Webpage_view {
         $content = new Body_table_template('Područja');
         
         $ar = '';
-        $areatpl = new Template('data/table-podrucja-3');
+        $areatpl = new Template('data/table-podrucja-0');
         foreach($areas as $area) {
             foreach($area as $key=>$val) {
                 $areatpl->set($key, $val);
@@ -37,35 +37,7 @@ class Areas_view extends Webpage_view {
         $page->set_body($content->fill() );
         return $page->fill();
     }
-    public function view_moderator($areas=array() ) {
-        $page = $this->view_prepare();
-        
-        $content = new Body_table_template('Područja');
-        
-        $ar = '';
-        $areatpl = new Template('data/table-podrucja-3');
-        foreach($areas as $area) {
-            foreach($area as $key=>$val) {
-                $areatpl->set($key, $val);
-            }
-            $ar .= $areatpl->fill();
-        }
-        
-        $content->set_tabledata($ar);
-        $page->set_body($content->fill() );
-        return $page->fill();
-    }
     
-    /*public function view_2($areas=array() ) {
-        $page = $this->view_prepare();
-        
-        $content = new Body_table_template('Područja');
-        $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE);
-        
-        $content->set_tabledata($table1);
-        $page->set_body($content->fill() );
-        return $page->fill();
-    }*/
     
     public function crud($areas=array() ) {
         $page = $this->view_prepare();
@@ -85,6 +57,7 @@ class Areas_view extends Webpage_view {
         
         return $page->fill();
     }
+    
     public function crud_create() {
         $page = $this->view_prepare();
         
@@ -95,35 +68,29 @@ class Areas_view extends Webpage_view {
         $page->set_body($content->fill() );
         return $page->fill();
     }
-    public function crud_read($data) {
+    
+    
+    public function crud_read($data, $controls=array() ) {
         $page = $this->view_prepare();
         
-        $content = new Crud_podrucja();
-        $content->fill_data($data);
-        $content->set('link-back', 'areas/view');
-        $content->set('link', 'areas/read/'.$data['id_podrucja']);
-        $content->set('status-'.$data['status'], 'selected');
-        $content->set('readonly', 'readonly');
+        if(isset($data['subscribes']) )
+            $subsc = $data['subscribes'];
         
-        $page->set_body($content->fill() );
-        return $page->fill();
-    }
-    public function crud_read_moderator($data) {
-        $page = $this->view_prepare();
-        
+        $articles_data = $data['articles'];
         $area_data = $data['area'];
+        $areaid = $area_data['id_podrucja'];
         
-        $content = new Body_table_template('Područje ' . $area_data['id_podrucja']);
+        $content = new Body_table_template('Područje ' . $areaid);
         
-        $areatpl = new Template('data/table-podrucja-read-2');
+        $areatpl = new Template('data/table-podrucja-read');
         foreach($area_data as $key=>$val) {
             $areatpl->set($key, $val);
         }
         
-        if(count($data['articles']) > 0) {
+        if(count($articles_data) > 0) {
             $article_tpl = new Template('data/table-clanci-small-1');
             $article_previewdata = '<ul class="area-articles">';
-            foreach($data['articles'] as $article) {
+            foreach($articles_data as $article) {
                 foreach($article as $key=>$val)
                     $article_tpl->set($key, $val);
                 $article_previewdata .= $article_tpl->fill();
@@ -133,63 +100,29 @@ class Areas_view extends Webpage_view {
             $article_previewdata = '<p>Nema članaka</p>';
         $areatpl->set('area-articles', $article_previewdata);
         
-        $content->set_tabledata($areatpl->fill() );
-        $page->set_body($content->fill() );
-        return $page->fill();
-    }
-    public function crud_read_registered($data) {
-        $page = $this->view_prepare();
-        
-        $area_data = $data['area'];
-        
-        $content = new Body_table_template('Područje ' . $area_data['id_podrucja']);
-        
-        $areatpl = new Template('data/table-podrucja-read-3');
-        foreach($area_data as $key=>$val) {
-            $areatpl->set($key, $val);
-        }
-        
-        if(count($data['articles']) > 0) {
-            $article_tpl = new Template('data/table-clanci-small-1');
-            $article_previewdata = '<ul class="area-articles">';
-            foreach($data['articles'] as $article) {
-                foreach($article as $key=>$val)
-                    $article_tpl->set($key, $val);
-                $article_previewdata .= $article_tpl->fill();
+        $ctrls = '';
+        foreach($controls as $c)
+            if($c == 'back')
+                $ctrls .= '<a class="btn" href="{@project_root_path}/areas/view">Natrag</a>';
+            elseif($c == 'update')
+                $ctrls .= '<a class="btn" href="{@project_root_path}/areas/update/' . $areaid . '">Uredi</a>';
+            elseif($c == 'delete')
+                $ctrls .= '<a class="btn" href="{@project_root_path}/areas/delete/' . $areaid . '">Izbriši</a>';
+            elseif($c == 'subscribe') {
+                if($subsc != true) {
+                    $subs_link = 'create';
+                    $subs = 'Pretplati se';
+                } else {
+                    $subs_link = 'delete';
+                    $subs = 'Prekini pretplatu';
+                }
+                
+                $ctrls .= '<a class="btn" href="{@project_root_path}/subscribes/' . $subs_link . '/' . $areaid . '">' . $subs . '</a>';
             }
-            $article_previewdata .= '</ul>';
-        } else
-            $article_previewdata = '<p>Nema članaka</p>';
-        $areatpl->set('area-articles', $article_previewdata);
         
-        $content->set_tabledata($areatpl->fill() );
-        $page->set_body($content->fill() );
-        return $page->fill();
-    }
-    public function crud_read_guest($data) {
-        $page = $this->view_prepare();
+        $areatpl->set('area-controls', $ctrls);
         
-        $area_data = $data['area'];
         
-        $content = new Body_table_template('Područje ' . $area_data['id_podrucja']);
-        
-        $areatpl = new Template('data/table-podrucja-read-1');
-        foreach($area_data as $key=>$val) {
-            $areatpl->set($key, $val);
-        }
-        
-        if(count($data['articles']) > 0) {
-            $article_tpl = new Template('data/table-clanci-small-1');
-            $article_previewdata = '<ul class="area-articles">';
-            foreach($data['articles'] as $article) {
-                foreach($article as $key=>$val)
-                    $article_tpl->set($key, $val);
-                $article_previewdata .= $article_tpl->fill();
-            }
-            $article_previewdata .= '</ul>';
-        } else
-            $article_previewdata = '<p>Nema članaka</p>';
-        $areatpl->set('area-articles', $article_previewdata);
         
         $content->set_tabledata($areatpl->fill() );
         $page->set_body($content->fill() );
@@ -209,19 +142,7 @@ class Areas_view extends Webpage_view {
         $page->set_body($content->fill() );
         return $page->fill();
     }
-    public function crud_delete($data) {
-        $page = $this->view_prepare();
-        
-        $content = new Crud_podrucja();
-        $content->fill_data($data);
-        $content->set('link-back', 'areas/view');
-        $content->set('link', 'areas/delete/'.$data['id_podrucja']);
-        $content->set('status-'.$data['status'], 'selected');
-        $content->set('readonly', 'readonly');
-        
-        $page->set_body($content->fill() );
-        return $page->fill();
-    }
+    
     
     
     protected function create_table_areas($data='', $type=PROJECT_DATA_STATUS_ACTIVE, $crud=false, $headers=true) {

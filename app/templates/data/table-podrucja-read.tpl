@@ -11,7 +11,6 @@
     </section>
     
     <div class="btn-out">
-        <a class="btn" href="{@project_root_path}/subscribes/create/{@id_podrucja}">Pretplati se</a>
-        <a class="btn" href="{@project_root_path}/areas/view">Ok</a>
+        {@area-controls}
     </div>
 </section>

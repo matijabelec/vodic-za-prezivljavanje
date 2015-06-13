@@ -12,8 +12,8 @@ class Crud_podrucja extends Template {
         $this->set('opis', '');
         $this->set('slika', '');
         
+        $this->set('status-0', '');
         $this->set('status-1', '');
-        $this->set('status-2', '');
         
         $this->set('readonly', '');
         

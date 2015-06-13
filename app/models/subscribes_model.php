@@ -41,36 +41,36 @@ class Subscribes_model extends Model {
     }
     
     
-    public function subscribe($userid, $areaid) {
+    public static function subscribe($userid, $areaid) {
         $ok = Database::insert('INSERT INTO pretplate(id_podrucja, id_korisnika, status) VALUES(:areaid, :userid, 1)',
                             array('userid'=>$userid, 'areaid'=>$areaid) );
         if(!$ok) {
-            $ok2 = Database::insert('UPDATE pretplate SET status = 1 WHERE id_korisnika = :userid AND id_podrucja = :areaid AND status = 0',
+            return Database::insert('UPDATE pretplate SET status = 1 WHERE id_korisnika = :userid AND id_podrucja = :areaid AND status = 0',
                                     array('userid'=>$userid, 'areaid'=>$areaid) );
         }
-        return $ok;
+        return false;
     }
     
-    public function unsubscribe($userid, $areaid) {
+    public static function unsubscribe($userid, $areaid) {
         return Database::insert('UPDATE pretplate SET status = 0 WHERE id_korisnika = :userid AND id_podrucja = :areaid AND status = 1',
                                 array('userid'=>$userid, 'areaid'=>$areaid) );
     }
     
     
-    public function restrict_access($userid, $areaid) {
+    public static function restrict_access($userid, $areaid) {
         return Database::insert('UPDATE pretplate SET status = 2 WHERE id_korisnika = :userid AND id_podrucja = :areaid',
                                 array('userid'=>$userid, 'areaid'=>$areaid) );
     }
     
     
-    public function check_subscription($userid, $areaid) {
+    public static function check_subscription($userid, $areaid) {
         $subscribes = Database::query('SELECT * FROM pretplate WHERE id_korisnika = :userid AND id_podrucja = :areaid AND status = 1',
                                     array('userid'=>$userid, 'areaid'=>$areaid) );
         if(count($subscribes) == 0)
             return false;
         return true;
     }
-    public function check_subscription_restricted($userid, $areaid) {
+    public static function check_subscription_restricted($userid, $areaid) {
         $subscribes = Database::query('SELECT * FROM pretplate WHERE id_korisnika = :userid AND id_podrucja = :areaid AND status = 2',
                                     array('userid'=>$userid, 'areaid'=>$areaid) );
         if(count($subscribes) == 0)
