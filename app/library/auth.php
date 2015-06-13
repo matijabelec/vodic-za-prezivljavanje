@@ -140,11 +140,14 @@ class Auth {
         return false;
     }
     
-    public static function user_role_check($role=null) {
-        if(self::login_check() && self::$user['role'] == $role)
-            return true;
-        elseif(!self::login_check() && $role==PROJECT_USER_ROLE_GUEST)
-            return true;
+    public static function user_role_check($role=PROJECT_USER_ROLE_GUEST) {
+        if(self::login_check() ) {
+            if(self::$user['role'] == $role)
+                return true;
+        } else {
+            if($role == PROJECT_USER_ROLE_GUEST)
+                return true;
+        }
         return false;
     }
 }

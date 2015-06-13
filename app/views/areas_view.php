@@ -14,22 +14,20 @@ class Areas_view extends Webpage_view {
             }
             $ar .= $areatpl->fill();
         }
+        unset($areatpl);
         
         $content->set_tabledata($ar);
         $page->set_body($content->fill() );
+        unset($content);
+        
         return $page->fill();
     }
-    public function view_registered($areas=array(), $areas2=null) {
+    public function view_registered($areas=array() ) {
         $page = $this->view_prepare();
         
         $content = new Body_table_template('Područja');
         
         $ar = '';
-        
-        if(!is_null($areas2) ) {
-            $ar .= '<h3>Aktivna područja</h3>';
-        }
-        
         $areatpl = new Template('data/table-podrucja-3');
         foreach($areas as $area) {
             foreach($area as $key=>$val) {
@@ -37,43 +35,46 @@ class Areas_view extends Webpage_view {
             }
             $ar .= $areatpl->fill();
         }
-        
-        if(!is_null($areas2) ) {
-            $ar .= '<h3>Izbrisana područja</h3>';
-            
-            $areatpl = new Template('data/table-podrucja-2');
-            foreach($areas2 as $area) {
-                foreach($area as $key=>$val) {
-                    $areatpl->set($key, $val);
-                }
-                $ar .= $areatpl->fill();
-            }
-        }
+        unset($areatpl);
         
         $content->set_tabledata($ar);
         $page->set_body($content->fill() );
+        unset($content);
+        
         return $page->fill();
     }
-    
-    
-    public function crud($areas=array() ) {
+    public function view_admin($areas=array(), $areas2=array() ) {
         $page = $this->view_prepare();
         
-        $crud_create = '<div style="text-align:right">' . Crud::get_html_c('/areas') . '</div>';
-        
-        $table1 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_ACTIVE, 'rud');
-        $table2 = $this->create_table_areas($areas, PROJECT_DATA_STATUS_DELETED, 'ru');
-        
         $content = new Body_table_template('Područja');
-        $content->set_tabledata(
-            $crud_create . 
-            '<h3>Aktivna područja</h3>' . $table1 . 
-            '<h3>Izbrisana područja</h3>' . $table2);
         
+        $ar = '<h3>Aktivna područja</h3>';
+        $areatpl = new Template('data/table-podrucja-3');
+        foreach($areas as $area) {
+            foreach($area as $key=>$val) {
+                $areatpl->set($key, $val);
+            }
+            $ar .= $areatpl->fill();
+        }
+        unset($areatpl);
+        
+        $ar .= '<h3>Izbrisana područja</h3>';
+        $areatpl = new Template('data/table-podrucja-2');
+        foreach($areas2 as $area) {
+            foreach($area as $key=>$val) {
+                $areatpl->set($key, $val);
+            }
+            $ar .= $areatpl->fill();
+        }
+        unset($areatpl);
+        
+        $content->set_tabledata($ar);
         $page->set_body($content->fill() );
+        unset($content);
         
         return $page->fill();
     }
+    
     
     public function crud_create() {
         $page = $this->view_prepare();
@@ -112,6 +113,8 @@ class Areas_view extends Webpage_view {
                     $article_tpl->set($key, $val);
                 $article_previewdata .= $article_tpl->fill();
             }
+            unset($article_tpl);
+            
             $article_previewdata .= '</ul>';
         } else
             $article_previewdata = '<p>Nema članaka</p>';
@@ -139,10 +142,12 @@ class Areas_view extends Webpage_view {
         
         $areatpl->set('area-controls', $ctrls);
         
-        
-        
         $content->set_tabledata($areatpl->fill() );
+        unset($areatpl);
+        
         $page->set_body($content->fill() );
+        unset($content);
+        
         return $page->fill();
     }
     
@@ -157,6 +162,8 @@ class Areas_view extends Webpage_view {
         $content->set('status-'.$data['status'], 'selected');
         
         $page->set_body($content->fill() );
+        unset($content);
+        
         return $page->fill();
     }
     

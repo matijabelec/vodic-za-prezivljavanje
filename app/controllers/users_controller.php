@@ -42,25 +42,17 @@ class Users_controller extends Controller {
         if(count($args) != URL_ARGUMENTS_NONE)
             return RET_ERR;
         
-        // if user is admin
         if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            // get users
             $users = $this->model->get_users();
             echo $this->view->crud($users);
-            return;
-        
-        // if user is registered user or moderator
         } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) || 
                  Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
-            // get users
             $users = $this->model->get_users();
             echo $this->view->view_2($users);
-            return;
+        } else {
+            $users = $this->model->get_users_safe();
+            echo $this->view->view($users);
         }
-        
-        // if user is guest
-        $users = $this->model->get_users_safe();
-        echo $this->view->view($users);
     }
     
     public function create($args) {

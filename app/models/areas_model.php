@@ -1,12 +1,6 @@
 <?php
 
 class Areas_model extends Model {
-    public function get_area_by_id($id) {
-        $areas = Database::query('SELECT * FROM podrucja WHERE id_podrucja = :id', array('id'=>$id) );
-        if(count($areas) == 1)
-            return $areas[0];
-    }
-    
     public function get_articles_for_area($id) {
         $articles = Database::query('SELECT *,
 (SELECT count(*) FROM materijali WHERE clanci.id_clanka = materijali.id_clanka AND materijali.status=1 AND materijali.id_tipa_materijala = 1) AS broj_slika,
@@ -30,11 +24,10 @@ WHERE status = 1 AND id_podrucja = :id', array('id'=>$id) );
     }
     
     public function get_active_areas() {
-        return Database::query('SELECT * FROM podrucja WHERE status = :status', array('status'=>PROJECT_DATA_STATUS_ACTIVE) );
+        return Database::query('SELECT * FROM podrucja WHERE status = 1');
     }
     public function get_deleted_areas() {
-        $areas = Database::query('SELECT * FROM podrucja WHERE status = :status', array('status'=>PROJECT_DATA_STATUS_DELETED) );
-        return $areas;
+        return Database::query('SELECT * FROM podrucja WHERE status = 0');
     }
     
     public function get_area($areaid) {

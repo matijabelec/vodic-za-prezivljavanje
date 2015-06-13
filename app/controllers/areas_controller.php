@@ -14,15 +14,9 @@ class Areas_controller extends Controller {
         if(count($args) != URL_ARGUMENTS_NONE)
             return RET_ERR;
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) ) {
-            $areas = $this->model->get_active_areas();
-            echo $this->view->view_guest($areas);
-        } else {
+        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
             $user = Auth::get_user();
-            
-            // get areas
             $areas = $this->model->get_active_areas();
-            $areas2 = $this->model->get_deleted_areas();
             
             $subs = new Subscribes_model;
             foreach($areas as &$area) {
@@ -36,14 +30,34 @@ class Areas_controller extends Controller {
                     $area['subscribe'] = 'Pretplati se';
                 }
             }
+            unset($subs);
             
-            if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
-                $areas2 = $this->model->get_deleted_areas();
+            $areas2 = $this->model->get_deleted_areas();
+            
+            echo $this->view->view_admin($areas, $areas2);
+            
+        } elseif (Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) || 
+                  Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
+            $user = Auth::get_user();
+            $areas = $this->model->get_active_areas();
+            
+            $subs = new Subscribes_model;
+            foreach($areas as &$area) {
+                $sub_ch = $subs->check_subscription($user['userid'], $area['id_podrucja']);
                 
-                echo $this->view->view_registered($areas, $areas2);
-            } else {
-                echo $this->view->view_registered($areas);
+                if($sub_ch) {
+                    $area['subscribe-link'] = '/delete/' . $area['id_podrucja'];
+                    $area['subscribe'] = 'Ukloni pretplatu';
+                } else {
+                    $area['subscribe-link'] = '/create/' . $area['id_podrucja'];
+                    $area['subscribe'] = 'Pretplati se';
+                }
             }
+            unset($subs);
+            echo $this->view->view_registered($areas);
+        } else {
+            $areas1 = $this->model->get_active_areas();
+            echo $this->view->view_guest($areas1);
         }
     }
     
@@ -92,7 +106,6 @@ class Areas_controller extends Controller {
         if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
             echo $this->view->crud_read(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe', 'update', 'delete') );
         } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) ) {
-            
             echo $this->view->crud_read(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe', 'update') );
         } elseif(Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
             echo $this->view->crud_read(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe') );
