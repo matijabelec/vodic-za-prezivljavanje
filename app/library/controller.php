@@ -16,12 +16,8 @@
  */
 
 class Controller {
-    protected $model = null;
-    protected $view = null;
-    
-    /*public function index($args) {
-        echo "<h1>Default page</h1>\n<p>Belec PHP Framework</p>";
-    }*/
+    protected $model;
+    protected $view;
 }
 
 ?>

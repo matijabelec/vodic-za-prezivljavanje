@@ -13,6 +13,14 @@ class Comments_model extends Model {
     }
     
     
+    public function get_comments_for_article($articleid) {
+        if(!isset($articleid) )
+            return array();
+        
+        return Database::query('SELECT * FROM komentari WHERE id_clanka = :id_clanka AND status > 0',
+                               array('id_clanka'=>$articleid) );
+    }
+    
     
     public function comment($comment) {
         if(!(isset($comment['id_korisnika']) &&  
