@@ -7,7 +7,7 @@ class Articles_view extends Webpage_view {
         $content = new Body_table_template('Članci');
         
         $t = '';
-        $tpl = new Template('data/table-clanci');
+        $tpl = new Template('data/table-article-small');
         foreach($articles as $data) {
             foreach($data as $key=>$val) {
                 $tpl->set($key, $val);
@@ -26,6 +26,8 @@ class Articles_view extends Webpage_view {
     public function read($article, $comments) {
         $page = $this->view_prepare();
         
+        $content = new Template('data/table-article');
+        
         $t = '';
         $tpl = new Template('data/table-comment-on-article');
         foreach($comments as $data) {
@@ -36,7 +38,8 @@ class Articles_view extends Webpage_view {
         }
         unset($tpl);
         
-        $page->set_body($t);
+        $page->set('article-comments', $t);
+        $page->set_body($content->fill() );
         
         return $page->fill();
     }

@@ -1,9 +1,7 @@
 <li>
     <div class="article-comment">
-        <p class="comment-">{@naslov}</p>
-        <p class="article-desc">{@sadrzaj}</p>
-        <p class="article-date">{@datum_objave}</p>
+        <a href="{@project_root_path}/comments/read/{id_komentara}"><span class="article-date">{@datum_objave}</span></a>
         
-        <!--<a class="btn article-more-information" href="{@project_root_path}/areas/read/{@id_podrucja}">Više</a>-->
+        <p class="comment-data">{@sadrzaj}</p>
     </div>
 </li>
