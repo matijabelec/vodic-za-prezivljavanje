@@ -1,9 +1,6 @@
 <?php
 
 class Admin_view extends Webpage_view {
-    public function output() {
-        
-    }
     public function time($time='') {
         $page = $this->view_prepare();
         

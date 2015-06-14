@@ -38,6 +38,10 @@ class Comments_controller extends Controller {
         if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) )
             return RET_ERR;
         
+        if(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) ) {
+            
+        }
+        
         $user = Auth::get_user();
         $userid = $user['userid'];
         $articleid = $args[URL_ARG_1];

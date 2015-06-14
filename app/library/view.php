@@ -15,7 +15,7 @@
  */
 
 class View {
-    public function output() {}
+    /*protected function output() {}*/
 }
 
 ?>
