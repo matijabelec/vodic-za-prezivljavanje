@@ -106,7 +106,69 @@ class Areas_view extends Webpage_view {
         }
         
         if(count($articles_data) > 0) {
-            $article_tpl = new Template('data/table-clanci-small-1');
+            $article_tpl = new Template('data/table-article-small-0');
+            $article_previewdata = '<ul class="area-articles">';
+            foreach($articles_data as $article) {
+                foreach($article as $key=>$val)
+                    $article_tpl->set($key, $val);
+                $article_previewdata .= $article_tpl->fill();
+            }
+            unset($article_tpl);
+            
+            $article_previewdata .= '</ul>';
+        } else
+            $article_previewdata = '<p>Nema članaka</p>';
+        $areatpl->set('area-articles', $article_previewdata);
+        
+        $ctrls = '';
+        foreach($controls as $c)
+            if($c == 'back')
+                $ctrls .= '<a class="btn" href="{@project_root_path}/areas/view">Natrag</a>';
+            elseif($c == 'update')
+                $ctrls .= '<a class="btn" href="{@project_root_path}/areas/update/' . $areaid . '">Uredi</a>';
+            elseif($c == 'delete')
+                $ctrls .= '<a class="btn" href="{@project_root_path}/areas/delete/' . $areaid . '">Izbriši</a>';
+            elseif($c == 'subscribe') {
+                if($subsc != true) {
+                    $subs_link = 'create';
+                    $subs = 'Pretplati se';
+                } else {
+                    $subs_link = 'delete';
+                    $subs = 'Prekini pretplatu';
+                }
+                
+                $ctrls .= '<a class="btn" href="{@project_root_path}/subscribes/' . $subs_link . '/' . $areaid . '">' . $subs . '</a>';
+            }
+        
+        $areatpl->set('area-controls', $ctrls);
+        
+        $content->set_tabledata($areatpl->fill() );
+        unset($areatpl);
+        
+        $page->set_body($content->fill() );
+        unset($content);
+        
+        return $page->fill();
+    }
+    public function crud_read_auth($data, $controls=array() ) {
+        $page = $this->view_prepare();
+        
+        if(isset($data['subscribes']) )
+            $subsc = $data['subscribes'];
+        
+        $articles_data = $data['articles'];
+        $area_data = $data['area'];
+        $areaid = $area_data['id_podrucja'];
+        
+        $content = new Body_table_template('Područje ' . $areaid);
+        
+        $areatpl = new Template('data/table-podrucja-read');
+        foreach($area_data as $key=>$val) {
+            $areatpl->set($key, $val);
+        }
+        
+        if(count($articles_data) > 0) {
+            $article_tpl = new Template('data/table-article-small-1');
             $article_previewdata = '<ul class="area-articles">';
             foreach($articles_data as $article) {
                 foreach($article as $key=>$val)
