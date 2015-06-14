@@ -360,13 +360,59 @@ class Mod1_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // logins
+    public function get_logins() {
+        return Database::query('SELECT * FROM prijave WHERE status=1');
+    }
+    public function get_logins_for_user($userid) {
+        if(!isset($userid) )
+            return array();
+        return Database::query('SELECT * FROM prijave 
+                                WHERE id_korisnika=:userid AND 
+                                status=1', 
+                               array('userid'=>$userid) );
+    }
     
+    public function insert_login($login) {
+        if(!isset($login) || !is_array($login) )
+            return false;
+        if(!isset($login['id_korisnika']) || 
+           !isset($login['vrijeme_od']) || 
+           !isset($login['vrijeme_do']) )
+            return false;
+        return Database::insert('INSERT INTO prijave(id_korisnika, vrijeme_od, vrijeme_do, status) 
+                                 VALUES(:userid, :from, :to, 1)', 
+                                array('userid'=>$login['id_korisnika'], 
+                                      'from'=>$login['vrijeme_od'], 
+                                      'to'=>$login['vrijeme_do']) );
+    }
     
     
     ///////////////////////////////////////////////////////////////////////
-    // 
-    ///////////////////////////////////////////////////////////////////////
-    // 
+    // systemtime
+    public function get_systemtime() {
+        $res = Database::query('SELECT trenutno_vrijeme FROM vrijeme_sustava WHERE id=1');
+        if($res[0])
+            return $res[0];
+        return 0;
+    }
+    public function set_systemtime($time) {
+        if(!isset($time) )
+            return false;
+        return Database::insert('UPDATE vrijeme_sustava 
+                                 SET trenutno_vrijeme=:time 
+                                 WHERE id=1', 
+                                array('time'=>$time) );
+    }
+    /*public function get_logins_for_user($userid) {
+        if(!isset($userid) )
+            return array();
+        return Database::query('SELECT * FROM prijave 
+                                WHERE id_korisnika=:userid AND 
+                                status=1', 
+                               array('userid'=>$userid) );
+    }*/
+    
+    
 }
 
 ?>
