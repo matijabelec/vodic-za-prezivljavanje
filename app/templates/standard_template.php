@@ -41,7 +41,7 @@ class Standard_template extends Template {
         
         
         if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            $this->create_main_menu(array('Početna', 'Korisnici', 'Područja', 'Admin') );
+            $this->create_main_menu(array('Početna', 'Korisnici', 'Područja', 'Moderatori', 'Članci', 'Admin') );
         } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) ) {
             $this->create_main_menu(array('Početna', 'Korisnici', 'Područja') );
         } elseif(Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
@@ -76,6 +76,14 @@ class Standard_template extends Template {
                     case 'Područja':
                         $mm .= $this->create_menu_option('option-areas', 'areas', 'Područja');
                         $arr_id[] = 'option-areas';
+                        break;
+                    case 'Moderatori':
+                        $mm .= $this->create_menu_option('option-moderators', 'moderators', 'Moderatori');
+                        $arr_id[] = 'option-moderators';
+                        break;
+                    case 'Članci':
+                        $mm .= $this->create_menu_option('option-articles', 'articles', 'Članci');
+                        $arr_id[] = 'option-articles';
                         break;
                     case 'Admin':
                         $mm .= $this->create_menu_option('option-admin', 'admin', 'Admin');

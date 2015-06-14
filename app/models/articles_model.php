@@ -29,6 +29,44 @@ class Articles_model extends Model {
         unset($comments_model);
         return $comments;
     }
+    
+    
+    public function check_subscribed_to_articles_area($userid, $articleid) {
+        if(!isset($userid) || !isset($articleid) )
+            return false;
+        
+        $users = Database::query('SELECT * 
+                                    FROM pretplate 
+                                    WHERE id_podrucja = (SELECT id_podrucja 
+                                                         FROM clanci 
+                                                         WHERE id_clanka = :id_clanka) AND 
+                                          id_korisnika = :id_korisnika AND 
+                                          status > 0',
+                                    array('id_korisnika'=>$userid,
+                                          'id_clanka'=>$articleid) );
+        if(count($users) > 0)
+            return true;
+        
+        return false;
+    }
+    
+    
+    public function check_moderation_for_area($userid, $areaid) {
+        if(!isset($userid) || !isset($areaid) )
+            return false;
+        
+        $users = Database::query('SELECT * 
+                                    FROM moderatori 
+                                    WHERE id_podrucja = :id_podrucja AND 
+                                          id_korisnika = :id_korisnika AND 
+                                          status > 0',
+                                    array('id_korisnika'=>$userid,
+                                          'id_podrucja'=>$areaid) );
+        if(count($users) > 0)
+            return true;
+        
+        return false;
+    }
 }
 
 ?>

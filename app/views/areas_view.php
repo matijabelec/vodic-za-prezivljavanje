@@ -91,6 +91,7 @@ class Areas_view extends Webpage_view {
     public function crud_read($data, $controls=array() ) {
         $page = $this->view_prepare();
         
+        $subsc = false;
         if(isset($data['subscribes']) )
             $subsc = $data['subscribes'];
         
@@ -106,7 +107,11 @@ class Areas_view extends Webpage_view {
         }
         
         if(count($articles_data) > 0) {
-            $article_tpl = new Template('data/table-article-small-0');
+            if($subsc)
+                $article_tpl = new Template('data/table-article-small-0');
+            else
+                $article_tpl = new Template('data/table-article-small-1');
+            
             $article_previewdata = '<ul class="area-articles">';
             foreach($articles_data as $article) {
                 foreach($article as $key=>$val)
@@ -153,6 +158,7 @@ class Areas_view extends Webpage_view {
     public function crud_read_auth($data, $controls=array() ) {
         $page = $this->view_prepare();
         
+        $subsc = false;
         if(isset($data['subscribes']) )
             $subsc = $data['subscribes'];
         
@@ -162,13 +168,22 @@ class Areas_view extends Webpage_view {
         
         $content = new Body_table_template('Područje ' . $areaid);
         
-        $areatpl = new Template('data/table-podrucja-read');
+        if($subsc)
+            $areatpl = new Template('data/table-areas-read-1');
+        else
+            $areatpl = new Template('data/table-podrucja-read');
+        
+        $areatpl->set('ocjena', '-');
         foreach($area_data as $key=>$val) {
             $areatpl->set($key, $val);
         }
         
         if(count($articles_data) > 0) {
-            $article_tpl = new Template('data/table-article-small-1');
+            if($subsc)
+                $article_tpl = new Template('data/table-article-small-1');
+            else
+                $article_tpl = new Template('data/table-article-small-0');
+            
             $article_previewdata = '<ul class="area-articles">';
             foreach($articles_data as $article) {
                 foreach($article as $key=>$val)

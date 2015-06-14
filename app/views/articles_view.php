@@ -53,6 +53,18 @@ class Articles_view extends Webpage_view {
     }
     
     
+    public function crud_create($areaid) {
+        $page = $this->view_prepare();
+        
+        $content = new Crud_articles();
+        $content->set('link-back', 'areas/read/' . $areaid);
+        $content->set('link', 'articles/create');
+        
+        $page->set_body($content->fill() );
+        return $page->fill();
+    }
+    
+    
     protected function view_prepare() {
         $page = new Standard_template('Članci');
         $page->set('option-articles', ' selected');
