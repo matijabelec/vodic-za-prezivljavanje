@@ -32,7 +32,7 @@ class Articles_controller extends Controller {
            Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) || 
            Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
             
-            $article = $this->model->get_comments_for_article($articleid);
+            $article = $this->model->get_article($articleid);
             $comments = $this->model->get_comments_for_article($articleid);
             echo $this->view->read($article, $comments);
         } else

@@ -27,23 +27,30 @@ class Articles_view extends Webpage_view {
         $page = $this->view_prepare();
         
         $content = new Template('data/table-article');
+        foreach($article as $key=>$val) {
+            $content->set($key, $val);
+        }
         
         $t = '';
-        $tpl = new Template('data/table-comment-on-article');
-        foreach($comments as $data) {
-            foreach($data as $key=>$val) {
-                $tpl->set($key, $val);
+        if(count($comments) ) {
+            $t = '<ul>';
+            $tpl = new Template('data/table-comment-on-article');
+            $tpl->set('project_root_path', WEBSITE_ROOT_PATH);
+            foreach($comments as $data) {
+                foreach($data as $key=>$val)
+                    $tpl->set($key, $val);
+                $t .= $tpl->fill();
             }
-            $t .= $tpl->fill();
+            unset($tpl);
+            $t .= '</ul>';
         }
-        unset($tpl);
         
         $page->set('article-comments', $t);
         $page->set_body($content->fill() );
+        unset($content);
         
         return $page->fill();
     }
-    
     
     
     protected function view_prepare() {

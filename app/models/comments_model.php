@@ -29,11 +29,10 @@ class Comments_model extends Model {
              isset($comment['datum_objave']) ) ) {
             return false;
         }
-        return Database::insert('INSERT INTO komentari(id_korisnika, id_clanka, sadrzaj, datum_objave, status) VALUES(:id_korisnika, :id_clanka, :sadrzaj, :datum_objave, 1)',
+        return Database::insert('INSERT INTO komentari(id_korisnika, id_clanka, sadrzaj, datum_objave, status) VALUES(:id_korisnika, :id_clanka, :sadrzaj, now(), 1)',
                                 array('id_korisnika'=>$comment['id_korisnika'], 
                                       'id_clanka'=>$comment['id_clanka'], 
-                                      'sadrzaj'=>$comment['sadrzaj'], 
-                                      'datum_objave'=>$comment['datum_objave']) );
+                                      'sadrzaj'=>$comment['sadrzaj']) );//, 'datum_objave'=>$comment['datum_objave']) );
     }
     public function delete($commentid) {
         if(!isset($commentid) )

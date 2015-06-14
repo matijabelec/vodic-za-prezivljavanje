@@ -3,7 +3,7 @@
     <p class="article-desc">{@sadrzaj}</p>
     <p class="article-date">{@datum_objave}</p>
     
-    <!--<a class="btn article-more-information" href="{@project_root_path}/areas/read/{@id_podrucja}">Više</a>-->
+    <a class="btn article-more-comment" href="{@project_root_path}/comments/create/{@id_clanka}">Komentiraj</a>
     
     <div class="article-comments">
         {@article-comments}
