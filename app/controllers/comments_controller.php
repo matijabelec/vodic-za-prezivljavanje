@@ -31,7 +31,7 @@ class Comments_controller extends Controller {
         echo $this->view->crud_create($userid, $articleid);
     }
     
-    public function create($args) {
+    public function delete($args) {
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
@@ -44,7 +44,7 @@ class Comments_controller extends Controller {
         
         if(isset($_POST['id_clanka']) ) {
             $comment = $_POST;
-            $ok = $this->model->comment($comment);
+            $ok = $this->model->delete($comment);
             if($ok)
                 Redirect('/articles/read/' . $articleid);
         }

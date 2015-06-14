@@ -393,4 +393,38 @@ form input.btn{
 
 
 
+.article-comments-container{
+    display: block;
+    position: relative;
+    margin: auto;
+    max-width: 640px;
+}
+.article-comments-container>ul{
+    list-style: none;
+}
+.article-comment{
+    text-align: left;
+    border-top: 1px solid #a5a5a5;
+    padding: 4px 6px 6px 16px;
+}
+.article-comment-date{
+    float: right;
+    text-align: right;
+    color: #444444;
+    font: 8pt;
+    font-weight: normal;
+}
+.article-comment-author{
+    display: inline-block;
+    color: #cc6600;
+    font: 18pt;
+    font-weight: bold;
+    margin-top: 6px;
+}
+.article-comment-content{
+    color: #232323;
+    font: 16pt;
+    padding: 2px 4px 4px 10px;
+}
+
 

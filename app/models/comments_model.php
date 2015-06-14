@@ -17,7 +17,7 @@ class Comments_model extends Model {
         if(!isset($articleid) )
             return array();
         
-        return Database::query('SELECT * FROM komentari WHERE id_clanka = :id_clanka AND status > 0',
+        return Database::query('SELECT komentari.*, (SELECT korisnicko_ime FROM korisnici WHERE korisnici.id_korisnika = komentari.id_korisnika) AS korisnicko_ime FROM komentari WHERE id_clanka = :id_clanka AND status > 0',
                                array('id_clanka'=>$articleid) );
     }
     

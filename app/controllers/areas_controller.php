@@ -104,11 +104,11 @@ class Areas_controller extends Controller {
         }
         
         if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            echo $this->view->crud_read(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe', 'update', 'delete') );
+            echo $this->view->crud_read_auth(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe', 'update', 'delete') );
         } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) ) {
-            echo $this->view->crud_read(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe', 'update') );
+            echo $this->view->crud_read_auth(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe', 'update') );
         } elseif(Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
-            echo $this->view->crud_read(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe') );
+            echo $this->view->crud_read_auth(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe') );
         } else {
             echo $this->view->crud_read(array('area'=>$areadata, 'articles'=>$articles), array('back') );
         }

@@ -1,7 +1,6 @@
 <li class="article-information-small">
     <div>
         <p class="article-title">{@naslov}</p>
-        <p>{@sadrzaj}</p>
     </div>
     <div>
         <span class="article-video-count">{@broj_videa}</span>

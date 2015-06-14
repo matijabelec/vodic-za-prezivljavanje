@@ -5,7 +5,7 @@
     
     <a class="btn article-more-comment" href="{@project_root_path}/comments/create/{@id_clanka}">Komentiraj</a>
     
-    <div class="article-comments">
+    <div class="article-comments-container">
         {@article-comments}
     </div>
 </section>

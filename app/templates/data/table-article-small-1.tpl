@@ -8,4 +8,6 @@
         <span class="article-image-count">{@broj_slika}</span>
         <span class="article-document-count">{@broj_dokumenata}</span>
     </div>
+    
+    <a class="btn article-more" href="{@project_root_path}/articles/read/{@id_clanka}">Više</a>
 </li>
