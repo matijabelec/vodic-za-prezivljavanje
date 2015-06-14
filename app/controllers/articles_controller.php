@@ -66,6 +66,9 @@ class Articles_controller extends Controller {
             if(!$this->model->check_moderation_for_area($userid, $areaid) ) {
                 return RET_ERR;
             }
+            
+            return RET_ERR;
+            
             /*
             $article = $this->model->get_article($articleid);
             $comments = $this->model->get_comments_for_article($articleid);
