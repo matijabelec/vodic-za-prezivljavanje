@@ -26,8 +26,8 @@ class Areas_controller extends Controller {
             $areas = Data_model::get_areas();
             echo $this->view->view_reg($areas);
         } else {
-            $areas1 = Data_model::get_areas();
-            echo $this->view->view($areas1);
+            $areas = Data_model::get_areas();
+            echo $this->view->view($areas);
         }
     }
     

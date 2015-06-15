@@ -195,7 +195,7 @@ class Areas_view extends Webpage_view {
                 $footdata .= 'var areaid=' . $data['areaid'] . '; ';
                 $footdata .= 'var elem=$("' . $data['elem'] . '"); ';
                 $footdata .= '</script>';
-                $footdata .= '<script src="/site/js/script-areas.js"></script>';
+                $footdata .= '<script src="' . WEBSITE_ROOT_PATH . '/site/js/script-areas.js"></script>';
             }
         }
         
