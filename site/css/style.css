@@ -42,7 +42,7 @@ span.loader{
     background-image: url('../gfx/ajax-loader.gif');
     background-repeat: no-repeat;
     background-position: center center;
-    width: 18px;
+    width: 18px;;
     height: 15px;
 }
 
