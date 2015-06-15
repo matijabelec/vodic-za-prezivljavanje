@@ -1,7 +1,30 @@
 <?php
 
 class Articles_view extends Webpage_view {
-    public function view($articles=array(), $ajax=false) {
+    public function view($articles, $ajax=false) {
+        $body = '';
+        foreach($articles as &$article)
+            $body .= $this->view_mini($article, array('r') );
+        if($body == '')
+            $body = '<p>Nema članaka</p>';
+        
+        if($ajax)
+            return $body;
+        
+        $content = new Template('data/areas/view');
+        $content->set('menu', '');
+        $content->set('title', 'Područja');
+        $content->set('body', $body);
+        $cf = $content->fill();
+        unset($content);
+        
+        return $this->page('Područja', $cf);
+    }
+    
+    
+    
+    
+    /*public function view($articles=array(), $ajax=false) {
         if($ajax == true) {
             $content = new Body_table_template('Članci');
             
@@ -43,7 +66,7 @@ class Articles_view extends Webpage_view {
         $page->set_body($content->fill() );
         unset($content);
         return $page->fill();
-    }
+    }*/
     
     public function read($article, $comments) {
         $page = $this->view_prepare();
@@ -75,11 +98,11 @@ class Articles_view extends Webpage_view {
     }
     
     
-    public function crud_create($areaid) {
+    public function crud_create($articleid) {
         $page = $this->view_prepare();
         
         $content = new Crud_articles();
-        $content->set('link-back', 'areas/read/' . $areaid);
+        $content->set('link-back', 'areas/read/' . $articleid);
         $content->set('link', 'articles/create');
         
         $page->set_body($content->fill() );
@@ -111,8 +134,8 @@ class Articles_view extends Webpage_view {
             }
         }
         
-        $page = new Standard_template('Područja');
-        $page->set('option-areas', ' selected');
+        $page = new Standard_template('Članci');
+        $page->set('option-articles', ' selected');
         $page->set('body', $body);
         $page->set('foot-data', $footdata);
         $pf = $page->fill();
@@ -123,39 +146,39 @@ class Articles_view extends Webpage_view {
     
     
     protected function view_mini($data, $ma=null) {
-        $area = new Template('data/areas/area-mini');
-        $menu = $this->create_menu($ma, $data['id_podrucja']);
-        $area->set('menu', $menu);
-        $this->fill_data($area, $data);
-        $fill = $area->fill();
-        unset($area);
+        $article = new Template('data/articles/article-mini');
+        $menu = $this->create_menu($ma, $data['id_clanka']);
+        $article->set('menu', $menu);
+        $this->fill_data($article, $data);
+        $fill = $article->fill();
+        unset($article);
         return $fill;
     }
     protected function view_standard($data, $ma=null) {
-        $area = new Template('data/areas/area');
-        $menu = $this->create_menu($ma, $data['id_podrucja']);
-        $area->set('menu', $menu);
-        $this->fill_data($area, $data);
-        $fill = $area->fill();
-        unset($area);
+        $article = new Template('data/articles/article');
+        $menu = $this->create_menu($ma, $data['id_clanka']);
+        $article->set('menu', $menu);
+        $this->fill_data($article, $data);
+        $fill = $article->fill();
+        unset($article);
         return $fill;
     }
     protected function view_full($data, $ma=null) {
-        $area = new Template('data/areas/area-full');
-        $menu = $this->create_menu($ma, $data['id_podrucja']);
-        $area->set('menu', $menu);
-        $this->fill_data($area, $data);
-        $fill = $area->fill();
-        unset($area);
+        $article = new Template('data/articles/article-full');
+        $menu = $this->create_menu($ma, $data['id_clanka']);
+        $article->set('menu', $menu);
+        $this->fill_data($article, $data);
+        $fill = $article->fill();
+        unset($article);
         return $fill;
     }
     protected function view_input($data, $ma=null) {
-        $area = new Template('data/areas/area-input');
-        $menu = $this->create_menu($ma, $data['id_podrucja']);
-        $area->set('menu', $menu);
-        $this->fill_data($area, $data);
-        $fill = $area->fill();
-        unset($area);
+        $article = new Template('data/articles/article-input');
+        $menu = $this->create_menu($ma, $data['id_clanka']);
+        $article->set('menu', $menu);
+        $this->fill_data($article, $data);
+        $fill = $article->fill();
+        unset($article);
         return $fill;
     }
     
@@ -167,12 +190,12 @@ class Articles_view extends Webpage_view {
     }
     
     
-    protected function create_menu($data, $areaid=null) {
+    protected function create_menu($data, $articleid=null) {
         $create = '<p style="text-align:right"><a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create">Novo</a></p> ';
-        $read = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/read/' . $areaid . '">Više</a> ';
-        $update = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $areaid . '">Uredi</a> ';
-        $delete = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/delete/' . $areaid . '">Izbriši</a> ';
-        $activate = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create/' . $areaid . '">Aktiviraj</a> ';
+        $read = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/read/' . $articleid . '">Više</a> ';
+        $update = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $articleid . '">Uredi</a> ';
+        $delete = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/delete/' . $articleid . '">Izbriši</a> ';
+        $activate = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create/' . $articleid . '">Aktiviraj</a> ';
         
         $m = '';
         if(is_array($data) )

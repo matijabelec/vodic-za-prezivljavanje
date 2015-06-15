@@ -11,12 +11,8 @@ class Articles_controller extends Controller {
     }
     
     public function view($args) {
-        $argc = count($args);
-        if($argc != URL_ARGUMENTS_NONE)
-            return RET_ERR;
-        
         if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            $articles = $this->model->get_active_articles();
+            $articles = Data_model::get_articles();
             echo $this->view->view($articles);
         } else
             return RET_ERR;

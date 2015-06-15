@@ -1,10 +1,7 @@
-<section class="area-section">
-    <div class="area-img-out">
-        <img class="area-img" src="{@slika}" alt="[slika područja {@naziv_podrucja}]">
-    </div><div class="area-short-desc">
-        <h2 class="area-title">{@naziv_podrucja}</h2>
-        <p class="area-desc">{@opis}</p>
-        
-        {@menu}
-    </div>
+<section class="article-section-small">
+    <h2 class="article-title">{@naslov}</h2>
+    <p class="article-desc">{@sadrzaj}</p>
+    <p class="article-date">{@datum_objave}</p>
+    
+    <a class="btn article-more-information" href="{@project_root_path}/articles/read/{@id_clanka}">Više</a>
 </section>
