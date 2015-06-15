@@ -93,6 +93,100 @@ class Articles_view extends Webpage_view {
         
         return $page;
     }
+    
+    
+    
+    
+    protected function page($title, $body, $data=null) {
+        $footdata = '';
+        if(!is_null($data) && is_array($data) ) {
+            if(isset($data['areaid']) && isset($data['elem']) ) {
+                $footdata = '<script>';
+                $footdata .= 'var relurl="' . WEBSITE_ROOT_PATH . '"; ';
+                $footdata .= 'var get_articles=true; ';
+                $footdata .= 'var areaid=' . $data['areaid'] . '; ';
+                $footdata .= 'var elem=$("' . $data['elem'] . '"); ';
+                $footdata .= '</script>';
+                $footdata .= '<script src="' . WEBSITE_ROOT_PATH . '/site/js/script-areas.js"></script>';
+            }
+        }
+        
+        $page = new Standard_template('Područja');
+        $page->set('option-areas', ' selected');
+        $page->set('body', $body);
+        $page->set('foot-data', $footdata);
+        $pf = $page->fill();
+        unset($page);
+        
+        return $pf;
+    }
+    
+    
+    protected function view_mini($data, $ma=null) {
+        $area = new Template('data/areas/area-mini');
+        $menu = $this->create_menu($ma, $data['id_podrucja']);
+        $area->set('menu', $menu);
+        $this->fill_data($area, $data);
+        $fill = $area->fill();
+        unset($area);
+        return $fill;
+    }
+    protected function view_standard($data, $ma=null) {
+        $area = new Template('data/areas/area');
+        $menu = $this->create_menu($ma, $data['id_podrucja']);
+        $area->set('menu', $menu);
+        $this->fill_data($area, $data);
+        $fill = $area->fill();
+        unset($area);
+        return $fill;
+    }
+    protected function view_full($data, $ma=null) {
+        $area = new Template('data/areas/area-full');
+        $menu = $this->create_menu($ma, $data['id_podrucja']);
+        $area->set('menu', $menu);
+        $this->fill_data($area, $data);
+        $fill = $area->fill();
+        unset($area);
+        return $fill;
+    }
+    protected function view_input($data, $ma=null) {
+        $area = new Template('data/areas/area-input');
+        $menu = $this->create_menu($ma, $data['id_podrucja']);
+        $area->set('menu', $menu);
+        $this->fill_data($area, $data);
+        $fill = $area->fill();
+        unset($area);
+        return $fill;
+    }
+    
+    
+    protected function fill_data(&$tpl, &$data) {
+        foreach($data as $key=>$val) {
+            $tpl->set($key, $val);
+        }
+    }
+    
+    
+    protected function create_menu($data, $areaid=null) {
+        $create = '<p style="text-align:right"><a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create">Novo</a></p> ';
+        $read = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/read/' . $areaid . '">Više</a> ';
+        $update = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $areaid . '">Uredi</a> ';
+        $delete = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/delete/' . $areaid . '">Izbriši</a> ';
+        $activate = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create/' . $areaid . '">Aktiviraj</a> ';
+        
+        $m = '';
+        if(is_array($data) )
+            foreach($data as &$d)
+                switch($d) {
+                    case 'c': $m  .= $create; break;
+                    case 'r': $m  .= $read; break;
+                    case 'u': $m  .= $update; break;
+                    case 'd': $m  .= $delete; break;
+                    case 'a': $m  .= $activate; break;
+                    default: break;
+                }
+        return $m;
+    }
 }
 
 ?>

@@ -139,7 +139,8 @@ class Areas_view extends Webpage_view {
         $area['area-articles'] = '<p>Nema članaka</p>';
         $area['area-controls'] = 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/view">Natrag</a> ' .
-            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $area['id_podrucja'] . '">Uredi</a>';
+            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $area['id_podrucja'] . '">Uredi</a>' . 
+            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create">Novi članak</a>';
         
         $body = $this->view_standard($area);
         
@@ -158,7 +159,8 @@ class Areas_view extends Webpage_view {
         $area['area-articles'] = '<p>Nema članaka</p>';
         $area['area-controls'] = 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/view">Natrag</a> ' . 
-            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $area['id_podrucja'] . '">Uredi</a>';
+            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $area['id_podrucja'] . '">Uredi</a>' . 
+            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create">Novi članak</a>';
         
         $body = $this->view_standard($area);
         
