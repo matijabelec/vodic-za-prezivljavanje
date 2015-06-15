@@ -37,6 +37,15 @@ h1,h2,h3,h4,h5{
 }
 
 
+span.loader{
+    display: inline-block;
+    background-image: url('../gfx/ajax-loader.gif');
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 18px;
+    height: 15px;
+}
+
 
   /**********/
  /* header */

@@ -1,7 +1,7 @@
 <?php
 
 class Areas_view extends Webpage_view {
-    public function view(&$areas) {
+    public function view($areas) {
         $body = '';
         foreach($areas as &$area)
             $body .= $this->view_mini($area, array('r') );
@@ -17,7 +17,7 @@ class Areas_view extends Webpage_view {
         
         return $this->page('Područja', $cf);
     }
-    public function view_reg(&$areas) {
+    public function view_reg($areas) {
         $body = '';
         foreach($areas as &$area)
             $body .= $this->view_mini($area, array('r') );
@@ -33,7 +33,7 @@ class Areas_view extends Webpage_view {
         
         return $this->page('Područja', $cf);
     }
-    public function view_mod(&$areas, &$areas2) {
+    public function view_mod($areas, $areas2) {
         $body = '';
         foreach($areas as &$area)
             $body .= $this->view_mini($area, array('r', 'u') );
@@ -59,7 +59,7 @@ class Areas_view extends Webpage_view {
         
         return $this->page('Područja', $cf);
     }
-    public function view_admin(&$areas, &$areas2) {
+    public function view_admin($areas, $areas2) {
         $menu = $this->create_menu(array('c') );
         
         $body = '';
@@ -115,10 +115,50 @@ class Areas_view extends Webpage_view {
         return $this->page('Područja', $cf);
     }
     public function read_reg($area, $articles, $subscribe) {
+        $areaid = $area['id_podrucja'];
+        $area['area-articles'] = '<p>Nema članaka</p>';
+        $area['area-controls'] = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/view">Natrag</a>';
+        if($subscribe)
+            $area['area-controls'] .= ' <a class="btn" href="' . WEBSITE_ROOT_PATH . '/subscribes/create/' . $areaid . '">Pretplati se</a>';
+        else
+            $area['area-controls'] .= ' <a class="btn" href="' . WEBSITE_ROOT_PATH . '/subscribes/delete/' . $areaid . '">Ukloni pretplatu</a>';
+        $body = $this->view_standard($area);
+        
+        $content = new Template('data/areas/view');
+        $content->set('menu', '');
+        $content->set('title', $area['naziv_podrucja']);
+        $content->set('body', $body);
+        $cf = $content->fill();
+        unset($content);
+        
+        $data = array('areaid'=>$area['id_podrucja'],
+                      'elem'=>'#articles-containter');
+        return $this->page('Područja', $cf, $data);
+    }
+    public function read_mod($area, $articles) {
         $area['area-articles'] = '<p>Nema članaka</p>';
         $area['area-controls'] = 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/view">Natrag</a> ' .
-            '<a class="btn" href="#' . WEBSITE_ROOT_PATH . '">Pretplati se</a>';
+            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $area['id_podrucja'] . '">Uredi</a>';
+        
+        $body = $this->view_standard($area);
+        
+        $content = new Template('data/areas/view');
+        $content->set('menu', '');
+        $content->set('title', $area['naziv_podrucja']);
+        $content->set('body', $body);
+        $cf = $content->fill();
+        unset($content);
+        
+        $data = array('areaid'=>$area['id_podrucja'],
+                      'elem'=>'#articles-containter');
+        return $this->page('Područja', $cf, $data);
+    }
+    public function read_admin($area, $articles) {
+        $area['area-articles'] = '<p>Nema članaka</p>';
+        $area['area-controls'] = 
+            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/view">Natrag</a> ' . 
+            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $area['id_podrucja'] . '">Uredi</a>';
         
         $body = $this->view_standard($area);
         

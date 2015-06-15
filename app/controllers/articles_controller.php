@@ -78,15 +78,6 @@ class Articles_controller extends Controller {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
     public function ajax($args) {
         $argc = count($args);
         if($argc >= URL_ARGUMENTS_1) {

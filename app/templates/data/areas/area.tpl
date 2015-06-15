@@ -3,12 +3,12 @@
     
     <p class="area-desc">{@opis}</p>
     
+    <div class="btn-out">
+        {@area-controls}
+    </div>
+    
     <section id="articles-containter" class="area-detailed-information">
         <h3>Popis članaka</h3>
         {@area-articles}
     </section>
-    
-    <div class="btn-out">
-        {@area-controls}
-    </div>
 </section>

@@ -7,7 +7,6 @@
     
     <!--<link rel="shortcut icon" href="/icon.ico"/>-->
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link href='//fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{@project_root_path}/site/css/style.css"/>
     {@head-data}
@@ -33,6 +32,8 @@
         <div id="copyright-info">{@copyright-info-data}</div>
     </footer>
     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{@project_root_path}/site/js/jquery-2.1.4.min.js">\x3C/script>')</script>
     {@foot-data}
 </body>
 </html>

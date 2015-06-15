@@ -101,7 +101,7 @@ class Auth extends Controller {
         if(!isset($username) )
             return false;
         $user = Data_model::get_activated_user_by_username($username);
-        if(count($user) > 0) {
+        if(count($user) == 1) {
             $userid = $user['id_korisnika'];
             $usern = $user['korisnicko_ime'];
             $userr = $user['id_tipa_korisnika'];

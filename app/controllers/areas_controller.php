@@ -59,11 +59,6 @@ class Areas_controller extends Controller {
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
-        // check if data sent
-        if(isset($_POST['id_podrucja']) )
-            Redirect('/areas/view');
-        
-        // get data
         $areaid = $args[URL_ARG_1];
         $area =  Data_model::get_area_by_id($areaid);
         if(count($area) == 0)
@@ -71,10 +66,23 @@ class Areas_controller extends Controller {
         
         $articles = Data_model::get_articles_for_area($areaid);
         
-        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) )
+        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) ) {
             echo $this->view->read($area, $articles);
-        else
-            echo $this->view->read_reg($area, $articles, false);
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
+            $userid = Auth::userid();
+            $subs = !Data_model::check_area_subscription($areaid, $userid);
+            echo $this->view->read_reg($area, $articles, $subs);
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
+            $userid = Auth::userid();
+            if(Data_model::check_area_moderation($areaid, $userid) )
+                echo $this->view->read_mod($area, $articles);
+            else {
+                $subs = !Data_model::check_area_subscription($areaid, $userid);
+                echo $this->view->read_reg($area, $articles, $subs);
+            }
+        } else {
+            echo $this->view->read_admin($area, $articles);
+        }
     }
     
     public function update($args) {

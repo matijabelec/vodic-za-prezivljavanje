@@ -205,6 +205,19 @@ class Data_model extends Model {
             return true;
         return false;
     }
+    public static function check_area_subscription($areaid, $userid) {
+        if(!isset($areaid) || !isset($userid) )
+            return false;
+        $res = Database::query('SELECT * FROM pretplate 
+                                WHERE id_korisnika=:userid AND 
+                                id_podrucja=:areaid AND 
+                                status>0', 
+                               array('areaid'=>$areaid, 
+                                     'userid'=>$userid) );
+        if(count($res) > 0)
+            return true;
+        return false;
+    }
     
     public static function create_area($area) {
         if(!isset($area) || !is_array($area) )

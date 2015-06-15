@@ -15,8 +15,10 @@ class Articles_view extends Webpage_view {
             }
             unset($tpl);
             
-            $content->set_tabledata($t);
+            if($t == '')
+                $t = '<p>Nema članaka</p>';
             
+            $content->set_tabledata($t);
             $content->set('project_root_path', WEBSITE_ROOT_PATH);
             $cf = $content->fill();
             unset($content);
