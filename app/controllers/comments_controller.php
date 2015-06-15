@@ -14,11 +14,10 @@ class Comments_controller extends Controller {
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) )
+        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) )
             return RET_ERR;
         
-        $user = Auth::get_user();
-        $userid = $user['userid'];
+        $userid = Auth::userid();
         $articleid = $args[URL_ARG_1];
         
         if(isset($_POST['id_clanka']) ) {
@@ -35,15 +34,14 @@ class Comments_controller extends Controller {
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) )
+        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) )
             return RET_ERR;
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
             
         }
         
-        $user = Auth::get_user();
-        $userid = $user['userid'];
+        $userid = Auth::userid();
         $articleid = $args[URL_ARG_1];
         
         if(isset($_POST['id_clanka']) ) {

@@ -15,13 +15,13 @@
             <label for="slika">Slika: </label>
         </div>
         
-        <div>
+        <!--<div>
             <select name="status" {@readonly}>
                 <option value="1" {@status-1}>Aktivno</option>
                 <option value="0" {@status-0}>Izbrisano</option>
             </select>
             <label for="status">Status: </label>
-        </div>
+        </div>-->
         
         <input type="hidden" name="id_podrucja" value='{@id_podrucja}' {@readonly}>
         

@@ -15,7 +15,7 @@ class Articles_controller extends Controller {
         if($argc != URL_ARGUMENTS_NONE)
             return RET_ERR;
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             $articles = $this->model->get_active_articles();
             echo $this->view->view($articles);
         } else
@@ -28,14 +28,13 @@ class Articles_controller extends Controller {
         
         $articleid = $args[URL_ARG_1];
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             $article = $this->model->get_article($articleid);
             $comments = $this->model->get_comments_for_article($articleid);
             echo $this->view->read($article, $comments);
-        } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) || 
-                 Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
-            $user = Auth::get_user();
-            $userid = $user['userid'];
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) || 
+                 Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
+            $userid = Auth::userid();
             
             if(!$this->model->check_subscribed_to_articles_area($userid, $articleid) ) {
                 return RET_ERR;
@@ -54,14 +53,13 @@ class Articles_controller extends Controller {
         
         $areaid = $args[URL_ARG_1];
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             /*$article = $this->model->get_article($articleid);
             $comments = $this->model->get_comments_for_article($articleid);
             echo $this->view->read($article, $comments);*/
-        } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) || 
-                 Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
-            $user = Auth::get_user();
-            $userid = $user['userid'];
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) || 
+                 Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
+            $userid = Auth::userid();
             
             if(!$this->model->check_moderation_for_area($userid, $areaid) ) {
                 return RET_ERR;

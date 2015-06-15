@@ -10,7 +10,7 @@ class Index_controller extends Controller {
             Redirect('/');
         
         if(Auth::login_check() == true) {
-            if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
                 echo $this->view->admin();
             } else {
                 echo $this->view->admin();

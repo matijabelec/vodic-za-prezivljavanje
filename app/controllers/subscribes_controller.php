@@ -18,15 +18,15 @@ class Subscribes_controller extends Controller {
             return RET_ERR;
         
         // if user is guest
-        if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) ) {
             Redirect('/');
         }
         
         $areaid = $args[URL_ARG_1];
         
-        $user = Auth::get_user();
+        $userid = Auth::userid();
         
-        if($this->model->subscribe($user['userid'], $areaid) )
+        if($this->model->subscribe($userid, $areaid) )
             Redirect('/areas/read/' . $areaid);
         
         Redirect('/areas/view');
@@ -37,15 +37,15 @@ class Subscribes_controller extends Controller {
             return RET_ERR;
         
         // if user is guest
-        if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) ) {
             Redirect('/');
         }
         
         $areaid = $args[URL_ARG_1];
         
-        $user = Auth::get_user();
+        $userid = Auth::userid();
         
-        if($this->model->unsubscribe($user['userid'], $areaid) )
+        if($this->model->unsubscribe($userid, $areaid) )
             Redirect('/areas/read/' . $areaid);
         
         Redirect('/areas/view');

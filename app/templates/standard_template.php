@@ -17,19 +17,19 @@ class Standard_template extends Template {
         
         
         // prepare user profile preview
-        if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) ) {
             $this->set('style-user-type-id', '');
         } else {
             $this->set_user_type_style();
         }
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) ) {
             $userprofile = new Template('data/user_profile_menu_login');
         } else {
-            $user = Auth::get_user();
+            $username = Auth::username();
             $userprofile = new Template('data/user_profile_menu');
-            $userprofile->set('username-link', $user['username']);
-            $userprofile->set('username',$user['username']);
+            $userprofile->set('username-link', $username);
+            $userprofile->set('username', $username);
         }
         
         
@@ -40,11 +40,11 @@ class Standard_template extends Template {
         $this->set('main-menu-options', '');
         
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             $this->create_main_menu(array('Početna', 'Korisnici', 'Područja', 'Moderatori', 'Članci', 'Admin') );
-        } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) ) {
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
             $this->create_main_menu(array('Početna', 'Korisnici', 'Područja') );
-        } elseif(Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
             $this->create_main_menu(array('Početna', 'Korisnici', 'Područja') );
         } else {
             $this->create_main_menu(array('Početna', 'Korisnici', 'Područja') );
@@ -106,11 +106,11 @@ class Standard_template extends Template {
     
     public function set_user_type_style() {
         $style = ' style="background-color: ';
-        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             $this->set('style-user-type-id', $style.'#ff0000"');
-        } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) ) {
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
             $this->set('style-user-type-id', $style.'#00ff00"');
-        } elseif(Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
             $this->set('style-user-type-id', $style.'#0000ff"');
         } else {
             $this->set('style-user-type-id', '');

@@ -42,11 +42,11 @@ class Users_controller extends Controller {
         if(count($args) != URL_ARGUMENTS_NONE)
             return RET_ERR;
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             $users = $this->model->get_users();
             echo $this->view->crud($users);
-        } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) || 
-                 Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) || 
+                 Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
             $users = $this->model->get_users();
             echo $this->view->view_2($users);
         } else {
@@ -60,7 +60,7 @@ class Users_controller extends Controller {
             return RET_ERR;
         
         // if user is not admin
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        if(!Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             Redirect('/users/view');
         }
         
@@ -97,7 +97,7 @@ class Users_controller extends Controller {
             return RET_ERR;
         
         // if user is not admin
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        if(!Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             Redirect('/users/view');
         }
         
@@ -116,7 +116,7 @@ class Users_controller extends Controller {
             return RET_ERR;
         
         // if user is not admin
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        if(!Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             Redirect('/users/view');
         }
         
@@ -133,9 +133,9 @@ class Users_controller extends Controller {
             $id_kor = $_POST['id_korisnika'];
             $st = $_POST['status'];
             
-            $user = Auth::get_user();
+            $userid = Auth::userid();
             
-            if($st==0 && $user['userid'] == $id_kor) {
+            if($st==0 && $userid == $id_kor) {
                 
             } else if($st>=0 && $st<=3) {
                 Database::query('UPDATE korisnici SET korisnicko_ime=:korime, lozinka=:lozinka, mail=:mail, ime=:ime, prezime=:prezime, slika_korisnika=:slika, id_tipa_korisnika=:id_tip, status=:status WHERE id_korisnika=:korid',
@@ -162,16 +162,16 @@ class Users_controller extends Controller {
             return RET_ERR;
         
         // if user is not admin
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
+        if(!Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             Redirect('/users/view');
         }
         
         // check if data sent
         if(isset($_POST['id_korisnika']) ) {
-            $user = Auth::get_user();
+            $userid = Auth::userid();
             
             $id_kor = $_POST['id_korisnika'];
-            if($user['userid'] != $id_kor) {
+            if($userid != $id_kor) {
                 Database::query('UPDATE korisnici SET status = 0 WHERE id_korisnika = :id', array('id'=>$id_kor) );
                 Redirect('/users/view');
             }

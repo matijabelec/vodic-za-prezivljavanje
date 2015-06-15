@@ -11,7 +11,7 @@ class Moderators_controller extends Controller {
     }
     
     public function view($args) {
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) )
+        if(!Auth::role_check(PROJECT_USER_ROLE_ADMIN) )
             return RET_ERR;
         
         $moderators = $this->model->get_moderators();
@@ -19,7 +19,7 @@ class Moderators_controller extends Controller {
     }
     
     public function create($args) {
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) )
+        if(!Auth::role_check(PROJECT_USER_ROLE_ADMIN) )
             return RET_ERR;
         
         $argc = count($args);
@@ -47,7 +47,7 @@ class Moderators_controller extends Controller {
         
         echo $this->view->crud_create($moderation);
         
-        /*if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) )
+        /*if(Auth::role_check(PROJECT_USER_ROLE_GUEST) )
             return RET_ERR;
         
         $user = Auth::get_user();
@@ -70,10 +70,10 @@ class Moderators_controller extends Controller {
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_GUEST) )
+        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) )
             return RET_ERR;
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
             
         }
         

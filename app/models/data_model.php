@@ -1,43 +1,191 @@
 <?php
 
-class Mod1_model extends Model {
+class Data_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // users
-    public function get_users() {
-        return Database::query('SELECT * FROM korisnici WHERE status>0');
+    public static function get_users() {
+        return Database::query('SELECT * FROM korisnici WHERE status>1');
     }
-    public function get_registered_users() {
+    public static function get_registered_users() {
         return Database::query('SELECT * FROM korisnici WHERE status=1');
     }
-    public function get_activated_users() {
+    public static function get_activated_users() {
         return Database::query('SELECT * FROM korisnici WHERE status=2');
     }
-    public function get_blocked_users() {
+    public static function get_blocked_users() {
         return Database::query('SELECT * FROM korisnici WHERE status=3');
     }
-    public function get_deleted_users() {
+    public static function get_deleted_users() {
         return Database::query('SELECT * FROM korisnici WHERE status=0');
     }
     
+    public static function create_user($user) {
+        if(!isset($user) || !is_array($user) )
+            return false;
+        if(!isset($user['id_tipa_korisnika']) || 
+           !isset($user['korisnicko_ime']) || 
+           !isset($user['mail']) || 
+           !isset($user['lozinka']) || 
+           !isset($user['ime']) || 
+           !isset($user['prezime']) || 
+           !isset($user['slika_korisnika']) || 
+           !isset($user['datum_registracije']) || 
+           !isset($user['aktivacijski_kod']) )
+            return false;
+        return Database::insert('INSERT INTO korisnici 
+                                (id_tipa_korisnika, korisnicko_ime, mail, lozinka, 
+                                 ime, prezime, slika_korisnika, datum_registracije, 
+                                 aktivacijski_kod, status) 
+                                 VALUES(:typeid, :uname, :mail, :pass, :fname, 
+                                        :lname, :img, :date, :aclink, 1)', 
+                                array('typeid'=>$user['id_tipa_korisnika'], 
+                                      'uname'=>$user['korisnicko_ime'], 
+                                      'mail'=>$user['mail'], 
+                                      'pass'=>$user['lozinka'], 
+                                      'fname'=>$user['ime'], 
+                                      'lname'=>$user['prezime'], 
+                                      'img'=>$user['slika_korisnika'], 
+                                      'date'=>$user['datum_registracije'], 
+                                      'aclink'=>$user['aktivacijski_kod']) );
+    }
+    public static function activate_user_by_aclink($aclink) {
+        if(!isset($aclink) )
+            return false;
+        return Database::insert('UPDATE korisnici SET status=2 
+                                 WHERE aktivacijski_kod=:aclink AND 
+                                 status=1', 
+                                array('aclink'=>$aclink) );
+    }
+    public static function block_user($userid) {
+        if(!isset($userid) )
+            return false;
+        return Database::insert('UPDATE korisnici SET status=3 
+                                 WHERE id_korisnika=:userid AND status=2', 
+                                array('userid'=>$userid) );
+    }
+    public static function unblock_user($userid) {
+        if(!isset($userid) )
+            return false;
+        return Database::insert('UPDATE korisnici SET status=2 
+                                 WHERE id_korisnika=:userid AND status=3', 
+                                array('userid'=>$userid) );
+    }
+    public static function delete_user($userid) {
+        if(!isset($userid) )
+            return false;
+        return Database::insert('UPDATE korisnici SET status=0 
+                                 WHERE id_korisnika=:userid AND status>1', 
+                                array('userid'=>$userid) );
+    }
+    public static function undelete_user($userid) {
+        if(!isset($userid) )
+            return false;
+        return Database::insert('UPDATE korisnici SET status=2 
+                                 WHERE id_korisnika=:userid AND status=0', 
+                                array('userid'=>$userid) );
+    }
+    public static function update_user($userid) {
+        if(!isset($user) || !is_array($user) )
+            return false;
+        if(!isset($user['id_korisnika']) || 
+           !isset($user['korisnicko_ime']) || 
+           !isset($user['mail']) || 
+           !isset($user['lozinka']) || 
+           !isset($user['ime']) || 
+           !isset($user['prezime']) || 
+           !isset($user['slika_korisnika']) )
+            return false;
+        return Database::insert('UPDATE korisnici 
+                                 SET korisnicko_ime=:uname, 
+                                 mail=:mail, 
+                                 lozinka=:pass, 
+                                 ime=:fname, 
+                                 prezime=:lname, 
+                                 slika_korisnika=:img 
+                                 WHERE id_korisnika=:userid', 
+                                array('userid'=>$user['id_korisnika'], 
+                                      'uname'=>$user['korisnicko_ime'], 
+                                      'mail'=>$user['mail'], 
+                                      'pass'=>$user['lozinka'], 
+                                      'fname'=>$user['ime'], 
+                                      'lname'=>$user['prezime'], 
+                                      'img'=>$user['slika_korisnika']) );
+    }
+    public static function get_activated_user_by_username($username) {
+        if(!isset($username) )
+            return array();
+        $users = Database::query('SELECT * FROM korisnici 
+                                  WHERE korisnicko_ime=:uname AND 
+                                  status=2',
+                                 array('uname'=>$username) );
+        if(count($users) == 1)
+            return $users[0];
+        return array();
+    }
     
+    public static function check_username_exists($username) {
+        $users = Database::query('SELECT * FROM korisnici
+                                  WHERE korisnicko_ime=:uname', 
+                                array('uname'=>$username) );
+        if(count($users) > 0)
+            return true;
+        return false;
+    }
+    public static function check_mail_exists($mail) {
+        $users = Database::query('SELECT * FROM korisnici
+                                  WHERE mail=:mail', 
+                                array('mail'=>$mail) );
+        if(count($users) > 0)
+            return true;
+        return false;
+    }
     
     ///////////////////////////////////////////////////////////////////////
     // areas
-    public function get_areas() {
-        return Database::query('SELECT * FROM podrucja WHERE status=1');
-    }
-    public function get_deleted_areas() {
-        return Database::query('SELECT * FROM podrucja WHERE status=0');
+    public static function get_empty_area() {
+        return array('id_podrucja'=>'',
+                     'naziv_podrucja'=>'',
+                     'opis'=>'',
+                     'slika'=>'',
+                     'status'=>'');
     }
     
-    public function create_area($area) {
+    public static function get_areas() {
+        return Database::query('SELECT * FROM podrucja WHERE status=1');
+    }
+    public static function get_deleted_areas() {
+        return Database::query('SELECT * FROM podrucja WHERE status=0');
+    }
+    public static function get_area_by_id($areaid) {
+        if(!isset($areaid) )
+            return array();
+        $areas = Database::query('SELECT * FROM podrucja 
+                                WHERE id_podrucja=:areaid AND status=1', 
+                               array('areaid'=>$areaid) );
+        if(count($areas) == 1)
+            return $areas[0];
+        return array();
+    }
+    
+    public static function get_areas_for_moderator($moderatorid) {
+        if(!isset($moderatorid) )
+            return array();
+        return Database::query('SELECT p.* FROM podrucja p 
+                                JOIN pretplate pr 
+                                ON p.id_podrucja=pr.id_podrucja 
+                                WHERE pr.id_korisnika=:modid AND 
+                                pr.status=2 AND 
+                                p.status=1', 
+                               array('modid'=>$moderatorid) );
+    }
+    
+    public static function create_area($area) {
         if(!isset($area) || !is_array($area) )
             return false;
         if(!isset($area['naziv_podrucja']) || 
            !isset($area['opis']) ||
-           !isset($area['slika']) || 
-           !isset($area['status']) )
+           !isset($area['slika']) )
             return false;
         return Database::insert('INSERT INTO podrucja 
                                 (naziv_podrucja, opis, slika, status) 
@@ -46,16 +194,7 @@ class Mod1_model extends Model {
                                      'adesc'=>$area['opis'],
                                      'aimg'=>$area['slika']) );
     }
-    public function delete_area($areaid) {
-        if(!isset($areaid) )
-            return false;
-        return Database::insert('UPDATE podrucja 
-                                 SET status=1 
-                                 WHERE id_podrucja=:areaid AND 
-                                 status=0', 
-                               array('areaid'=>$areaid) );
-    }
-    public function undelete_area($areaid) {
+    public static function delete_area($areaid) {
         if(!isset($areaid) )
             return false;
         return Database::insert('UPDATE podrucja 
@@ -64,7 +203,16 @@ class Mod1_model extends Model {
                                  status=1', 
                                array('areaid'=>$areaid) );
     }
-    public function update_area($area) {
+    public static function undelete_area($areaid) {
+        if(!isset($areaid) )
+            return false;
+        return Database::insert('UPDATE podrucja 
+                                 SET status=1 
+                                 WHERE id_podrucja=:areaid AND 
+                                 status=0', 
+                               array('areaid'=>$areaid) );
+    }
+    public static function update_area($area) {
         if(!isset($area) || !is_array($area) )
             return false;
         if(!isset($area['id_podrucja']) || 
@@ -87,33 +235,33 @@ class Mod1_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // subscribes
-    public function get_subscribes() {
+    public static function get_subscribes() {
         return Database::query('SELECT * FROM pretplate WHERE status=1');
     }
-    public function get_moderations() {
+    public static function get_moderations() {
         return Database::query('SELECT * FROM pretplate WHERE status=2');
     }
-    public function get_subscribers_for_area($areaid) {
+    public static function get_subscribers_for_area($areaid) {
         if(!isset($areaid) )
             return array();
         return Database::query('SELECT k.* FROM pretplate p 
                                 JOIN korisnici k ON k.id_korisnika=p.id_korisnika 
                                 WHERE id_podrucja=:id_podrucja AND 
-                                p.status=1 AND k.status>0',
+                                p.status=1 AND k.status>1',
                                 array('id_podrucja'=>$areaid) );
     }
-    public function get_moderators_for_area($areaid) {
+    public static function get_moderators_for_area($areaid) {
         if(!isset($areaid) )
             return array();
         return Database::query('SELECT k.* FROM pretplate p 
                                 JOIN korisnici k ON k.id_korisnika=p.id_korisnika 
                                 WHERE id_podrucja=:id_podrucja AND 
-                                p.status=2 AND k.status>0',
+                                p.status=2 AND k.status>1',
                                 array('id_podrucja'=>$areaid) );
     }
     
     
-    public function subscribe($areaid, $userid) {
+    public static function subscribe($areaid, $userid) {
         if(!isset($articleid) || !isset($userid) );
             return false;
         $ok = Database::insert('INSERT INTO pretplate 
@@ -131,7 +279,7 @@ class Mod1_model extends Model {
         }
         return $ok;
     }
-    public function unsubscribe($areaid, $userid) {
+    public static function unsubscribe($areaid, $userid) {
         if(!isset($articleid) || !isset($userid) );
             return false;
         return Database::insert('UPDATE pretplate SET status=0 
@@ -145,14 +293,37 @@ class Mod1_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // articles
-    public function get_articles() {
+    public static function get_articles() {
         return Database::query('SELECT * FROM clanci WHERE status=1');
     }
-    public function get_deleted_articles() {
+    public static function get_deleted_articles() {
         return Database::query('SELECT * FROM clanci WHERE status=1');
     }
     
-    public function check_article_restriction($articleid, $userid) {
+    public static function get_articles_for_area($areaid) {
+        if(!isset($areaid) )
+            return array();
+            
+        return Database::query('SELECT *,
+                        (SELECT count(*) FROM materijali 
+                            WHERE clanci.id_clanka = materijali.id_clanka AND 
+                            materijali.status=1 AND 
+                            materijali.id_tipa_materijala = 1) AS broj_slika,
+                        (SELECT count(*) FROM materijali 
+                            WHERE clanci.id_clanka = materijali.id_clanka AND 
+                            materijali.status=1 AND 
+                            materijali.id_tipa_materijala = 2) AS broj_videa,
+                        (SELECT count(*) FROM materijali 
+                            WHERE clanci.id_clanka = materijali.id_clanka AND 
+                            materijali.status=1 AND 
+                            materijali.id_tipa_materijala = 3) AS broj_dokumenata
+                    FROM clanci 
+                    WHERE status = 1 AND 
+                          id_podrucja = :areaid',
+                    array('areaid'=>$areaid) );
+    }
+    
+    public static function check_article_restriction($articleid, $userid) {
         if(!isset($articleid) || !isset($user) )
             return 1;
         $res = Database::query('SELECT zp.* FROM zabrana_pristupa 
@@ -161,7 +332,7 @@ class Mod1_model extends Model {
                                 WHERE c.id_korisnika=:moderatorid AND 
                                 zp.id_korisnika=:userid AND 
                                 zp.status=1 AND 
-                                k.status>0 AND 
+                                k.status>1 AND 
                                 c.status=0',
                                 array('moderatorid'=>$moderatorid,
                                       'userid'=>$userid) );
@@ -170,26 +341,25 @@ class Mod1_model extends Model {
         return 0;
     }
     
-    
     ///////////////////////////////////////////////////////////////////////
     // article grades
-    public function get_grades() {
+    public static function get_grades() {
         return Database::query('SELECT * FROM ocjene_clanaka WHERE status=1');
     }
-    public function get_article_grade($articleid) {
+    public static function get_article_grade($articleid) {
         if(!isset($articleid) )
             return 0;
         //TODO: ?? return Database::query('SELECT * FROM clanci WHERE status=1');
         return 0;
     }
-    public function get_article_grade_count($articleid) {
+    public static function get_article_grade_count($articleid) {
         if(!isset($articleid) )
             return 0;
         //TODO: ?? return Database::query('SELECT * FROM clanci WHERE status=1');
         return 0;
     }
     
-    public function grade_article($grade) {
+    public static function grade_article($grade) {
         if(!isset($grade) || !is_array($grade) );
             return false;
         if(!isset($grade['id_korisnika']) || 
@@ -219,7 +389,7 @@ class Mod1_model extends Model {
         }
         return $ok;
     }
-    public function ungrade_article($grade) {
+    public static function ungrade_article($grade) {
         if(!isset($grade) || !is_array($grade) );
             return false;
         if(!isset($grade['id_korisnika']) || 
@@ -236,20 +406,20 @@ class Mod1_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // comments
-    public function get_comments() {
+    public static function get_comments() {
         return Database::query('SELECT * FROM komentari WHERE status=1');
     }
-    public function get_deleted_comments() {
+    public static function get_deleted_comments() {
         return Database::query('SELECT * FROM komentari WHERE status=0');
     }
-    public function get_comments_for_article($articleid) {
+    public static function get_comments_for_article($articleid) {
         if(!isset($articleid) )
             return array();
         return Database::query('SELECT * FROM komentari 
                                 WHERE id_clanka=:articleid AND status=1',
                                 array('articleid'=>$articleid) );
     }
-    public function get_comments_for_user($userid) {
+    public static function get_comments_for_user($userid) {
         if(!isset($articleid) )
             return array();
         return Database::query('SELECT * FROM komentari 
@@ -258,7 +428,7 @@ class Mod1_model extends Model {
     }
     
     
-    public function comment_article($comment) {
+    public static function comment_article($comment) {
         if(!isset($comment) || !is_array($comment) )
             return false;
         if(!isset($comment['id_korisnika']) || 
@@ -274,21 +444,21 @@ class Mod1_model extends Model {
                                      'cdata'=>$comment['sadrzaj'],
                                      'date'=>$comment['datum_objave']) );
     }
-    public function delete_comment($commentid) {
+    public static function delete_comment($commentid) {
         if(!isset($commentid) )
             return false;
         return Database::insert('UPDATE komentari SET status=0 
                                  WHERE id_komentara=:commentid',
                                 array('commentid'=>$commentid) );
     }
-    public function undelete_comment($commentid) {
+    public static function undelete_comment($commentid) {
         if(!isset($commentid) )
             return false;
         return Database::insert('UPDATE komentari SET status=1 
                                  WHERE id_komentara=:commentid',
                                 array('commentid'=>$commentid) );
     }
-    public function update_comment($comment) {
+    public static function update_comment($comment) {
         if(!isset($comment) || !is_array($comment) )
             return false;
         if(!isset($comment['id_komentara']) || 
@@ -303,13 +473,13 @@ class Mod1_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // materials
-    public function get_materials() {
+    public static function get_materials() {
         return Database::query('SELECT * FROM materijali WHERE status=1');
     }
-    public function get_deleted_materials() {
+    public static function get_deleted_materials() {
         return Database::query('SELECT * FROM materijali WHERE status=0');
     }
-    public function get_materials_for_article($articleid) {
+    public static function get_materials_for_article($articleid) {
         if(!isset($articleid) )
             return array();
         return Database::query('SELECT * FROM materijali 
@@ -317,7 +487,7 @@ class Mod1_model extends Model {
                                array('articleid'=>$articleid) );
     }
     
-    public function get_images_for_article($articleid) {
+    public static function get_images_for_article($articleid) {
         if(!isset($articleid) )
             return array();
         return Database::query('SELECT m.*, ms.opis 
@@ -330,7 +500,7 @@ class Mod1_model extends Model {
                                 ms.status=1',
                                array('articleid'=>$articleid) );
     }
-    public function get_videos_for_article($articleid) {
+    public static function get_videos_for_article($articleid) {
         if(!isset($articleid) )
             return array();
         return Database::query('SELECT m.*, mv.trajanje 
@@ -343,7 +513,7 @@ class Mod1_model extends Model {
                                 mv.status=1',
                                array('articleid'=>$articleid) );
     }
-    public function get_documents_for_article($type) {
+    public static function get_documents_for_article($type) {
         if(!isset($articleid) )
             return array();
         return Database::query('SELECT m.*, md.opis 
@@ -360,10 +530,10 @@ class Mod1_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // logins
-    public function get_logins() {
+    public static function get_logins() {
         return Database::query('SELECT * FROM prijave WHERE status=1');
     }
-    public function get_logins_for_user($userid) {
+    public static function get_logins_for_user($userid) {
         if(!isset($userid) )
             return array();
         return Database::query('SELECT * FROM prijave 
@@ -372,30 +542,64 @@ class Mod1_model extends Model {
                                array('userid'=>$userid) );
     }
     
-    public function insert_login($login) {
-        if(!isset($login) || !is_array($login) )
+    public static function get_login_failed_count($userid) {
+        if(!isset($userid) )
+            return -1;
+        $counts = Database::query('SELECT count(*) prijave 
+                                  WHERE id_korisnika=:userid AND 
+                                  status=1', 
+                                  array('userid'=>$username) );
+        if(count($counts) == 1)
+            return $counts[0];
+        return -1;
+    }
+    
+    public static function insert_login($userid, $time) {
+        if(!isset($userid) || !isset($time) )
             return false;
-        if(!isset($login['id_korisnika']) || 
-           !isset($login['vrijeme_od']) || 
-           !isset($login['vrijeme_do']) )
+        Database::insert('UPDATE prijave 
+                          SET status=0 
+                          WHERE id_korisnika=:userid AND 
+                          status=1', 
+                          array('userid'=>$username) );
+        Database::insert('INSERT INTO prijave(id_korisnika, vrijeme_od, vrijeme_do, status) 
+                          VALUES(:userid, :time, NULL, 1)', 
+                         array('userid'=>$userid, 
+                               'time'=>$time) );
+        return true;
+    }
+    public static function insert_logout($userid, $time) {
+        if(!isset($userid) || !isset($time) )
+            return false;
+        return Database::insert('UPDATE prijave SET vrijeme_do=:time, status=0
+                                 WHERE id_korisnika=:userid AND 
+                                 vrijeme_do IS NULL AND 
+                                 status=1', 
+                                array('userid'=>$userid, 
+                                      'time'=>$time) );
+    }
+    public static function insert_login_fail($userid, $time) {
+        if(!isset($userid) || !isset($time) )
             return false;
         return Database::insert('INSERT INTO prijave(id_korisnika, vrijeme_od, vrijeme_do, status) 
-                                 VALUES(:userid, :from, :to, 1)', 
-                                array('userid'=>$login['id_korisnika'], 
-                                      'from'=>$login['vrijeme_od'], 
-                                      'to'=>$login['vrijeme_do']) );
+                                 VALUES(:userid, :time1, :time2, 1)', 
+                                array('userid'=>$userid, 
+                                      'time1'=>$time,
+                                      'time2'=>$time) );
     }
     
     
     ///////////////////////////////////////////////////////////////////////
     // systemtime
-    public function get_systemtime() {
+    public static function get_systemtime() {
         $res = Database::query('SELECT trenutno_vrijeme FROM vrijeme_sustava WHERE id=1');
-        if($res[0])
-            return $res[0];
+        if(count($res) == 1) {
+            $tv = $res[0];
+            return $tv['trenutno_vrijeme'];
+        }
         return 0;
     }
-    public function set_systemtime($time) {
+    public static function set_systemtime($time) {
         if(!isset($time) )
             return false;
         return Database::insert('UPDATE vrijeme_sustava 
@@ -403,16 +607,15 @@ class Mod1_model extends Model {
                                  WHERE id=1', 
                                 array('time'=>$time) );
     }
-    /*public function get_logins_for_user($userid) {
-        if(!isset($userid) )
-            return array();
-        return Database::query('SELECT * FROM prijave 
-                                WHERE id_korisnika=:userid AND 
-                                status=1', 
-                               array('userid'=>$userid) );
-    }*/
-    
-    
+    public static function set_systemtime_from_arka() {
+        $time = Server_time::get_saved_time();
+        if(!isset($time) )
+            return false;
+        return Database::insert('UPDATE vrijeme_sustava 
+                                 SET trenutno_vrijeme=:time 
+                                 WHERE id=1', 
+                                array('time'=>$time) );
+    }
 }
 
 ?>

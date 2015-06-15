@@ -32,13 +32,9 @@ class Auth_controller extends Controller {
                 $password = $_POST['password'];
                 
                 // check username and password if they are correct
-                if(Auth::login($username, $password) == true) {
-                    // user is logged in
+                if(Auth::login($username, $password) )
                     Redirect('/');
-                } else {
-                    // user is NOT logged in - WRONG user data
-                    Redirect('/auth/login?reg=failed');
-                }
+                Redirect('/auth/login?reg=failed');
             }
         }
         
@@ -63,42 +59,52 @@ class Auth_controller extends Controller {
         }
         
         // check if registration data is available
-        if(isset($_POST['username']) && $_POST['username']!='' &&
-           isset($_POST['email']) && $_POST['email']!='' ) {
-            $username = $_POST['username'];
-            $email = $_POST['email'];
+        if(isset($_POST['korisnicko_ime']) && 
+           isset($_POST['mail']) && 
+           isset($_POST['mail2']) && 
+           isset($_POST['lozinka']) && 
+           isset($_POST['lozinka2']) ) {
+               
+            $username = $_POST['korisnicko_ime'];
+            $email = $_POST['mail'];
+            $email2 = $_POST['mail2'];
+            $passwd = $_POST['lozinka'];
+            $passwd2 = $_POST['lozinka2'];
             
-            // check if username is available
-            $users = Database::query('SELECT korisnicko_ime FROM korisnici WHERE korisnicko_ime = :usname', array('usname'=>$username) );
-            if(count($users) != 0) {
+            if($email!=$email2)
+                Redirect('/auth/registration?reg=failed&info=two-different-mails');
+            if($passwd!=$passwd2)
+                Redirect('/auth/registration?reg=failed&info=two-different-passwords');
+            
+            if(!Auth::check_username_available($username) )
                 Redirect('/auth/registration?reg=failed&info=username-not-available');
-            }
             
-            // check if e-mail is available
-            $mails = Database::query('SELECT mail FROM korisnici WHERE mail = :usmail', array('usmail'=>$email) );
-            if(count($mails) != 0) {
+            if(!Auth::check_mail_available($email) )
                 Redirect('/auth/registration?reg=failed&info=email-not-available');
-            }
             
-            $userdata = array(
-                'username' => $username,
-                'email' => $email,
-                'activation_data' => 'id=' . $username
-            );
-            
-            if(Auth::register($userdata) == true) {
-                Redirect('/auth/activation');
-            } else {
-                Redirect('/auth/registration?reg=failed');
-            }
+            $userdata = $_POST;
+            $userdata['id_tipa_korisnika'] = PROJECT_USER_ROLE_REGISTERED;
+            $userdata['ime'] = 'ime'; 
+            $userdata['prezime'] = 'prezime'; 
+            $userdata['slika_korisnika'] = ''; 
+            if(Auth::registration($userdata) == true)
+                Redirect('/auth/activate');
+            Redirect('/auth/registration?reg=failed');
         }
         
         echo $this->view->registration();
     }
     
-    public function activation($id=null) {
+    public function activate() {
         UseSecureConnection();
         
+        if(isset($_GET['acl']) ) {
+            $acl = $_GET['acl'];
+            if(Auth::activation($acl) )
+                Redirect('/auth/login');
+            else
+                Redirect('/');
+        }
         Redirect('/');
     }
     
@@ -108,12 +114,9 @@ class Auth_controller extends Controller {
         if(Auth::login_check() == true) {
             Auth::logout();
             Redirect('/auth/login');
-            //    echo $this->view->logout();
-        
-        // if user is NOT logged in
-        } else {
-            Redirect('/');
         }
+        
+        Redirect('/');
     }
 }
 

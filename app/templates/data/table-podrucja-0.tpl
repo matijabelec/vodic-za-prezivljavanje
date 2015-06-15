@@ -5,6 +5,6 @@
         <h2 class="area-title">{@naziv_podrucja}</h2>
         <p class="area-desc">{@opis}</p>
         
-        <a class="btn area-more-information" href="{@project_root_path}/areas/read/{@id_podrucja}">Više</a>
+        <a class="btn" href="{@project_root_path}/areas/read/{@id_podrucja}">Više</a>
     </div>
 </section>

@@ -3,7 +3,6 @@
 class Areas_controller extends Controller {
     public function __construct() {
         $this->view = new Areas_view;
-        $this->model = new Areas_model;
     }
     
     public function index($args) {
@@ -14,67 +13,46 @@ class Areas_controller extends Controller {
         if(count($args) != URL_ARGUMENTS_NONE)
             return RET_ERR;
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            $user = Auth::get_user();
-            $areas = $this->model->get_active_areas();
-            
-            $subs = new Subscribes_model;
-            foreach($areas as &$area) {
-                $sub_ch = $subs->check_subscription($user['userid'], $area['id_podrucja']);
-                
-                if($sub_ch) {
-                    $area['subscribe-link'] = '/delete/' . $area['id_podrucja'];
-                    $area['subscribe'] = 'Ukloni pretplatu';
-                } else {
-                    $area['subscribe-link'] = '/create/' . $area['id_podrucja'];
-                    $area['subscribe'] = 'Pretplati se';
-                }
-            }
-            unset($subs);
-            
-            $areas2 = $this->model->get_deleted_areas();
-            
+        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            $areas = Data_model::get_areas();
+            $areas2 = Data_model::get_deleted_areas();
             echo $this->view->view_admin($areas, $areas2);
-            
-        } elseif (Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) || 
-                  Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
-            $user = Auth::get_user();
-            $areas = $this->model->get_active_areas();
-            
-            $subs = new Subscribes_model;
-            foreach($areas as &$area) {
-                $sub_ch = $subs->check_subscription($user['userid'], $area['id_podrucja']);
-                
-                if($sub_ch) {
-                    $area['subscribe-link'] = '/delete/' . $area['id_podrucja'];
-                    $area['subscribe'] = 'Ukloni pretplatu';
-                } else {
-                    $area['subscribe-link'] = '/create/' . $area['id_podrucja'];
-                    $area['subscribe'] = 'Pretplati se';
-                }
-            }
-            unset($subs);
-            echo $this->view->view_registered($areas);
+        } elseif (Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
+            $userid = Auth::userid();
+            $areas = Data_model::get_areas_for_moderator($userid);
+            $areas2 = Data_model::get_areas();
+            echo $this->view->view_mod($areas, $areas2);
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
+            $areas = Data_model::get_areas();
+            echo $this->view->view_reg($areas);
         } else {
-            $areas1 = $this->model->get_active_areas();
-            echo $this->view->view_guest($areas1);
+            $areas1 = Data_model::get_areas();
+            echo $this->view->view($areas1);
         }
     }
     
     public function create($args) {
+        if(count($args) == URL_ARGUMENTS_1) {
+            $areaid = $args[URL_ARG_1];
+            if(Data_model::undelete_area($areaid) )
+                Redirect('/areas/view');
+        }
+        
         // if user is not admin
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) )
+        if(!Auth::role_check(PROJECT_USER_ROLE_ADMIN) )
             Redirect('/areas/view');
         
         // check if data sent
         if(isset($_POST['id_podrucja']) ) {
             $area = $_POST;
-            $ok = $this->model->create_new_area($area);
-            if($ok)
+            if(Data_model::create_area($area) )
                 Redirect('/areas/view');
-        }
-        
-        echo $this->view->crud_create();
+        } else
+            $area = Data_model::get_empty_area();
+        $area['link-back'] = 'areas/view';
+        $area['link'] = 'areas/create';
+        $area['status'] = 1;
+        echo $this->view->create($area);
     }
     
     public function read($args) {
@@ -87,39 +65,28 @@ class Areas_controller extends Controller {
         
         // get data
         $areaid = $args[URL_ARG_1];
-        $areadata = $this->model->get_active_area($areaid);
-        if(count($areadata) == 0)
+        $area =  Data_model::get_area_by_id($areaid);
+        if(count($area) == 0)
             return RET_ERR;
         
-        $articles = $this->model->get_area_articles($areaid);
+        $articles = Data_model::get_articles_for_area($areaid);
         
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_GUEST) ) {
-            $user = Auth::get_user();
-            $userid = $user['userid'];
-            
-            if(Subscribes_model::check_subscription($userid, $areaid) )
-                $subs = true;
-            else
-                $subs = false;
-        }
+        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) )
+            echo $this->view->read($area, $articles);
+        else
+            echo $this->view->read_reg($area, $articles, false);
         
-        if(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            echo $this->view->crud_read_auth(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe', 'update', 'delete') );
-        } elseif(Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) ) {
-            echo $this->view->crud_read_auth(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe', 'update') );
-        } elseif(Auth::user_role_check(PROJECT_USER_ROLE_REGISTERED) ) {
-            echo $this->view->crud_read_auth(array('area'=>$areadata, 'articles'=>$articles, 'subscribes'=>$subs), array('back', 'subscribe') );
-        } else {
-            echo $this->view->crud_read(array('area'=>$areadata, 'articles'=>$articles), array('back') );
-        }
     }
     
     public function update($args) {
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
-        if(!(Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) || 
-           Auth::user_role_check(PROJECT_USER_ROLE_MODERATOR) ) )
+        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
+            
+        } else 
             Redirect('/areas/view');
         
         $areaid = $args[URL_ARG_1];
@@ -127,15 +94,15 @@ class Areas_controller extends Controller {
         // check if data sent
         if(isset($_POST['id_podrucja']) ) {
             $area = $_POST;
+            $area['id_podrucja'] = $areaid;
             
-            $ok = $this->model->update_area($area);
-            if($ok)
-                Redirect('/areas/view');
-        }
-        
-        // get data
-        $areadata = $this->model->get_area($areaid);
-        echo $this->view->crud_update($areadata);
+            if(Data_model::update_area($area) )
+                Redirect('/areas/read/' . $areaid);
+        } else 
+            $area = Data_model::get_area_by_id($areaid);
+        $area['link-back'] = 'areas/view';
+        $area['link'] = 'areas/update/' . $areaid;
+        echo $this->view->update($area);
     }
     
     public function delete($args) {
@@ -143,11 +110,11 @@ class Areas_controller extends Controller {
             return RET_ERR;
         
         // if user is not admin
-        if(!Auth::user_role_check(PROJECT_USER_ROLE_ADMIN) )
+        if(!Auth::role_check(PROJECT_USER_ROLE_ADMIN) )
             Redirect('/areas/view');
         
         $areaid = $args[URL_ARG_1];
-        $ok = $this->model->delete_area($areaid);
+        $ok = Data_model::delete_area($areaid);
         
         Redirect('/areas/view');
     }
