@@ -85,7 +85,7 @@ class Data_model extends Model {
                                  WHERE id_korisnika=:userid AND status=0', 
                                 array('userid'=>$userid) );
     }
-    public static function update_user($userid) {
+    public static function update_user($user) {
         if(!isset($user) || !is_array($user) )
             return false;
         if(!isset($user['id_korisnika']) || 
@@ -125,6 +125,8 @@ class Data_model extends Model {
     }
     
     public static function check_username_exists($username) {
+        if(!isset($username) )
+            return false;
         $users = Database::query('SELECT * FROM korisnici
                                   WHERE korisnicko_ime=:uname', 
                                 array('uname'=>$username) );
@@ -615,7 +617,7 @@ class Data_model extends Model {
         $counts = Database::query('SELECT count(*) prijave 
                                   WHERE id_korisnika=:userid AND 
                                   status=1', 
-                                  array('userid'=>$username) );
+                                  array('userid'=>$userid) );
         if(count($counts) == 1)
             return $counts[0];
         return -1;
@@ -628,7 +630,7 @@ class Data_model extends Model {
                           SET status=0 
                           WHERE id_korisnika=:userid AND 
                           status=1', 
-                          array('userid'=>$username) );
+                          array('userid'=>$userid) );
         Database::insert('INSERT INTO prijave(id_korisnika, vrijeme_od, vrijeme_do, status) 
                           VALUES(:userid, :time, NULL, 1)', 
                          array('userid'=>$userid, 
