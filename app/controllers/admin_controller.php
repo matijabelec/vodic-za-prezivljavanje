@@ -14,8 +14,7 @@ class Admin_controller extends Controller {
     
     public function view() {
         if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            // get users
-            $time = Data_model::get_systemtime();
+            $time = Server_time::get_virtualTime();
             echo $this->view->time($time);
         } else
             return RET_ERR;
@@ -23,7 +22,7 @@ class Admin_controller extends Controller {
     
     public function time() {
         if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            Data_model::set_systemtime_from_arka();
+            Server_time::set_time();
             Redirect('/admin/view');
         } else
             return RET_ERR;

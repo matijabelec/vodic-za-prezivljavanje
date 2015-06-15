@@ -16,60 +16,28 @@
 
 class Server_time {
     protected static $instance = null;
-    protected static $url = "http://arka.foi.hr/PzaWeb/PzaWeb2004/config/pomak.xml";
-    protected static $hours = null;
-    protected static $server_time;
-    protected static $system_time;
+    //protected static $url = "http://arka.foi.hr/PzaWeb/PzaWeb2004/config/pomak.xml";
+    protected static $url = "http://arka.foi.hr/WebDiP/pomak_vremena/pomak.php?format=xml";
     
     protected function __construct() {}
     protected function __destruct() {}
     
     public static function set_time() {
-        if(!($fp = fopen(self::$url, 'r') ) ) {
-            echo "Error: url '$url' is not reachable!";
-            exit;
+        if($fp=fopen(self::$url, 'r') ) {
+            $xml_string = fread($fp, 10000);
+            fclose($fp);            
+            $xml = simplexml_load_string($xml_string);
+            $hours = $xml->vrijeme->pomak->brojSati;
+            Data_model::set_systemtime($hours);
         }
-        $xml_string = fread($fp, 10000);
-        fclose($fp);
-        
-        $domdoc = new DOMDocument;
-        $domdoc->loadXML($xml_string);
-        $params = $domdoc->getElementsByTagName('pomak');
-        
-        self::$hours = 0;
-        foreach ($params as $param) {
-            $attr = $param->attributes;
-            foreach($attr as $key => $val)
-                if("brojSati" == $key)
-                    self::$hours = $val->value;
-        }
-        
-        Database::query("UPDATE TABLE vrijeme_sustava SET trenutno_vrijeme = :time WHERE id = 1", array('time'=>self::$hours) );
     }
     
     public static function get_virtualTime() {
-        self::$server_time = time();
-        self::$system_time = self::$server_time + (self::$hours * 3600);
-        if(!is_null(self::$hours) )
-            return self::$system_time;
+        $hours = Data_model::get_systemtime();
+        $server_time = time();
+        $system_time = $server_time + ($hours * 3600);
+        return date("Y-m-d H:i:s", $system_time);
     }
-    public static function get_realTime() {
-        self::$server_time = time();
-        if(!is_null(self::$hours) )
-            return self::$server_time;
-    }
-    
-    public static function get_saved_time() {
-        $result = Database::query("SELECT trenutno_vrijeme FROM vrijeme_sustava");
-        if(count($result) == 1) {
-            $time = $result[0];
-            self::$hours = $time['trenutno_vrijeme'];
-            return self::get_virtualTime();
-        }
-    }
-    /*public static function get_saved_time_str() {
-        return date("Y-m-d H:i:s");
-    }*/
 }
 
 ?>

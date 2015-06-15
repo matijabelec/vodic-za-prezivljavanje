@@ -705,15 +705,16 @@ class Data_model extends Model {
                                  WHERE id=1', 
                                 array('time'=>$time) );
     }
-    public static function set_systemtime_from_arka() {
-        $time = Server_time::get_saved_time();
+    /*public static function set_systemtime_from_arka() {
+        Server_time::set_time();
+        $time = Server_time::get_virtualTime();
         if(!isset($time) )
             return false;
         return Database::insert('UPDATE vrijeme_sustava 
                                  SET trenutno_vrijeme=:time 
                                  WHERE id=1', 
                                 array('time'=>$time) );
-    }
+    }*/
 }
 
 ?>
