@@ -179,6 +179,32 @@ class Data_model extends Model {
                                 p.status=1', 
                                array('modid'=>$moderatorid) );
     }
+    public static function get_areas_not_for_moderator($moderatorid) {
+        if(!isset($moderatorid) )
+            return array();
+        return Database::query('SELECT p.* FROM podrucja p 
+                                WHERE p.id_podrucja NOT IN 
+                                    (SELECT pr.id_podrucja 
+                                    FROM pretplate pr 
+                                    WHERE pr.id_korisnika=:modid AND 
+                                    pr.status=2) AND 
+                                p.status=1 ', 
+                               array('modid'=>$moderatorid) );
+    }
+    
+    public static function check_area_moderation($areaid, $moderatorid) {
+        if(!isset($areaid) || !isset($moderatorid) )
+            return false;
+        $res = Database::query('SELECT * FROM pretplate 
+                                WHERE id_korisnika=:modid AND 
+                                id_podrucja=:areaid AND 
+                                status=2', 
+                               array('areaid'=>$areaid, 
+                                     'modid'=>$moderatorid) );
+        if(count($res) > 0)
+            return true;
+        return false;
+    }
     
     public static function create_area($area) {
         if(!isset($area) || !is_array($area) )
@@ -300,6 +326,18 @@ class Data_model extends Model {
         return Database::query('SELECT * FROM clanci WHERE status=1');
     }
     
+    public static function get_article($articleid) {
+        if(!isset($articleid) )
+            return array();
+        $articles = Database::query('SELECT * FROM clanci 
+                                     WHERE id_clanka=:articleid AND 
+                                     status=1',
+                                    array('articleid'=>$articleid) );
+        if(count($articles) == 1)
+            return $articles[0];
+        return array();
+    }
+    
     public static function get_articles_for_area($areaid) {
         if(!isset($areaid) )
             return array();
@@ -323,8 +361,8 @@ class Data_model extends Model {
                     array('areaid'=>$areaid) );
     }
     
-    public static function check_article_restriction($articleid, $userid) {
-        if(!isset($articleid) || !isset($user) )
+    public static function check_article_restriction($moderatorid, $userid) {
+        if(!isset($moderatorid) || !isset($userid) )
             return 1;
         $res = Database::query('SELECT zp.* FROM zabrana_pristupa 
                                 JOIN korisnici k ON k.id_korisnika=zp.id_moderatora 
@@ -335,6 +373,22 @@ class Data_model extends Model {
                                 k.status>1 AND 
                                 c.status=0',
                                 array('moderatorid'=>$moderatorid,
+                                      'userid'=>$userid) );
+        if(count($res)>0)
+            return 1;
+        return 0;
+    }
+    
+    public static function check_area_subscription_by_article($articleid, $userid) {
+        if(!isset($articleid) || !isset($userid) )
+            return 1;
+        $res = Database::query('SELECT * FROM pretplate 
+                                WHERE id_podrucja=(SELECT id_podrucja 
+                                    FROM clanci 
+                                    WHERE id_clanka=:articleid) AND 
+                                id_korisnika=:userid AND 
+                                status>0',
+                                array('articleid'=>$articleid,
                                       'userid'=>$userid) );
         if(count($res)>0)
             return 1;

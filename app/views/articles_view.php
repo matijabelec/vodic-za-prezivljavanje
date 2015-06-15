@@ -1,8 +1,28 @@
 <?php
 
 class Articles_view extends Webpage_view {
-    public function view($articles=array() ) {
-        $page = $this->view_prepare();
+    public function view($articles=array(), $ajax=false) {
+        if($ajax == true) {
+            $content = new Body_table_template('Članci');
+            
+            $t = '';
+            $tpl = new Template('data/table-article-small');
+            foreach($articles as $data) {
+                foreach($data as $key=>$val) {
+                    $tpl->set($key, $val);
+                }
+                $t .= $tpl->fill();
+            }
+            unset($tpl);
+            
+            $content->set_tabledata($t);
+            
+            $content->set('project_root_path', WEBSITE_ROOT_PATH);
+            $cf = $content->fill();
+            unset($content);
+            return $cf;
+        }
+        
         
         $content = new Body_table_template('Članci');
         
@@ -17,9 +37,9 @@ class Articles_view extends Webpage_view {
         unset($tpl);
         
         $content->set_tabledata($t);
+        $page = $this->view_prepare();
         $page->set_body($content->fill() );
         unset($content);
-        
         return $page->fill();
     }
     

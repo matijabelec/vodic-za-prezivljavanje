@@ -20,7 +20,7 @@ class Areas_controller extends Controller {
         } elseif (Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
             $userid = Auth::userid();
             $areas = Data_model::get_areas_for_moderator($userid);
-            $areas2 = Data_model::get_areas();
+            $areas2 = Data_model::get_areas_not_for_moderator($userid);
             echo $this->view->view_mod($areas, $areas2);
         } elseif(Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
             $areas = Data_model::get_areas();
@@ -75,21 +75,23 @@ class Areas_controller extends Controller {
             echo $this->view->read($area, $articles);
         else
             echo $this->view->read_reg($area, $articles, false);
-        
     }
     
     public function update($args) {
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
-        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            
-        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
-            
-        } else 
+        $areaid = $args[URL_ARG_1];
+        
+        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) || 
+           Auth::role_check(PROJECT_USER_ROLE_REGISTERED) )
             Redirect('/areas/view');
         
-        $areaid = $args[URL_ARG_1];
+        if(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
+            $userid = Auth::userid();
+            if(!Data_model::check_area_moderation($areaid, $userid) )
+                Redirect('/areas/view');
+        }
         
         // check if data sent
         if(isset($_POST['id_podrucja']) ) {

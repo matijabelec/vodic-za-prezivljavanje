@@ -129,7 +129,9 @@ class Areas_view extends Webpage_view {
         $cf = $content->fill();
         unset($content);
         
-        return $this->page('Područja', $cf);
+        $data = array('areaid'=>$area['id_podrucja'],
+                      'elem'=>'#articles-containter');
+        return $this->page('Područja', $cf, $data);
     }
     
     
@@ -143,10 +145,24 @@ class Areas_view extends Webpage_view {
     
     
     
-    protected function page($title, $body) {
+    protected function page($title, $body, $data=null) {
+        $footdata = '';
+        if(!is_null($data) && is_array($data) ) {
+            if(isset($data['areaid']) && isset($data['elem']) ) {
+                $footdata = '<script>';
+                $footdata .= 'var relurl="' . WEBSITE_ROOT_PATH . '"; ';
+                $footdata .= 'var get_articles=true; ';
+                $footdata .= 'var areaid=' . $data['areaid'] . '; ';
+                $footdata .= 'var elem=$("' . $data['elem'] . '"); ';
+                $footdata .= '</script>';
+                $footdata .= '<script src="/site/js/script-areas.js"></script>';
+            }
+        }
+        
         $page = new Standard_template('Područja');
         $page->set('option-areas', ' selected');
         $page->set('body', $body);
+        $page->set('foot-data', $footdata);
         $pf = $page->fill();
         unset($page);
         

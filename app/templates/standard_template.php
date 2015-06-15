@@ -5,6 +5,7 @@ class Standard_template extends Template {
         parent::__construct('page/standard');
         
         $this->set('head-data', '');
+        $this->set('foot-data', '');
         $this->set('title', $title);
         
         $this->set('project-title', PROJECT_TITLE);

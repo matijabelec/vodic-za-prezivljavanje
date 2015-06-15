@@ -29,19 +29,18 @@ class Articles_controller extends Controller {
         $articleid = $args[URL_ARG_1];
         
         if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            $article = $this->model->get_article($articleid);
-            $comments = $this->model->get_comments_for_article($articleid);
+            $article = Data_model::get_article($articleid);
+            $comments = Data_model::get_comments_for_article($articleid);
             echo $this->view->read($article, $comments);
         } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) || 
                  Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
             $userid = Auth::userid();
             
-            if(!$this->model->check_subscribed_to_articles_area($userid, $articleid) ) {
+            if(!Data_model::check_area_subscription_by_article($articleid, $userid) ) {
                 return RET_ERR;
             }
-            
-            $article = $this->model->get_article($articleid);
-            $comments = $this->model->get_comments_for_article($articleid);
+            $article = Data_model::get_article($articleid);
+            $comments = Data_model::get_comments_for_article($articleid);
             echo $this->view->read($article, $comments);
         } else
             return RET_ERR;
@@ -73,6 +72,37 @@ class Articles_controller extends Controller {
             echo $this->view->read($article, $comments);*/
         } else
             return RET_ERR;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public function ajax($args) {
+        $argc = count($args);
+        if($argc >= URL_ARGUMENTS_1) {
+            switch($args[URL_ARG_1]) {
+                case 'articles-for-area':
+                    if($argc < URL_ARGUMENTS_2)
+                        break;
+                    $areaid = $args[URL_ARG_2];
+                    $articles = Data_model::get_articles_for_area($areaid);
+                    echo $this->view->view($articles, true);
+                    return;
+                default:
+                    break;
+            }
+        }
+        echo 'X';
     }
 }
 
