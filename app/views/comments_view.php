@@ -1,25 +1,72 @@
 <?php
 
 class Comments_view extends Webpage_view {
-    public function crud_create($userid, $articleid) {
-        $page = $this->view_prepare();
-        
-        $content = new Crud_comments();
-        $content->set('link-back', 'areas/view');
-        $content->set('link', 'comments/create/' . $articleid);
-        
-        $content->set('id_korisnika', $userid);
-        $content->set('id_clanka', $articleid);
-        
-        $page->set_body($content->fill() );
-        return $page->fill();
+    public function create($userid, $articleid) {
+        $comment = new Template('data/comments/comment-input');
+        $data = array('id_clanka'=>$articleid, 
+                      'id_korisnika'=>$userid, 
+                      'sadrzaj'=>'', 
+                      'link-back'=>'articles/read/' . $articleid, 
+                      'link'=>'comments/create/'. $articleid);
+        $this->fill_data($comment, $data);
+        $comment->set('project_root_path', WEBSITE_ROOT_PATH);
+        $fill = $comment->fill();
+        unset($comment);
+        return $fill;
     }
     
-    protected function view_prepare() {
-        $page = new Standard_template('Područja');
-        $page->set('option-comments', ' selected');
+    
+    
+    protected function view_comment_on_article($data) {
+        $comment = new Template('data/comments/comment-on-article');
+        $this->fill_data($comment, $data);
+        $comment->set('project_root_path', WEBSITE_ROOT_PATH);
+        $fill = $comment->fill();
+        unset($comment);
+        return $fill;
+    }
+    
+    
+    protected function fill_data(&$tpl, &$data) {
+        foreach($data as $key=>$val) {
+            $tpl->set($key, $val);
+        }
+    }
+    
+    
+    protected function create_menu($data, $articleid=null, $areaid=null) {
+        $create = '<p style="text-align:right"><a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create">Novo</a></p> ';
+        $read = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/read/' . $articleid . '">Više</a> ';
+        $update = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/update/' . $articleid . '">Uredi</a> ';
+        $delete = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/delete/' . $articleid . '">Izbriši</a> ';
+        $activate = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create/' . $articleid . '">Aktiviraj</a> ';
+        $back = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/area/read/' . $areaid . '">Aktiviraj</a> ';
         
-        return $page;
+        $m = '';
+        if(is_array($data) )
+            foreach($data as &$d)
+                switch($d) {
+                    case 'c': $m  .= $create; break;
+                    case 'r': $m  .= $read; break;
+                    case 'u': $m  .= $update; break;
+                    case 'd': $m  .= $delete; break;
+                    case 'a': $m  .= $activate; break;
+                    case 'b': $m  .= $back; break;
+                    default: break;
+                }
+        return $m;
+    }
+    
+    
+    public function ajax_view($comments) {
+        $body = '<p>Nema komentara</p>';
+        if(count($comments) ) {
+            $body = '<ul>';
+            foreach($comments as &$comment)
+                $body .= $this->view_comment_on_article($comment);
+            $body .= '</ul>';
+        }
+        return $body;
     }
 }
 

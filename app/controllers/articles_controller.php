@@ -81,15 +81,25 @@ class Articles_controller extends Controller {
                 case 'articles-for-area':
                     if($argc < URL_ARGUMENTS_2)
                         break;
-                    $areaid = $args[URL_ARG_2];
-                    $articles = Data_model::get_articles_for_area($areaid);
-                    echo $this->view->view($articles, true);
+                    if(Auth::role_check(PROJECT_USER_ROLE_GUEST) ) {
+                        $areaid = $args[URL_ARG_2];
+                        $articles = Data_model::get_articles_for_area($areaid);
+                        echo $this->view->ajax_view($articles);
+                    } else {
+                        $areaid = $args[URL_ARG_2];
+                        $userid = Auth::userid();
+                        $articles = Data_model::get_articles_for_area($areaid);
+                        if(Data_model::check_area_subscription($areaid, $userid) )
+                            echo $this->view->ajax_view_reg($articles);
+                        else
+                            echo $this->view->ajax_view($articles);
+                    }
                     return;
                 default:
                     break;
             }
         }
-        echo 'X';
+        return;
     }
 }
 

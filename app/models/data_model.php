@@ -194,6 +194,31 @@ class Data_model extends Model {
                                array('modid'=>$moderatorid) );
     }
     
+    public static function get_areas_for_subscriber($userid) {
+        if(!isset($userid) )
+            return array();
+        return Database::query('SELECT p.* FROM podrucja p 
+                                JOIN pretplate pr 
+                                ON p.id_podrucja=pr.id_podrucja 
+                                WHERE pr.id_korisnika=:userid AND 
+                                pr.status=1 AND 
+                                p.status=1', 
+                               array('userid'=>$userid) );
+    }
+    
+    public static function get_areas_not_subscribed($userid) {
+        if(!isset($userid) )
+            return array();
+        return Database::query('SELECT p.* FROM podrucja p 
+                                WHERE p.id_podrucja NOT IN 
+                                    (SELECT pr.id_podrucja 
+                                    FROM pretplate pr 
+                                    WHERE pr.id_korisnika=:userid AND 
+                                    pr.status>0) AND 
+                                p.status=1', 
+                               array('userid'=>$userid) );
+    }
+    
     public static function check_area_moderation($areaid, $moderatorid) {
         if(!isset($areaid) || !isset($moderatorid) )
             return false;
@@ -484,8 +509,12 @@ class Data_model extends Model {
     public static function get_comments_for_article($articleid) {
         if(!isset($articleid) )
             return array();
-        return Database::query('SELECT * FROM komentari 
-                                WHERE id_clanka=:articleid AND status=1',
+        return Database::query('SELECT kom.*, k.korisnicko_ime, k.ime, 
+                                        k.prezime, k.status AS status_korisnika 
+                                FROM komentari kom 
+                                JOIN korisnici k ON kom.id_korisnika=k.id_korisnika 
+                                WHERE kom.id_clanka=:articleid AND 
+                                kom.status=1',
                                 array('articleid'=>$articleid) );
     }
     public static function get_comments_for_user($userid) {

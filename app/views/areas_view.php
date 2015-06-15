@@ -17,7 +17,7 @@ class Areas_view extends Webpage_view {
         
         return $this->page('Područja', $cf);
     }
-    public function view_reg($areas) {
+    public function view_reg($areas, $areas2) {
         $body = '';
         foreach($areas as &$area)
             $body .= $this->view_mini($area, array('r') );
@@ -26,14 +26,24 @@ class Areas_view extends Webpage_view {
         
         $content = new Template('data/areas/view');
         $content->set('menu', '');
-        $content->set('title', 'Područja');
+        $content->set('title', 'Područja za koja imam pretplatu');
         $content->set('body', $body);
         $cf = $content->fill();
+        
+        $body = '';
+        foreach($areas2 as &$area)
+            $body .= $this->view_mini($area, array('r') );
+        if($body == '')
+            $body = '<p>Nema područja</p>';
+        
+        $content->set('title', 'Ostala područja');
+        $content->set('body', $body);
+        $cf .= $content->fill();
         unset($content);
         
         return $this->page('Područja', $cf);
     }
-    public function view_mod($areas, $areas2) {
+    public function view_mod($areas, $areas2, $areas3) {
         $body = '';
         foreach($areas as &$area)
             $body .= $this->view_mini($area, array('r', 'u') );
@@ -52,6 +62,16 @@ class Areas_view extends Webpage_view {
         if($body == '')
             $body = '<p>Nema područja</p>';
         
+        $content->set('title', 'Područja za koja imam pretplatu');
+        $content->set('body', $body);
+        $cf .= $content->fill();
+        
+        $body = '';
+        foreach($areas3 as &$area)
+            $body .= $this->view_mini($area, array('r') );
+        if($body == '')
+            $body = '<p>Nema područja</p>';
+        
         $content->set('title', 'Ostala područja');
         $content->set('body', $body);
         $cf .= $content->fill();
@@ -59,7 +79,7 @@ class Areas_view extends Webpage_view {
         
         return $this->page('Područja', $cf);
     }
-    public function view_admin($areas, $areas2) {
+    public function view_admin($areas, $areas2, $areas3, $areas4) {
         $menu = $this->create_menu(array('c') );
         
         $body = '';
@@ -70,17 +90,37 @@ class Areas_view extends Webpage_view {
         
         $content = new Template('data/areas/view');
         $content->set('menu', $menu);
-        $content->set('title', 'Aktivna područja');
+        $content->set('title', 'Područja za koja imam status moderatora');
         $content->set('body', $body);
         $cf = $content->fill();
         
         $body = '';
         foreach($areas2 as &$area)
-            $body .= $this->view_mini($area, array('a') );
+            $body .= $this->view_mini($area, array('r', 'u', 'd') );
         if($body == '')
             $body = '<p>Nema područja</p>';
         
         $content->set('menu', '');
+        $content->set('title', 'Područja za koja imam pretplatu');
+        $content->set('body', $body);
+        $cf .= $content->fill();
+        
+        $body = '';
+        foreach($areas3 as &$area)
+            $body .= $this->view_mini($area, array('r', 'u', 'd') );
+        if($body == '')
+            $body = '<p>Nema područja</p>';
+        
+        $content->set('title', 'Ostala aktivna područja');
+        $content->set('body', $body);
+        $cf .= $content->fill();
+        
+        $body = '';
+        foreach($areas4 as &$area)
+            $body .= $this->view_mini($area, array('r') );
+        if($body == '')
+            $body = '<p>Nema područja</p>';
+        
         $content->set('title', 'Izbrisana područja');
         $content->set('body', $body);
         $cf .= $content->fill();
@@ -112,7 +152,9 @@ class Areas_view extends Webpage_view {
         $cf = $content->fill();
         unset($content);
         
-        return $this->page('Područja', $cf);
+        $data = array('areaid'=>$area['id_podrucja'],
+                      'elem'=>'#articles-containter');
+        return $this->page('Područja', $cf, $data);
     }
     public function read_reg($area, $articles, $subscribe) {
         $areaid = $area['id_podrucja'];

@@ -22,12 +22,14 @@ class Comments_controller extends Controller {
         
         if(isset($_POST['id_clanka']) ) {
             $comment = $_POST;
-            $ok = $this->model->comment($comment);
+            $comment['status'] = 1;
+            $comment['datum_objave'] = Server_time::get_virtualTime();
+            $ok = Data_model::comment_article($comment);
             if($ok)
                 Redirect('/articles/read/' . $articleid);
         }
         
-        echo $this->view->crud_create($userid, $articleid);
+        echo $this->view->create($userid, $articleid);
     }
     
     public function delete($args) {
@@ -52,6 +54,29 @@ class Comments_controller extends Controller {
         }
         
         echo $this->view->crud_create($userid, $articleid);
+    }
+    
+    
+    
+    
+    public function ajax($args) {
+        $argc = count($args);
+        if($argc >= URL_ARGUMENTS_1) {
+            switch($args[URL_ARG_1]) {
+                case 'comments-for-article':
+                    if($argc < URL_ARGUMENTS_2)
+                        break;
+                    if(!Auth::role_check(PROJECT_USER_ROLE_GUEST) ) {
+                        $articleid = $args[URL_ARG_2];
+                        $comments = Data_model::get_comments_for_article($articleid);
+                        echo $this->view->ajax_view($comments);
+                    }
+                    return;
+                default:
+                    break;
+            }
+        }
+        return;
     }
 }
 

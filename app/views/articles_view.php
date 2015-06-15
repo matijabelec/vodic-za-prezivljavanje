@@ -1,18 +1,14 @@
 <?php
 
 class Articles_view extends Webpage_view {
-    public function view($articles, $ajax=false) {
-        $body = '';
-        foreach($articles as &$article)
-            $body .= $this->view_mini($article, array('r') );
+    public function view($articles) {
+        $body = $this->create_table($articles);
         if($body == '')
             $body = '<p>Nema članaka</p>';
         
-        if($ajax)
-            return $body;
-        
         $content = new Template('data/areas/view');
-        $content->set('menu', '');
+        $content->set('menu', $this->create_menu(array('c') ) );
+        
         $content->set('title', 'Područja');
         $content->set('body', $body);
         $cf = $content->fill();
@@ -21,80 +17,26 @@ class Articles_view extends Webpage_view {
         return $this->page('Područja', $cf);
     }
     
-    
-    
-    
-    /*public function view($articles=array(), $ajax=false) {
-        if($ajax == true) {
-            $content = new Body_table_template('Članci');
-            
-            $t = '';
-            $tpl = new Template('data/table-article-small');
-            foreach($articles as $data) {
-                foreach($data as $key=>$val) {
-                    $tpl->set($key, $val);
-                }
-                $t .= $tpl->fill();
-            }
-            unset($tpl);
-            
-            if($t == '')
-                $t = '<p>Nema članaka</p>';
-            
-            $content->set_tabledata($t);
-            $content->set('project_root_path', WEBSITE_ROOT_PATH);
-            $cf = $content->fill();
-            unset($content);
-            return $cf;
-        }
-        
-        
-        $content = new Body_table_template('Članci');
-        
-        $t = '';
-        $tpl = new Template('data/table-article-small');
-        foreach($articles as $data) {
-            foreach($data as $key=>$val) {
-                $tpl->set($key, $val);
-            }
-            $t .= $tpl->fill();
-        }
-        unset($tpl);
-        
-        $content->set_tabledata($t);
-        $page = $this->view_prepare();
-        $page->set_body($content->fill() );
-        unset($content);
-        return $page->fill();
-    }*/
-    
     public function read($article, $comments) {
-        $page = $this->view_prepare();
+        $areaid = $article['id_podrucja'];
+        $articleid = $article['id_clanka'];
+        $article['article-comments'] = '<p>Nema komentara</p>';
+        $article['article-controls'] = 
+            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/read/' . $areaid . '">Natrag</a> ' . 
+            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/comments/create/' . $articleid . '">Komentiraj</a> ';
         
-        $content = new Template('data/table-article');
-        foreach($article as $key=>$val) {
-            $content->set($key, $val);
-        }
+        $body = $this->view_standard($article);
         
-        $t = '';
-        if(count($comments) ) {
-            $t = '<ul>';
-            $tpl = new Template('data/table-comment-on-article');
-            $tpl->set('project_root_path', WEBSITE_ROOT_PATH);
-            foreach($comments as $data) {
-                foreach($data as $key=>$val)
-                    $tpl->set($key, $val);
-                $t .= $tpl->fill();
-            }
-            unset($tpl);
-            $t .= '</ul>';
-        }
-        
-        $page->set('article-comments', $t);
-        $page->set_body($content->fill() );
+        $content = new Template('data/areas/view');
+        $content->set('menu', '');
+        $content->set('title', $article['naslov']);
+        $content->set('body', $body);
+        $cf = $content->fill();
         unset($content);
         
-        return $page->fill();
+        $data = array('articleid'=>$article['id_clanka'],
+                      'elem'=>'#article-comments-container');
+        return $this->page('Članci', $cf, $data);
     }
     
     
@@ -123,14 +65,14 @@ class Articles_view extends Webpage_view {
     protected function page($title, $body, $data=null) {
         $footdata = '';
         if(!is_null($data) && is_array($data) ) {
-            if(isset($data['areaid']) && isset($data['elem']) ) {
+            if(isset($data['articleid']) && isset($data['elem']) ) {
                 $footdata = '<script>';
                 $footdata .= 'var relurl="' . WEBSITE_ROOT_PATH . '"; ';
-                $footdata .= 'var get_articles=true; ';
-                $footdata .= 'var areaid=' . $data['areaid'] . '; ';
+                $footdata .= 'var get_comments=true; ';
+                $footdata .= 'var articleid=' . $data['articleid'] . '; ';
                 $footdata .= 'var elem=$("' . $data['elem'] . '"); ';
                 $footdata .= '</script>';
-                $footdata .= '<script src="' . WEBSITE_ROOT_PATH . '/site/js/script-areas.js"></script>';
+                $footdata .= '<script src="' . WEBSITE_ROOT_PATH . '/site/js/script-articles.js"></script>';
             }
         }
         
@@ -181,6 +123,15 @@ class Articles_view extends Webpage_view {
         unset($article);
         return $fill;
     }
+    protected function view_article_on_area($data, $ma=null) {
+        $article = new Template('data/articles/article-on-area-guest');
+        $menu = $this->create_menu($ma, $data['id_clanka']);
+        $article->set('menu', $menu);
+        $this->fill_data($article, $data);
+        $fill = $article->fill();
+        unset($article);
+        return $fill;
+    }
     
     
     protected function fill_data(&$tpl, &$data) {
@@ -190,12 +141,13 @@ class Articles_view extends Webpage_view {
     }
     
     
-    protected function create_menu($data, $articleid=null) {
-        $create = '<p style="text-align:right"><a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create">Novo</a></p> ';
-        $read = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/read/' . $articleid . '">Više</a> ';
-        $update = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $articleid . '">Uredi</a> ';
-        $delete = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/delete/' . $articleid . '">Izbriši</a> ';
-        $activate = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create/' . $articleid . '">Aktiviraj</a> ';
+    protected function create_menu($data, $articleid=null, $areaid=null) {
+        $create = '<p style="text-align:right"><a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create">Novo</a></p> ';
+        $read = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/read/' . $articleid . '">Više</a> ';
+        $update = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/update/' . $articleid . '">Uredi</a> ';
+        $delete = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/delete/' . $articleid . '">Izbriši</a> ';
+        $activate = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create/' . $articleid . '">Aktiviraj</a> ';
+        $back = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/area/read/' . $areaid . '">Aktiviraj</a> ';
         
         $m = '';
         if(is_array($data) )
@@ -206,9 +158,34 @@ class Articles_view extends Webpage_view {
                     case 'u': $m  .= $update; break;
                     case 'd': $m  .= $delete; break;
                     case 'a': $m  .= $activate; break;
+                    case 'b': $m  .= $back; break;
                     default: break;
                 }
         return $m;
+    }
+    
+    
+    
+    
+    public function ajax_view($articles) {
+        $body = '<p>Nema članaka</p>';
+        if(count($articles) ) {
+            $body = '<ul>';
+            foreach($articles as &$article)
+                $body .= $this->view_article_on_area($article);
+            $body .= '</ul>';
+        }
+        return $body;
+    }
+    public function ajax_view_reg($articles) {
+        $body = '<p>Nema članaka</p>';
+        if(count($articles) ) {
+            $body = '<ul>';
+            foreach($articles as &$article)
+                $body .= $this->view_article_on_area($article, array('r') );
+            $body .= '</ul>';
+        }
+        return $body;
     }
 }
 

@@ -7,4 +7,5 @@
         <span class="article-image-count">{@broj_slika}</span>
         <span class="article-document-count">{@broj_dokumenata}</span>
     </div>
+    {@menu}
 </li>

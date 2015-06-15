@@ -27,28 +27,26 @@ class Webpage_view extends View {
         return $this->head_data;
     }
     
-    protected function create_table($data='', $headers=true) {
+    
+    protected function create_table($data) {
         $table = '';
         if(count($data) > 0) {
-            $table = '<table>';
-            if($headers == true) {
-                $table .= '<tr>';
-                foreach($data[0] as $key=>$val)
-                    $table .= '<th>' . $key . '</th>';
-                $table .= '</tr>';
-            }
+            $th = '<tr>';
+            $d = $data[0];
+            foreach($d as $key=>$val) $th .= '<th>' . $key . '</th>';
+            $th .= '</tr>';
             
-            foreach($data as $d) {
-                $table .= '<tr>';
+            $tb = '';
+            foreach($data as &$d) {
+                $tb .= '<tr>';
                 foreach($d as $key=>$val)
-                    $table .= '<td>' . $val . '</td>';
-                $table .= '</tr>';
+                    $tb .= '<td>' . $val . '</td>';
+                $tb .= '</tr>';
             }
-            $table .= '</table>';
+            $table = '<table>' . $th . $tb . '</table>';
         }
         return $table;
     }
-    
 }
 
 ?>
