@@ -31,18 +31,19 @@ class Webpage_view extends View {
     protected function create_table($data) {
         $table = '';
         if(count($data) > 0) {
-            $th = '<tr>';
+            $th = '<thead><tr>';
             $d = $data[0];
             foreach($d as $key=>$val) $th .= '<th>' . $key . '</th>';
-            $th .= '</tr>';
+            $th .= '</tr></thead>';
             
-            $tb = '';
+            $tb = '<tbody>';
             foreach($data as &$d) {
                 $tb .= '<tr>';
                 foreach($d as $key=>$val)
                     $tb .= '<td>' . $val . '</td>';
                 $tb .= '</tr>';
             }
+            $tb .= '</tbody>';
             $table = '<table>' . $th . $tb . '</table>';
         }
         return $table;

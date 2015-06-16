@@ -18,7 +18,7 @@ $(document).ready(function(){
             beforeSend: function(){elem.html('<span class="loader">&nbsp</span>');},
             success: function(data){
                 elem.html(data);
-                console.log(elem.find('table') );
+                pripremi_datatable(elem.children('table') );
             },
             error: function(d){elem.html('<p>Dogodila se greška!</p>');}
         });
