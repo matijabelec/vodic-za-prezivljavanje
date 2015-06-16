@@ -48,11 +48,8 @@ class Articles_controller extends Controller {
         
         $areaid = $args[URL_ARG_1];
         
-        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
-            /*$article = $this->model->get_article($articleid);
-            $comments = $this->model->get_comments_for_article($articleid);
-            echo $this->view->read($article, $comments);*/
-        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) || 
+           Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
             $userid = Auth::userid();
             
             if(!Data_model::check_area_moderation($areaid, $userid) ) {
