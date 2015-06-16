@@ -47,11 +47,11 @@ class Users_controller extends Controller {
         if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             $users = $this->model->get_users();
             echo $this->view->crud($users);
-        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) || 
+        } else/*if(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) || 
                  Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
             $users = $this->model->get_users();
             echo $this->view->view_2($users);
-        } else {
+        } else*/ {
             $users = $this->model->get_users_safe();
             echo $this->view->view($users);
         }

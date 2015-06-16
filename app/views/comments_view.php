@@ -1,7 +1,7 @@
 <?php
 
 class Comments_view extends Webpage_view {
-    public function create($userid, $articleid) {
+    public function create($userid, $articleid, $page=true) {
         $comment = new Template('data/comments/comment-input');
         $data = array('id_clanka'=>$articleid, 
                       'id_korisnika'=>$userid, 
@@ -12,7 +12,11 @@ class Comments_view extends Webpage_view {
         $comment->set('project_root_path', WEBSITE_ROOT_PATH);
         $fill = $comment->fill();
         unset($comment);
-        return $fill;
+        
+        if($page != true)
+            return $fill;
+        
+        return $this->page('Novi komentar', $fill);
     }
     
     
@@ -55,6 +59,16 @@ class Comments_view extends Webpage_view {
                     default: break;
                 }
         return $m;
+    }
+    
+    protected function page($title, $body) {
+        $page = new Standard_template($title);
+        $page->set('option-comments', ' selected');
+        $page->set('body', $body);
+        $pf = $page->fill();
+        unset($page);
+        
+        return $pf;
     }
     
     

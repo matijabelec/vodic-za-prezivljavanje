@@ -56,10 +56,8 @@ class Comments_controller extends Controller {
             if($ok)
                 Redirect('/articles/read/' . $articleid);
         }
-        
-        echo $this->view->crud_create($userid, $articleid);
+        return RET_ERR;
     }
-    
     
     
     
