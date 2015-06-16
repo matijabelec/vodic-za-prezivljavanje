@@ -49,13 +49,15 @@ class Data_model extends Model {
                                       'date'=>$user['datum_registracije'], 
                                       'aclink'=>$user['aktivacijski_kod']) );
     }
-    public static function activate_user_by_aclink($aclink) {
-        if(!isset($aclink) )
+    public static function activate_user_by_aclink($aclink, $datetime) {
+        if(!isset($aclink) || !isset($datetime) )
             return false;
         return Database::insert('UPDATE korisnici SET status=2 
                                  WHERE aktivacijski_kod=:aclink AND 
-                                 status=1', 
-                                array('aclink'=>$aclink) );
+                                 status=1 AND 
+                                 TIMESTAMPDIFF(HOUR,:dt,datum_registracije) > -24', 
+                                array('aclink'=>$aclink,
+                                      'dt'=>$datetime) );
     }
     public static function block_user($userid) {
         if(!isset($userid) )
@@ -114,14 +116,14 @@ class Data_model extends Model {
     }
     public static function get_activated_user_by_username($username) {
         if(!isset($username) )
-            return array();
+            return null;
         $users = Database::query('SELECT * FROM korisnici 
                                   WHERE korisnicko_ime=:uname AND 
                                   status=2',
                                  array('uname'=>$username) );
         if(count($users) == 1)
             return $users[0];
-        return array();
+        return null;
     }
     
     public static function check_username_exists($username) {
@@ -359,6 +361,16 @@ class Data_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // articles
+    public static function get_empty_article() {
+        return array('id_clanka'=>'',
+                     'id_podrucja'=>'',
+                     'id_korisnika'=>'',
+                     'naslov'=>'',
+                     'sadrzaj'=>'',
+                     'datum_objave'=>'',
+                     'status'=>'');
+    }
+    
     public static function get_articles() {
         return Database::query('SELECT * FROM clanci WHERE status=1');
     }
@@ -433,6 +445,25 @@ class Data_model extends Model {
         if(count($res)>0)
             return 1;
         return 0;
+    }
+    
+    public static function create_article($article) {
+        if(!isset($article) || !is_array($article) )
+            return false;
+        if(!isset($article['id_korisnika']) || 
+           !isset($article['id_podrucja']) || 
+           !isset($article['naslov']) || 
+           !isset($article['sadrzaj']) || 
+           !isset($article['datum_objave']) )
+            return false;
+        return Database::insert('INSERT INTO clanci 
+                                (id_korisnika, id_podrucja, naslov, sadrzaj, datum_objave, status) 
+                                 VALUES(:userid, :areaid, :title, :cdata, :date, 1)', 
+                               array('userid'=>$article['id_korisnika'], 
+                                     'areaid'=>$article['id_podrucja'], 
+                                     'title'=>$article['naslov'],
+                                     'cdata'=>$article['sadrzaj'],
+                                     'date'=>$article['datum_objave']) );
     }
     
     ///////////////////////////////////////////////////////////////////////
@@ -535,7 +566,7 @@ class Data_model extends Model {
            !isset($comment['datum_objave']) )
             return false;
         return Database::insert('INSERT INTO komentari
-                                (id_korisnika, id_clanka, sadrzaj, datum objave, status)
+                                (id_korisnika, id_clanka, sadrzaj, datum_objave, status)
                                  VALUES(:userid, :articleid, :cdata, :date, 1)', 
                                array('userid'=>$comment['id_korisnika'], 
                                      'articleid'=>$comment['id_clanka'], 
@@ -643,12 +674,14 @@ class Data_model extends Model {
     public static function get_login_failed_count($userid) {
         if(!isset($userid) )
             return -1;
-        $counts = Database::query('SELECT count(*) prijave 
+        $counts = Database::query('SELECT count(*) AS num FROM prijave 
                                   WHERE id_korisnika=:userid AND 
                                   status=1', 
                                   array('userid'=>$userid) );
-        if(count($counts) == 1)
-            return $counts[0];
+        if(count($counts) == 1) {
+            $cnt = $counts[0];
+            return $cnt['num'];
+        }
         return -1;
     }
     
@@ -685,6 +718,17 @@ class Data_model extends Model {
                                       'time1'=>$time,
                                       'time2'=>$time) );
     }
+    public static function check_user_blocked($userid) {
+        if(!isset($userid) )
+            return false;
+        $users = Database::query('SELECT * FROM korisnici 
+                                  WHERE id_korisnika=:userid AND 
+                                  status=3', 
+                                  array('userid'=>$userid) );
+        if(count($users) == 1)
+            return true;
+        return false;
+    }
     
     
     ///////////////////////////////////////////////////////////////////////
@@ -705,16 +749,6 @@ class Data_model extends Model {
                                  WHERE id=1', 
                                 array('time'=>$time) );
     }
-    /*public static function set_systemtime_from_arka() {
-        Server_time::set_time();
-        $time = Server_time::get_virtualTime();
-        if(!isset($time) )
-            return false;
-        return Database::insert('UPDATE vrijeme_sustava 
-                                 SET trenutno_vrijeme=:time 
-                                 WHERE id=1', 
-                                array('time'=>$time) );
-    }*/
 }
 
 ?>

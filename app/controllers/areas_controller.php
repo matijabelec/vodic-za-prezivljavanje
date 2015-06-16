@@ -16,10 +16,10 @@ class Areas_controller extends Controller {
         if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             $userid = Auth::userid();
             $areas = Data_model::get_areas_for_moderator($userid);
-            $areas2 = Data_model::get_areas_not_for_moderator($userid);
+            $areas2 = Data_model::get_areas_for_subscriber($userid);
             $areas3 = Data_model::get_areas_not_subscribed($userid);
             $areas4 = Data_model::get_deleted_areas();
-            echo $this->view->view_admin($areas, $areas2, $area3, $area4);
+            echo $this->view->view_admin($areas, $areas2, $areas3, $areas4);
         } elseif (Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
             $userid = Auth::userid();
             $areas = Data_model::get_areas_for_moderator($userid);

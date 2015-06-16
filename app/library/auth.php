@@ -20,28 +20,34 @@
 class Auth extends Controller {
     public static function login($username, $password) {
         if(!isset($username) || !isset($password) )
-            return false;
+            return -1;
         
         $user = Data_model::get_activated_user_by_username($username);
-        if(!empty($user) ) {
+        if(!is_null($user) ) {
             $userid = $user['id_korisnika'];
             $username = $user['korisnicko_ime'];
             $userrole = $user['id_tipa_korisnika'];
-            $time = '0000-00-00 00:00:00';
+            $time = Server_time::get_virtualTime();
             if($user['lozinka'] == $password) {
                 Session::set('user', array('id'=>$userid, 
                                            'name'=>$username, 
                                            'role'=>$userrole) );
                 Data_model::insert_login($userid, $time);
-                return true;
+                return 1;
             } else {
                 Data_model::insert_login_fail($userid, $time);
-                if(Data_model::get_login_failed_count() >= 3) {
+                if(Data_model::get_login_failed_count($userid) >= 3) {
                     Data_model::block_user($userid);
+                    return -2;
                 }
             }
+            return -1;
         }
-        return false;
+        
+        if(Data_model::check_user_blocked($user['id_korisnika']) )
+            return -2;
+        
+        return -1;
     }
     
     public static function check_username_available($username) {
@@ -57,7 +63,7 @@ class Auth extends Controller {
         
         $user = Session::get('user');
         
-        $time = '0000-00-00 00:00:00';
+        $time = Server_time::get_virtualTime();
         Data_model::insert_logout(self::userid(), $time);
         
         Session::destroy('user');
@@ -73,7 +79,7 @@ class Auth extends Controller {
         
         $username = $user['korisnicko_ime'];
         $user['aktivacijski_kod'] = $username.$username;
-        $user['datum_registracije'] = '0000-00-00 00:00:00'; 
+        $user['datum_registracije'] = Server_time::get_virtualTime(); 
         
         if(Data_model::create_user($user) ) {
             $mail_to = $user['mail'];
@@ -93,8 +99,8 @@ class Auth extends Controller {
     public static function activation($aclink) {
         if(!isset($aclink) )
             return false;
-        
-        return Data_model::activate_user_by_aclink($aclink);
+        $datetime = Server_time::get_virtualTime();
+        return Data_model::activate_user_by_aclink($aclink, $datetime);
     }
     
     public static function authorize($username) {

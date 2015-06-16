@@ -32,9 +32,13 @@ class Auth_controller extends Controller {
                 $password = $_POST['password'];
                 
                 // check username and password if they are correct
-                if(Auth::login($username, $password) )
+                $ok = Auth::login($username, $password);
+                if($ok == 1)
                     Redirect('/');
-                Redirect('/auth/login?reg=failed');
+                elseif($ok == -2)
+                    Redirect('/auth/login?reg=failed&info=user-blocked');
+                else
+                    Redirect('/auth/login?reg=failed');
             }
         }
         

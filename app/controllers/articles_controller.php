@@ -52,20 +52,29 @@ class Articles_controller extends Controller {
             /*$article = $this->model->get_article($articleid);
             $comments = $this->model->get_comments_for_article($articleid);
             echo $this->view->read($article, $comments);*/
-        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) || 
-                 Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
             $userid = Auth::userid();
             
-            if(!$this->model->check_moderation_for_area($userid, $areaid) ) {
+            if(!Data_model::check_area_moderation($areaid, $userid) ) {
                 return RET_ERR;
             }
             
-            return RET_ERR;
+            if(isset($_POST['naslov']) ) {
+                $article = $_POST;
+                $article['datum_objave'] = Server_time::get_virtualTime();
+                $article['id_podrucja'] = $areaid;
+                $article['id_korisnika'] = $userid;
+                $article['status'] = 1;
+                
+                if(Data_model::create_article($article) )
+                    Redirect('/areas/read/' . $areaid);
+            }
             
-            /*
-            $article = $this->model->get_article($articleid);
-            $comments = $this->model->get_comments_for_article($articleid);
-            echo $this->view->read($article, $comments);*/
+            $article = Data_model::get_empty_article();
+            $article['link-back'] = 'areas/read/' . $areaid;
+            $article['link'] = 'articles/create/' . $areaid;
+            $article['status'] = 1;
+            echo $this->view->create($article);
         } else
             return RET_ERR;
     }
@@ -85,6 +94,10 @@ class Articles_controller extends Controller {
                         $areaid = $args[URL_ARG_2];
                         $articles = Data_model::get_articles_for_area($areaid);
                         echo $this->view->ajax_view($articles);
+                    } elseif(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
+                        $areaid = $args[URL_ARG_2];
+                        $articles = Data_model::get_articles_for_area($areaid);
+                        echo $this->view->ajax_view_reg($articles);
                     } else {
                         $areaid = $args[URL_ARG_2];
                         $userid = Auth::userid();

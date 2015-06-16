@@ -52,14 +52,14 @@ class Articles_view extends Webpage_view {
     }
     
     
-    protected function view_prepare() {
-        $page = new Standard_template('Članci');
-        $page->set('option-articles', ' selected');
-        
-        return $page;
+    
+    
+    
+    
+    public function create($article) {
+        $body = $this->view_input($article);
+        return $this->page('Članci', $body);
     }
-    
-    
     
     
     protected function page($title, $body, $data=null) {

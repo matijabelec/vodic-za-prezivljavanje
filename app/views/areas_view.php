@@ -117,7 +117,7 @@ class Areas_view extends Webpage_view {
         
         $body = '';
         foreach($areas4 as &$area)
-            $body .= $this->view_mini($area, array('r') );
+            $body .= $this->view_mini($area, array('a') );
         if($body == '')
             $body = '<p>Nema područja</p>';
         
@@ -132,7 +132,6 @@ class Areas_view extends Webpage_view {
     
     public function create($area) {
         $body = $this->view_input($area);
-        
         return $this->page('Područja', $body);
     }
     
@@ -182,7 +181,7 @@ class Areas_view extends Webpage_view {
         $area['area-controls'] = 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/view">Natrag</a> ' .
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $area['id_podrucja'] . '">Uredi</a>' . 
-            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create">Novi članak</a>';
+            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create/' . $area['id_podrucja'] . '">Novi članak</a>';
         
         $body = $this->view_standard($area);
         
@@ -202,7 +201,7 @@ class Areas_view extends Webpage_view {
         $area['area-controls'] = 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/view">Natrag</a> ' . 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $area['id_podrucja'] . '">Uredi</a>' . 
-            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create">Novi članak</a>';
+            '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create/' . $area['id_podrucja'] . '">Novi članak</a>';
         
         $body = $this->view_standard($area);
         
@@ -300,7 +299,7 @@ class Areas_view extends Webpage_view {
     
     
     protected function create_menu($data, $areaid=null) {
-        $create = '<p style="text-align:right"><a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create">Novo</a></p> ';
+        $create = '<p style="text-align:right"><a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create/"' . $areaid . '>Novo</a></p> ';
         $read = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/read/' . $areaid . '">Više</a> ';
         $update = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $areaid . '">Uredi</a> ';
         $delete = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/delete/' . $areaid . '">Izbriši</a> ';

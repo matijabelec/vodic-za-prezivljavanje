@@ -22,6 +22,17 @@ class Auth_view extends Webpage_view {
         $content->set('errors', '');
         if(!is_null($reg) && $reg!='') {
             $error_info = 'Neuspjela prijava! Provjerite unesene podatke.';
+            
+            if(!is_null($info) ) {
+                switch($info) {
+                    case 'user-blocked':
+                        $error_info = 'Korisnik je blokiran.';
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
             $content->set('errors', $error_info);
         }
         $page->set_body($content->fill() );
@@ -40,10 +51,20 @@ class Auth_view extends Webpage_view {
         if(!is_null($reg) && $reg!='') {
             $error_info = 'Registracija nije uspjela!';
             if(!is_null($info) && $info!='') {
-                if($info == 'username-not-available')
-                    $error_info = 'Korisničko ime je već zauzeto.';
-                elseif($info == 'email-not-available')
-                    $error_info = 'E-mail je već zauzet.';
+                switch($info) {
+                    case 'username-not-available':
+                        $error_info = 'Korisničko ime je već zauzeto.';
+                        break;
+                    case 'email-not-available';
+                        $error_info = 'Već postoji korisnik sa unesenom e-mail adresom.';
+                        break;
+                    case 'two-different-mails':
+                    case 'two-different-passwords':
+                        $error_info = 'Pogrešno ispunjena prijava.';
+                        break;
+                    default:
+                        break;
+                }
             }
             $content->set('errors', $error_info);
         }
