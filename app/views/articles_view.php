@@ -17,13 +17,35 @@ class Articles_view extends Webpage_view {
         return $this->page('Područja', $cf);
     }
     
-    public function read($article, $comments) {
+    public function read($article, $comments, $grade, $gradecnt, $rate=true) {
         $areaid = $article['id_podrucja'];
         $articleid = $article['id_clanka'];
         $article['article-comments'] = '<p>Nema komentara</p>';
         $article['article-controls'] = 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/read/' . $areaid . '">Natrag</a> ' . 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/comments/create/' . $articleid . '">Komentiraj</a> ';
+        
+        if($rate) {
+            $lnkstart = '<a href="' . WEBSITE_ROOT_PATH . '/articles/grade/' . $articleid . '/';
+            
+            $article['ocjena-0'] = $lnkstart . '0"><span class="star">' . ($grade==0?'':'X') . '</span></a>';
+            $article['ocjena-1'] = $lnkstart . '1"><span class="star">' . ($grade==1?'*':'+') . '</span></a>';
+            $article['ocjena-2'] = $lnkstart . '2"><span class="star">' . ($grade==2?'*':'+') . '</span></a>';
+            $article['ocjena-3'] = $lnkstart . '3"><span class="star">' . ($grade==3?'*':'+') . '</span></a>';
+            $article['ocjena-4'] = $lnkstart . '4"><span class="star">' . ($grade==4?'*':'+') . '</span></a>';
+            $article['ocjena-5'] = $lnkstart . '5"><span class="star">' . ($grade==5?'*':'+') . '</span></a> ';
+        } else {
+            $article['ocjena-0'] = '';
+            $article['ocjena-1'] = '';
+            $article['ocjena-2'] = '';
+            $article['ocjena-3'] = '';
+            $article['ocjena-4'] = '';
+            $article['ocjena-5'] = '';
+        }
+        
+        if($gradecnt == '')
+            $gradecnt = '-';
+        $article['ocjena'] = $gradecnt . ($rate ? ' | ' : '');
         
         $body = $this->view_standard($article);
         

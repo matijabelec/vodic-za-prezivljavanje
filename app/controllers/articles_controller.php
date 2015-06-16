@@ -29,9 +29,15 @@ class Articles_controller extends Controller {
         $articleid = $args[URL_ARG_1];
         
         if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            $userid = Auth::userid();
+            
             $article = Data_model::get_article($articleid);
             $comments = Data_model::get_comments_for_article($articleid);
-            echo $this->view->read($article, $comments);
+            
+            $grade = Data_model::get_article_grade_by_subscriber($articleid, $userid);
+            $gradescnt = Data_model::get_article_grade($articleid);
+            
+            echo $this->view->read($article, $comments, $grade, $gradescnt);
         } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) || 
                  Auth::role_check(PROJECT_USER_ROLE_REGISTERED) ) {
             $userid = Auth::userid();
@@ -41,7 +47,17 @@ class Articles_controller extends Controller {
             }
             $article = Data_model::get_article($articleid);
             $comments = Data_model::get_comments_for_article($articleid);
-            echo $this->view->read($article, $comments);
+            
+            $grade = Data_model::get_article_grade_by_subscriber($articleid, $userid);
+            $gradescnt = Data_model::get_article_grade($articleid);
+            
+            $rate = true;
+            $articledata = Data_model::get_article($articleid);
+            $areaid = $articledata['id_podrucja'];
+            if(Data_model::check_area_moderation($areaid, $userid) )
+                $rate = false;
+            
+            echo $this->view->read($article, $comments, $grade, $gradescnt, $rate);
         } else
             return RET_ERR;
     }
@@ -83,7 +99,47 @@ class Articles_controller extends Controller {
     }
     
     
-    
+    public function grade($args) {
+        Auth::login_check();
+        
+        if(Auth::role_check(PROJECT_USER_ROLE_GUEST) )
+            RET_ERR;
+        
+        if(count($args) < URL_ARGUMENTS_2)
+            return RET_ERR;
+        
+        $userid = Auth::userid();
+        $articleid = $args[URL_ARG_1];
+        $gradecnt = $args[URL_ARG_2];
+        
+        if(!Data_model::check_area_subscription_by_article($articleid, $userid) )
+            Redirect('/articles/read/' . $articleid);
+        
+        $articledata = Data_model::get_article($articleid);
+        $areaid = $articledata['id_podrucja'];
+        
+        if(Data_model::check_area_moderation($areaid, $userid) )
+            Redirect('/articles/read/' . $articleid);
+        
+        if($gradecnt=='0') {
+            if(Data_model::ungrade_article($articleid, $userid) )
+                Redirect('/articles/read/' . $articleid);
+            exit;
+        } elseif($gradecnt=='1' || 
+                 $gradecnt=='2' || 
+                 $gradecnt=='3' || 
+                 $gradecnt=='4' || 
+                 $gradecnt=='5') {
+            $grade['id_korisnika'] = $userid;
+            $grade['id_clanka'] = $articleid;
+            $grade['ocjena'] = $gradecnt;
+            $grade['datum_ocjene'] = Server_time::get_virtualTime();
+            if(Data_model::grade_article($grade) )
+                Redirect('/articles/read/' . $articleid);
+            exit;
+        }
+        Redirect('/articles/read/' . $articleid);
+    }
     
     
     public function ajax($args) {

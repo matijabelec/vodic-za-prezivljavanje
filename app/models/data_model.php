@@ -600,7 +600,14 @@ class Data_model extends Model {
     public static function get_article_grade($articleid) {
         if(!isset($articleid) )
             return 0;
-        //TODO: ?? return Database::query('SELECT * FROM clanci WHERE status=1');
+        $grade = Database::query('SELECT avg(ocjena) as ocjena FROM ocjene_clanaka 
+                                  WHERE id_clanka=:articleid AND 
+                                  status=1',
+                                 array('articleid'=>$articleid) );
+        if(count($grade) ) {
+            $gr = $grade[0];
+            return $gr['ocjena'];
+        }
         return 0;
     }
     public static function get_article_grade_count($articleid) {
@@ -610,13 +617,31 @@ class Data_model extends Model {
         return 0;
     }
     
+    public static function get_article_grade_by_subscriber($articleid, $userid) {
+        if(!isset($articleid) || !isset($userid) )
+            return 0;
+        $grade = Database::query('SELECT * FROM ocjene_clanaka 
+                                   WHERE id_clanka=:articleid AND 
+                                   id_korisnika=:userid AND 
+                                   status=1',
+                                  array('articleid'=>$articleid,
+                                        'userid'=>$userid) );
+        if(count($grade) == 1) {
+            $gr = $grade[0];
+            return $gr['ocjena'];
+        }
+        return 0;
+    }
+    
     public static function grade_article($grade) {
-        if(!isset($grade) || !is_array($grade) );
+        if(!isset($grade) )
+            return false;
+        if(!is_array($grade) )
             return false;
         if(!isset($grade['id_korisnika']) || 
            !isset($grade['id_clanka']) || 
            !isset($grade['ocjena']) || 
-           !isset($grade['datum']) )
+           !isset($grade['datum_ocjene']) )
             return false;
         $ok = Database::insert('INSERT INTO ocjene_clanaka 
                                 (id_korisnika, id_clanka, ocjena, datum_ocjene, status) 
@@ -631,8 +656,7 @@ class Data_model extends Model {
                                          datum_ocjene=:date, 
                                          status=1 
                                      WHERE id_korisnika=:userid AND 
-                                           id_clanka=:articleid AND 
-                                           status=0', 
+                                           id_clanka=:articleid', 
                                     array('userid'=>$grade['id_korisnika'], 
                                           'articleid'=>$grade['id_clanka'], 
                                           'grade'=>$grade['ocjena'], 
@@ -640,18 +664,15 @@ class Data_model extends Model {
         }
         return $ok;
     }
-    public static function ungrade_article($grade) {
-        if(!isset($grade) || !is_array($grade) );
-            return false;
-        if(!isset($grade['id_korisnika']) || 
-           !isset($grade['id_clanka']) )
+    public static function ungrade_article($articleid, $userid) {
+        if(!isset($articleid) || !isset($userid) )
             return false;
         return Database::insert('UPDATE ocjene_clanaka SET status=0 
                                 WHERE id_korisnika=:userid AND 
                                       id_clanka=:articleid AND 
                                       status=1', 
-                               array('userid'=>$grade['id_korisnika'], 
-                                     'articleid'=>$grade['id_clanka']) );
+                               array('userid'=>$userid, 
+                                     'articleid'=>$articleid) );
     }
     
     
