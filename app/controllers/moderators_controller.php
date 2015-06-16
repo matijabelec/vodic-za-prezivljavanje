@@ -7,64 +7,46 @@ class Moderators_controller extends Controller {
     }
     
     public function index($args) {
+        Auth::login_check();
+        
         Redirect('/moderators/view');
     }
     
     public function view($args) {
+        Auth::login_check();
+        
         if(!Auth::role_check(PROJECT_USER_ROLE_ADMIN) )
             return RET_ERR;
         
-        $moderators = $this->model->get_moderators();
+        $moderators = Data_model::get_moderations();
         echo $this->view->view($moderators);
     }
     
     public function create($args) {
+        Auth::login_check();
+        
         if(!Auth::role_check(PROJECT_USER_ROLE_ADMIN) )
             return RET_ERR;
         
         $argc = count($args);
         
-        $moderation = array('id_korisnika'=>0,
-                            'id_podrucja'=>0,
-                            'status'=>1);
-        
-        if($argc == URL_ARGUMENTS_2) {
-            $userid = $args[URL_ARG_1];
-            $areaid = $args[URL_ARG_2];
-            $ok = $this->model->add_moderation($userid, $areaid);
-            if($ok)
-                Redirect('/moderators/view');
-        } else {
-            if(isset($_POST['id_korisnika']) && isset($_POST['id_podrucja']) ) {
-                $moderation = $_POST;
-                $userid = $moderation['id_korisnika'];
-                $areaid = $moderation['id_podrucja'];
-                $ok = $this->model->add_moderation($userid, $areaid);
-                if($ok)
-                    Redirect('/moderators/view/' . $articleid);
+        if($argc == URL_ARGUMENTS_1) {
+            $areaid = $args[URL_ARG_1];
+            if(isset($_POST['id_korisnika']) ) {
+                $moderatorid = $_POST['id_korisnika'];
+                if(Data_model::create_moderator_for_area($areaid, $moderatorid) )
+                    Redirect('/areas/read/' . $areaid);
+                Redirect('/moderators/create/' . $areaid);
             }
         }
         
-        echo $this->view->crud_create($moderation);
-        
-        /*if(Auth::role_check(PROJECT_USER_ROLE_GUEST) )
-            return RET_ERR;
-        
-        $user = Auth::get_user();
-        $userid = $user['userid'];
-        $articleid = $args[URL_ARG_1];
-        
-        if(isset($_POST['id_clanka']) ) {
-            $comment = $_POST;
-            $ok = $this->model->comment($comment);
-            if($ok)
-                Redirect('/articles/read/' . $articleid);
-        }
-        
-        echo $this->view->crud_create($userid, $articleid);*/
+        $users = Data_model::get_users();
+        echo $this->view->create($areaid, $users);
     }
     
     public function delete($args) {
+        Auth::login_check();
+        
         return RET_ERR;
         /*
         if(count($args) < URL_ARGUMENTS_1)

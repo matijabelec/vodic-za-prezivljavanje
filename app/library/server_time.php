@@ -38,6 +38,9 @@ class Server_time {
         $system_time = $server_time + ($hours * 3600);
         return date("Y-m-d H:i:s", $system_time);
     }
+    public static function get_virtualTimeOffset() {
+        return Data_model::get_systemtime();
+    }
 }
 
 ?>

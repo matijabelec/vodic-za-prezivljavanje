@@ -10,6 +10,8 @@ class Areas_controller extends Controller {
     }
     
     public function view($args) {
+        Auth::login_check();
+        
         if(count($args) != URL_ARGUMENTS_NONE)
             return RET_ERR;
         
@@ -38,6 +40,8 @@ class Areas_controller extends Controller {
     }
     
     public function create($args) {
+        Auth::login_check();
+        
         if(count($args) == URL_ARGUMENTS_1) {
             $areaid = $args[URL_ARG_1];
             if(Data_model::undelete_area($areaid) )
@@ -62,6 +66,8 @@ class Areas_controller extends Controller {
     }
     
     public function read($args) {
+        Auth::login_check();
+        
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
@@ -92,6 +98,8 @@ class Areas_controller extends Controller {
     }
     
     public function update($args) {
+        Auth::login_check();
+        
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
@@ -122,6 +130,8 @@ class Areas_controller extends Controller {
     }
     
     public function delete($args) {
+        Auth::login_check();
+        
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         

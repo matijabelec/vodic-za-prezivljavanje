@@ -11,6 +11,8 @@ class Articles_controller extends Controller {
     }
     
     public function view($args) {
+        Auth::login_check();
+        
         if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
             $articles = Data_model::get_articles();
             echo $this->view->view($articles);
@@ -19,6 +21,8 @@ class Articles_controller extends Controller {
     }
     
     public function read($args) {
+        Auth::login_check();
+        
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
@@ -43,6 +47,8 @@ class Articles_controller extends Controller {
     }
     
     public function create($args) {
+        Auth::login_check();
+        
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
@@ -81,6 +87,8 @@ class Articles_controller extends Controller {
     
     
     public function ajax($args) {
+        Auth::login_check();
+        
         $argc = count($args);
         if($argc >= URL_ARGUMENTS_1) {
             switch($args[URL_ARG_1]) {

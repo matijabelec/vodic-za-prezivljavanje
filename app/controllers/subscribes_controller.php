@@ -5,11 +5,9 @@ class Subscribes_controller extends Controller {
         $this->model = new Subscribes_model;
     }
     
-    public function index($args) {
-        return RET_ERR;
-    }
-    
     public function create($args) {
+        Auth::login_check();
+        
         if(Auth::role_check(PROJECT_USER_ROLE_GUEST) )
             Redirect('/');
         
@@ -24,6 +22,8 @@ class Subscribes_controller extends Controller {
     }
     
     public function delete($args) {
+        Auth::login_check();
+        
         if(Auth::role_check(PROJECT_USER_ROLE_GUEST) )
             Redirect('/');
         

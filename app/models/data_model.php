@@ -4,6 +4,10 @@ class Data_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // users
+    public static function get_all_users() {
+        return Database::query('SELECT * FROM korisnici');
+    }
+    
     public static function get_users() {
         return Database::query('SELECT * FROM korisnici WHERE status>1');
     }
@@ -18,6 +22,17 @@ class Data_model extends Model {
     }
     public static function get_deleted_users() {
         return Database::query('SELECT * FROM korisnici WHERE status=0');
+    }
+    
+    public static function get_user_by_id($userid) {
+        if(!isset($userid) )
+            return array();
+        $users = Database::query('SELECT * FROM korisnici 
+                                  WHERE id_korisnika=:userid',
+                                 array('userid'=>$userid) );
+        if(count($users) == 1)
+            return $users[0];
+        return array();
     }
     
     public static function create_user($user) {
@@ -147,6 +162,10 @@ class Data_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // areas
+    public static function get_all_areas() {
+        return Database::query('SELECT * FROM podrucja');
+    }
+    
     public static function get_empty_area() {
         return array('id_podrucja'=>'',
                      'naziv_podrucja'=>'',
@@ -302,7 +321,48 @@ class Data_model extends Model {
     
     
     ///////////////////////////////////////////////////////////////////////
+    // moderators
+    public static function create_moderator_for_area($areaid, $moderatorid) {
+        if(!isset($areaid) || !isset($moderatorid) )
+            return false;
+        Database::insert('UPDATE korisnici 
+                          SET id_tipa_korisnika=2 
+                          WHERE id_tipa_korisnika=1 AND 
+                          id_korisnika=:modid AND 
+                          status=2', 
+                          array('modid'=>$moderatorid) );
+        $ok = Database::insert('INSERT INTO pretplate 
+                                (id_korisnika, id_podrucja, status) 
+                                VALUES(:modid, :areaid, 2)', 
+                               array('modid'=>$moderatorid, 
+                                     'areaid'=>$areaid) );
+        if(!$ok) {
+            $ok = Database::insert('UPDATE pretplate SET status=2 
+                                    WHERE id_korisnika=:modid AND 
+                                          id_podrucja=:areaid', 
+                                    array('modid'=>$moderatorid, 
+                                          'areaid'=>$areaid) );
+        }
+        return true;
+    }
+    public static function remove_moderator_for_area($areaid, $moderatorid) {
+        if(!isset($areaid) || !isset($moderatorid) )
+            return false;
+        return Database::insert('UPDATE pretplate SET status=0 
+                                 WHERE id_korisnika=:modid AND 
+                                       id_podrucja=:areaid AND 
+                                       status=2', 
+                                array('modid'=>$moderatorid, 
+                                      'areaid'=>$areaid) );
+    }
+    
+    
+    ///////////////////////////////////////////////////////////////////////
     // subscribes
+    public static function get_all_subscribes() {
+        return Database::query('SELECT * FROM pretplate');
+    }
+    
     public static function get_subscribes() {
         return Database::query('SELECT * FROM pretplate WHERE status=1');
     }
@@ -361,6 +421,13 @@ class Data_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // articles
+    public static function get_all_articles() {
+        return Database::query('SELECT * FROM clanci');
+    }
+    public static function get_all_restrictions() {
+        return Database::query('SELECT * FROM zabrana_pristupa');
+    }
+    
     public static function get_empty_article() {
         return array('id_clanka'=>'',
                      'id_podrucja'=>'',
@@ -467,6 +534,65 @@ class Data_model extends Model {
     }
     
     ///////////////////////////////////////////////////////////////////////
+    // article materials
+    public static function create_material($material) {
+        if(!isset($material) )
+            return false;
+        if(!isset($material['id_tipa_materijala']) || 
+           !isset($material['id_korisnika']) || 
+           !isset($material['id_clanka']) || 
+           !isset($material['naziv_materijala']) || 
+           !isset($material['putanja']) || 
+           !isset($material['datum_objave']) ) {
+            return false;
+        }
+        return Database::insert('INSERT INTO materijali 
+                                 (id_tipa_materijala, id_korisnika, id_clanka, 
+                                 naziv_materijala, putanja, datum_objave, status) 
+                                 VALUES(:typeid, :userid, :articleid, :title, 
+                                 :path, :date, 1)',
+                                 array('typeid'=>$material['id_tipa_materijala'], 
+                                       'userid'=>$material['id_korisnika'], 
+                                       'articleid'=>$material['id_clanka'], 
+                                       'title'=>$material['naziv_materijala'], 
+                                       'path'=>$material['putanja'], 
+                                       'date'=>$material['datum_objave']) );
+    }
+    public static function delete_material($materialid) {
+        if(!isset($materialid) )
+            return false;
+        return Database::insert('UPDATE materijali 
+                                 SET status=0 
+                                 WHERE id_materijala=:materialid AND 
+                                 status=1',
+                                 array('materialid'=>$materialid) );
+    }
+    public static function undelete_material($materialid) {
+        if(!isset($materialid) )
+            return false;
+        return Database::insert('UPDATE materijali 
+                                 SET status=1 
+                                 WHERE id_materijala=:materialid AND 
+                                 status=0',
+                                 array('materialid'=>$materialid) );
+    }
+    
+    public static function check_material_owner($materialid, $userid) {
+        if(!isset($materialid) || !isset($userid) )
+            return false;
+        $users = Database::insert('SELECT * FROM materijali 
+                                 WHERE id_materijala=:materialid AND 
+                                 id_korisnika=:userid',
+                                 array('materialid'=>$materialid,
+                                       'userid'=>$userid) );
+        if(count($users) )
+            return true;
+        return false;
+    }
+    
+    
+    
+    ///////////////////////////////////////////////////////////////////////
     // article grades
     public static function get_grades() {
         return Database::query('SELECT * FROM ocjene_clanaka WHERE status=1');
@@ -531,6 +657,10 @@ class Data_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // comments
+    public static function get_all_comments() {
+        return Database::query('SELECT * FROM komentari');
+    }
+    
     public static function get_comments() {
         return Database::query('SELECT * FROM komentari WHERE status=1');
     }
@@ -602,6 +732,10 @@ class Data_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // materials
+    public static function get_all_materials() {
+        return Database::query('SELECT * FROM materijali');
+    }
+    
     public static function get_materials() {
         return Database::query('SELECT * FROM materijali WHERE status=1');
     }
@@ -659,6 +793,10 @@ class Data_model extends Model {
     
     ///////////////////////////////////////////////////////////////////////
     // logins
+    public static function get_all_logs() {
+        return Database::query('SELECT * FROM prijave');
+    }
+    
     public static function get_logins() {
         return Database::query('SELECT * FROM prijave WHERE status=1');
     }

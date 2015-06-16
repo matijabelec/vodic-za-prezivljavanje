@@ -131,7 +131,20 @@ class Auth extends Controller {
         return false;
     }
     public static function login_check() {
-        return Session::check('user');
+        if(Session::check('user') ) {
+            $user = Session::get('user');
+            $userid = $user['id'];
+            $userdata = Data_model::get_user_by_id($userid);
+            if($user['id'] == $userdata['id_korisnika'] && 
+               $user['name'] == $userdata['korisnicko_ime'] && 
+               $user['role'] == $userdata['id_tipa_korisnika']) {
+                Session::set('user', array('id'=>$userdata['id_korisnika'], 
+                                           'name'=>$userdata['korisnicko_ime'], 
+                                           'role'=>$userdata['id_tipa_korisnika']) );
+                return true;
+            }
+        }
+        return false;
     }
     
     public static function username() {

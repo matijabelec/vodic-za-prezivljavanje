@@ -11,6 +11,8 @@ class Comments_controller extends Controller {
     }
     
     public function create($args) {
+        Auth::login_check();
+        
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
@@ -33,6 +35,8 @@ class Comments_controller extends Controller {
     }
     
     public function delete($args) {
+        Auth::login_check();
+        
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
@@ -60,6 +64,8 @@ class Comments_controller extends Controller {
     
     
     public function ajax($args) {
+        Auth::login_check();
+        
         $argc = count($args);
         if($argc >= URL_ARGUMENTS_1) {
             switch($args[URL_ARG_1]) {

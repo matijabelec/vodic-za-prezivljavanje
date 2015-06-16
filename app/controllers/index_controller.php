@@ -2,10 +2,14 @@
 
 class Index_controller extends Controller {
     public function __construct() {
+        Auth::login_check();
+        
         $this->view = new Index_view;
     }
     
     public function index($args) {
+        Auth::login_check();
+        
         if(!is_null($args) )
             Redirect('/');
         
