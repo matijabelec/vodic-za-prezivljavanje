@@ -37,65 +37,313 @@
         </ul>
     </nav>
     <div id="main" style="text-align:left">
+        <style>
+                #directory-list {
+                    display: block;
+                    position: relative;
+                    padding: 2px 20px;
+                }
+                dt{
+                    display: block;
+                    font-weight: bold;
+                    padding-top: 6px;
+                }
+                dd{
+                    display: inline-block;
+                    font-weight: normal;
+                    padding-left: 8px;
+                }
+                ul{
+                    display: block;
+                    position: relative;
+                }
+                
+                .main-section{
+                    text-align: justify !important;
+                }
+                .main-section>ul{
+                    margin-left: 30px;
+                }
+                .ital{
+                    font-style: italic;
+                }
+            </style>
+        
         <section class="main-section">
             <h2>Dokumentacija projekta</h2>
             
             <section class="main-section">
                 <h3>opis projektnog zadatka</h3>
-            
+                
+                <p>Vodič za preživljavanje</p>
             </section>
             
             <section class="main-section">
                 <h3>opis projektnog rješenja</h3>
-            
+                
+                <p>Korišten je samostalno izrađen php framework koji se temelji na MVC-u<p>
+                
+                <p>Ajax upiti za određene dijelove rješenja (dobavljanje komentara za 
+                članak, dobavljanje članaka za određeno područje, dobavljanje podataka o 
+                tablici (admin-panel) ).</p>
+                
+                <p>Postoje 4 tipa korisnika:</p>
+                <ul>
+                    <li>Neregistrirani korisnik (Gost)</li>
+                    <li>Registrirani korisnik</li>
+                    <li>Moderator</li>
+                    <li>Administrator</li>
+                </ul>
             </section>
             
-            <section class="main-section">
+            <section class="main-section" style="text-align: center">
                 <h3>bitne odrednice projektnog rješenja (ERA model)</h3>
-            
+                <a href="site/gfx/mbelec_era.png" target="_blank"><img src="site/gfx/mbelec_era.png" style="display:block; max-height:400px; max-width:80%; margin:auto"/></a>
             </section>
             
-            <section class="main-section">
+            <section id="directory-list" class="main-section">
                 <h3>popis i opis skripata, mapa mjesta, navigacijski dijagram</h3>
                 
-                <section>
-                    <h4>Stvarni direktoriji</h4>
-                </section>
-                
-                <section>
-                    <h4>Url linkovi</h4>
-                    <!--<ul>
-                        <li>
-                            <p>index</p>
-                        </li>
-                        <li>
-                            <p>auth</p>
-                            <ul>
-                                <li>login</li>
-                                <li>logout</li>
-                                <li>registration</li>
-                                <li>activation</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <p>dokumentacija.html</p>
-                        </li>
-                        <li>
-                            <p>o_autoru.html</p>
-                        </li>
-                    </ul>-->
-                </section>
-                
+                <ul>
+                    <li>
+                        <dl>
+                            <dt>app/</dt>
+                            <dd>direktorij koji sadrži datoteke framework-a</dd>
+                        </dl>
+                        
+                        <ul>
+                            <li>
+                                <dl>
+                                    <dt>controllers/</dt>
+                                    <dd>popis svih kontrolera (skripte koje se direktno 
+                                    pozivaju iz url-a) npr. za pozivanje kontrolera 
+                                    'index_controller.php' url jest "/index"</dd>
+                                </dl>
+                            </li>
+                            
+                            <li>
+                                <dl>
+                                    <dt>library/</dt>
+                                    <dd>popis osnovnih klasa u frameworku</dd>
+                                </dl>
+                                <ul>
+                                    <li>
+                                        <dl>
+                                            <dt>auth.php</dt>
+                                            <dd>rad sa autorizacijom i autentifikacijom korisnika</dd>
+                                            
+                                            <dt>cacher.php</dt>
+                                            <dd>za poboljšanje učitavanja predložaka (
+                                            <span class="ital">engl. templates</span>) (prvo učitavanje 
+                                            .tpl datoteke se radi direktno iz datoteke, a svako sljedeće
+                                            korištenje se radi iz spremljenog "keširanog" predloška)</dd>
+                                            
+                                            <dt>controller.php</dt>
+                                            <dd>klasa koja predstavlja bilo koji kontroler (svi ostali
+                                            kontroleri nasljeđuju navedenu klasu</dd>
+                                            
+                                            <dt>crud.php</dt>
+                                            <dd>-</dd>
+                                            
+                                            <dt>database.php</dt>
+                                            <dd>rad sa bazom podataka</dd>
+                                            
+                                            <dt>functions.php</dt>
+                                            <dd>dodatne funkcije koje se koriste (autoloader, čiščenje GET/POST
+                                            varijabli, postavljanje ENVIRONMENT-a i sl.)</dd>
+                                            
+                                            <dt>mailer.php</dt>
+                                            <dd>rad sa mail servisom</dd>
+                                            
+                                            <dt>model.php</dt>
+                                            <dd>klasa koja predstavlja bilo koji model (svi ostali
+                                            modeli nasljeđuju navedenu klasu</dd>
+                                            
+                                            <dt>router.php</dt>
+                                            <dd>klasa koja služi za pravilno učitavanje kontrolera, te je u 
+                                            mogućnosti prikazati stranicu pogreške ako nema traženog kontrolera
+                                            ili nije moguće pokrenuti određenu akciju unutar kontrolera</dd>
+                                            
+                                            <dt>server_time.php</dt>
+                                            <dd>rad sa virtualnim vremenom (dobavljanje vremena sa arka.foi.hr)</dd>
+                                            
+                                            <dt>session.php</dt>
+                                            <dd>rad sa sesijom</dd>
+                                            
+                                            <dt>template.php</dt>
+                                            <dd>klasa koja predstavlja bilo koji predložak (svi ostali
+                                            predlošci nasljeđuju navedenu klasu</dd>
+                                            
+                                            <dt>uploader.php</dt>
+                                            <dd>rad sa učitavanjem/prijenosom<span class="ital">(engl. uploadom)</span> datoteka na server</dd>
+                                            
+                                            <dt>view.php</dt>
+                                            <dd>klasa koja predstavlja bilo koji pogled (svi ostali
+                                            pogledi nasljeđuju navedenu klasu</dd>
+                                        </dl>
+                                    </li>
+                                </ul>
+                            </li>
+                            
+                            <li>
+                                <dl>
+                                    <dt>models/</dt>
+                                    <dd>sadrži popis modela</dd>
+                                </dl>
+                            </li>
+                            
+                            <li>
+                                <dl>
+                                    <dt>plugins/</dt>
+                                    <dd>sadrži dodatne biblioteke koji se koriste u prijektu</dd>
+                                </dl>
+                            </li>
+                            
+                            <li>
+                                <dl>
+                                    <dt>templates/</dt>
+                                    <dd>sadrži predloške</dd>
+                                </dl>
+                            </li>
+                            
+                            <li>
+                                <dl>
+                                    <dt>tmp/</dt>
+                                    <dd>privremene datoteke (log-ovi pogrešaka)</dd>
+                                </dl>
+                            </li>
+                            
+                            <li>
+                                <dl>
+                                    <dt>views/</dt>
+                                    <dd>sadrži poglede</dd>
+                                </dl>
+                            </li>
+                        </ul>
+                        
+                        <dl>
+                            <dt>config.php</dt>
+                            <dd>glavna konfiguracijska datoteka</dd>
+                            
+                            <dt>init.php</dt>
+                            <dd>skripta koja služi za pokretanje router-a i ostalih
+                            komponenti framework-a</dd>
+                            
+                            <dt>project_data.php</dt>
+                            <dd>konfiguracijska datoteka za projekt</dd>
+                        </dl>
+                    </li>
+                    
+                    <li>
+                        <dl>
+                            <dt>site/</dt>
+                            <dd>direktorij koji sadrži datoteke vezane za sam projekt</dd>
+                        </dl>
+                        
+                        <ul>
+                            <li>
+                                <dl>
+                                    <dt>css/</dt>
+                                    <dd>sadrži datoteke za stiliziranje izgleda stranice</dd>
+                                </dl>
+                                
+                                <ul>
+                                    <li>
+                                        <dl>
+                                            <dt>style.css</dt>
+                                            <dd>glavna stilska datoteka</dd>
+                                        </dl>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <dl>
+                                    <dt>files/</dt>
+                                    <dd>direktorij unutar kojeg se nalaze svi upload-ani
+                                    materijali</dd>
+                                </dl>
+                            </li>
+                            
+                            <li>
+                                <dl>
+                                    <dt>gfx/</dt>
+                                    <dd>sadrži grafičke datoteke za prikaz na stranici</dd>
+                                </dl>
+                            </li>
+                            
+                            <li>
+                                <dl>
+                                    <dt>js/</dt>
+                                    <dd>sadrži .js datoteke</dd>
+                                </dl>
+                                
+                                <ul>
+                                    <li>
+                                        <dl>
+                                            <dt>script-admin.js</dt>
+                                            <dd>.js datoteka koja se koristi za admin-panel</dd>
+                                        
+                                            <dt>script-area.js</dt>
+                                            <dd>.js datoteka koja se koristi za stranicu područja</dd>
+                                        
+                                            <dt>script-articles.js</dt>
+                                            <dd>.js datoteka koja se koristi za stranicu članak</dd>
+                                        
+                                            <dt>script.js</dt>
+                                            <dd>standardna .js datoteka</dd>
+                                        </dl>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                        <dl>
+                            <dt>dokumentacija.html</dt>
+                            <dd>stranica koja je upravo prikazana, sadrži detalje o projektu</dd>
+                            
+                            <dt>index.php</dt>
+                            <dd>stranica koja je upravo prikazana, sadrži detalje o projektu</dd>
+                            
+                            <dt><a id="autor-matijabelec" href="o_autoru.html">o_autoru.html</a></dt>
+                            <dd>sadrži podatke o autoru projekta</dd>
+                            
+                            <dt>robots.txt</dt>
+                            <dd>sadrži postavke za robote (za preuzimanje podataka o web-mjestu)</dd>
+                            
+                            <dt>.htaccess</dt>
+                            <dd>sadrži postavke da se svaki upit šalje na skriptu index.php
+                            kao GET parametar s ključem "url", time se dobiva da index.php
+                            određuje daljnje izvršavanje programskog koda i centralizacija
+                            upita za web-stranicom</dd>
+                        </dl>
+                    </li>
+                </ul>
             </section>
             
             <section class="main-section">
                 <h3>popis i opis korištenih tehnologija i alata</h3>
-            
+                
+                <dl>
+                    <dt>HTML5, CSS3</dt>
+                    <dd>trenutna tehnologija za prikaz web stranica</dd>
+                    
+                    <dt>PHP5 - OOP, MVC</dt>
+                    <dd>objekni pristup, korištenje model-view-controller</dd>
+                    
+                    <dt>jQuery</dt>
+                    <dd>olakšano korištenje js-a</dd>
+                    
+                    <dt>dataTables</dt>
+                    <dd>za stiliziranje tabličnih prikaza</dd>
+                </dl>
             </section>
             
             <section class="main-section">
                 <h3>popis  i  opis  vanjskih  (tuđih)  modula/biblioteka  i  njihovo  korištenje u  skriptama i sl.</h3>
-            
+                
+                <p>nema</p>
             </section>
         </section>
     </div>
