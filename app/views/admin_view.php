@@ -20,7 +20,7 @@ class Admin_view extends Webpage_view {
         $footdata .= '</script>';
         $footdata .= '<script src="' . WEBSITE_ROOT_PATH . '/site/js/script-admin.js"></script>';
         
-        $page = new Standard_template('Područja');
+        $page = new Standard_template($title);
         $page->set('option-admin', ' selected');
         $page->set('body', $body);
         $page->set('foot-data', $footdata);

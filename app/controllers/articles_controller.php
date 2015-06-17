@@ -68,6 +68,10 @@ class Articles_controller extends Controller {
         if(count($args) < URL_ARGUMENTS_1)
             return RET_ERR;
         
+        if(count($args) >= URL_ARGUMENTS_2) {
+            $articleid = $args[URL_ARG_2];
+        }
+        
         $areaid = $args[URL_ARG_1];
         
         if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) || 
@@ -85,14 +89,28 @@ class Articles_controller extends Controller {
                 $article['id_korisnika'] = $userid;
                 $article['status'] = 1;
                 
-                if(Data_model::create_article($article) )
-                    Redirect('/areas/read/' . $areaid);
+                if(isset($articleid) ) {
+                    $article['id_clanka'] = $articleid;
+                    if(Data_model::update_article($article) )
+                        Redirect('/areas/read/' . $areaid);
+                } else {
+                    if(Data_model::create_article($article) )
+                        Redirect('/areas/read/' . $areaid);
+                }
             }
             
             $article = Data_model::get_empty_article();
             $article['link-back'] = 'areas/read/' . $areaid;
             $article['link'] = 'articles/create/' . $areaid;
             $article['status'] = 1;
+            
+            if(isset($articleid) ) {
+                $art2 = Data_model::get_article($articleid);
+                $article['naslov'] = $art2['naslov'];
+                $article['sadrzaj'] = $art2['sadrzaj'];
+                
+                $article['link'] = 'articles/create/' . $areaid . '/' . $articleid;
+            }
             echo $this->view->create($article);
         } else
             return RET_ERR;

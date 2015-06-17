@@ -14,7 +14,7 @@ class Articles_view extends Webpage_view {
         $cf = $content->fill();
         unset($content);
         
-        return $this->page('Područja', $cf);
+        return $this->page('Članci', $cf);
     }
     
     public function read($article, $comments, $grade, $gradecnt, $rate=true) {
@@ -24,6 +24,8 @@ class Articles_view extends Webpage_view {
         $article['article-controls'] = 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/read/' . $areaid . '">Natrag</a> ' . 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/comments/create/' . $articleid . '">Komentiraj</a> ';
+        
+        $article['new-controls'] = '';
         
         if($rate) {
             $lnkstart = '<a href="' . WEBSITE_ROOT_PATH . '/articles/grade/' . $articleid . '/';
@@ -41,6 +43,8 @@ class Articles_view extends Webpage_view {
             $article['ocjena-3'] = '';
             $article['ocjena-4'] = '';
             $article['ocjena-5'] = '';
+            
+            $article['new-controls'] = '<p style="text-align:right"><a href="' . WEBSITE_ROOT_PATH . '/articles/create/' . $areaid . '/' . $articleid . '">Uredi</a></p>';
         }
         
         if($gradecnt == '')

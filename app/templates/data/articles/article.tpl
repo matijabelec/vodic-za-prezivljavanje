@@ -1,4 +1,5 @@
 <section class="article-section">
+    {@new-controls}
     <span>Ocjena: {@ocjena} {@ocjena-1}{@ocjena-2}{@ocjena-3}{@ocjena-4}{@ocjena-5}{@ocjena-0}</span>
     
     <p class="article-desc">{@sadrzaj}</p>

@@ -531,6 +531,25 @@ class Data_model extends Model {
                                      'cdata'=>$article['sadrzaj'],
                                      'date'=>$article['datum_objave']) );
     }
+    public static function update_article($article) {
+        if(!isset($article) || !is_array($article) )
+            return false;
+        if(!isset($article['id_clanka']) || 
+           !isset($article['naslov']) || 
+           !isset($article['sadrzaj']) || 
+           !isset($article['datum_objave']) )
+            return false;
+        return Database::insert('UPDATE clanci 
+                                 SET naslov=:title, 
+                                     sadrzaj=:cdata, 
+                                     datum_objave=:date 
+                                 WHERE id_clanka=:articleid AND 
+                                 status=1', 
+                               array('articleid'=>$article['id_clanka'],  
+                                     'title'=>$article['naslov'], 
+                                     'cdata'=>$article['sadrzaj'], 
+                                     'date'=>$article['datum_objave']) );
+    }
     
     ///////////////////////////////////////////////////////////////////////
     // article materials

@@ -11,6 +11,7 @@ a{
     color: #cc6600;
     text-decoration: none;
     font-weight: bold;
+    cursor: pointer;
 }
 a:hover{
     color: #ff9900;
@@ -437,4 +438,18 @@ form input.btn{
     padding: 2px 4px 4px 10px;
 }
 
+
+
+.dataTables_wrapper{
+    position: relative;
+}
+.dataTables_length, .dataTables_filter{
+    display: inline-block;
+    position: relative;
+    padding: 2px 20px;
+}
+.paginate_button{
+    padding-left: 2px;
+    padding-right: 2px;
+}
 
