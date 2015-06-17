@@ -74,8 +74,71 @@ class Articles_controller extends Controller {
         
         $areaid = $args[URL_ARG_1];
         
-        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) || 
-           Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
+        if(Auth::role_check(PROJECT_USER_ROLE_ADMIN) ) {
+            $userid = Auth::userid();
+            
+            if(isset($_POST['naslov']) ) {
+                $article = $_POST;
+                $article['datum_objave'] = Server_time::get_virtualTime();
+                $article['id_podrucja'] = $areaid;
+                $article['id_korisnika'] = $userid;
+                $article['status'] = 1;
+                
+                $dir = "files/";
+                
+                $oke = 0;
+                if(isset($articleid) ) {
+                    $article['id_clanka'] = $articleid;
+                    if(Data_model::update_article($article) ) 
+                        $oke = 1;
+                } else {
+                    $articleid = Data_model::create_article($article);
+                    $oke = 1;
+                }
+                
+                $x = count($_FILES['file_to_upl']['name']);
+                if($x) {
+                    for($i=0; $i<$x; $i++) {
+                        $file = $dir . basename($_FILES['file_to_upl']['name'][$i]);
+                        $ok = 1;
+                        if(file_exists($file) ) $ok = 0;
+                        if($_FILES['file_to_upl']["size"][$i] > 100000) $ok = 0;
+                        if($ok) {
+                            if(move_uploaded_file($_FILES['file_to_upl']['tmp_name'][$i], $file) )
+                                $success = true;
+                        }
+                        $succes = false;
+                        $ftype = $_FILES['file_to_upl']['type'][$i];
+                        
+                        if($ftype=='image/jpeg' || $ftype=='image/gif' || $ftype=='image/jpg' || $ftype=='image/png') {
+                            $material['naziv_materijala'] = $_FILES['file_to_upl']['name'][$i];
+                            $material['id_korisnika'] = $userid;
+                            $material['id_clanka'] = $articleid;
+                            $material['id_tipa_materijala'] = 1;
+                            $material['putanja'] = WEBSITE_ROOT_PATH . $file;
+                            $material['datum_objave'] = Server_time::get_virtualTime();
+                            Data_model::add_material_for_article($material);
+                        }
+                    }
+                }
+                
+                if($oke)
+                    Redirect('/areas/read/' . $areaid);
+            }
+            
+            $article = Data_model::get_empty_article();
+            $article['link-back'] = 'areas/read/' . $areaid;
+            $article['link'] = 'articles/create/' . $areaid;
+            $article['status'] = 1;
+            
+            if(isset($articleid) ) {
+                $art2 = Data_model::get_article($articleid);
+                $article['naslov'] = $art2['naslov'];
+                $article['sadrzaj'] = $art2['sadrzaj'];
+                $article['link'] = 'articles/create/' . $areaid . '/' . $articleid;
+            }
+            echo $this->view->create($article);
+        } elseif(Auth::role_check(PROJECT_USER_ROLE_MODERATOR) ) {
             $userid = Auth::userid();
             
             if(!Data_model::check_area_moderation($areaid, $userid) ) {
@@ -89,14 +152,46 @@ class Articles_controller extends Controller {
                 $article['id_korisnika'] = $userid;
                 $article['status'] = 1;
                 
+                $dir = "files/";
+                
+                $oke = 0;
                 if(isset($articleid) ) {
                     $article['id_clanka'] = $articleid;
-                    if(Data_model::update_article($article) )
-                        Redirect('/areas/read/' . $areaid);
+                    if(Data_model::update_article($article) ) 
+                        $oke = 1;
                 } else {
-                    if(Data_model::create_article($article) )
-                        Redirect('/areas/read/' . $areaid);
+                    $articleid = Data_model::create_article($article);
+                    $oke = 1;
                 }
+                
+                $x = count($_FILES['file_to_upl']['name']);
+                if($x) {
+                    for($i=0; $i<$x; $i++) {
+                        $file = $dir . basename($_FILES['file_to_upl']['name'][$i]);
+                        $ok = 1;
+                        if(file_exists($file) ) $ok = 0;
+                        if($_FILES['file_to_upl']["size"][$i] > 100000) $ok = 0;
+                        if($ok) {
+                            if(move_uploaded_file($_FILES['file_to_upl']['tmp_name'][$i], $file) )
+                                $success = true;
+                        }
+                        $succes = false;
+                        $ftype = $_FILES['file_to_upl']['type'][$i];
+                        
+                        if($ftype=='image/jpeg' || $ftype=='image/gif' || $ftype=='image/jpg' || $ftype=='image/png') {
+                            $material['naziv_materijala'] = $_FILES['file_to_upl']['name'][$i];
+                            $material['id_korisnika'] = $userid;
+                            $material['id_clanka'] = $articleid;
+                            $material['id_tipa_materijala'] = 1;
+                            $material['putanja'] = WEBSITE_ROOT_PATH . $file;
+                            $material['datum_objave'] = Server_time::get_virtualTime();
+                            Data_model::add_material_for_article($material);
+                        }
+                    }
+                }
+                
+                if($oke)
+                    Redirect('/areas/read/' . $areaid);
             }
             
             $article = Data_model::get_empty_article();
@@ -108,7 +203,6 @@ class Articles_controller extends Controller {
                 $art2 = Data_model::get_article($articleid);
                 $article['naslov'] = $art2['naslov'];
                 $article['sadrzaj'] = $art2['sadrzaj'];
-                
                 $article['link'] = 'articles/create/' . $areaid . '/' . $articleid;
             }
             echo $this->view->create($article);
@@ -142,7 +236,6 @@ class Articles_controller extends Controller {
         if($gradecnt=='0') {
             if(Data_model::ungrade_article($articleid, $userid) )
                 Redirect('/articles/read/' . $articleid);
-            exit;
         } elseif($gradecnt=='1' || 
                  $gradecnt=='2' || 
                  $gradecnt=='3' || 
@@ -154,7 +247,6 @@ class Articles_controller extends Controller {
             $grade['datum_ocjene'] = Server_time::get_virtualTime();
             if(Data_model::grade_article($grade) )
                 Redirect('/articles/read/' . $articleid);
-            exit;
         }
         Redirect('/articles/read/' . $articleid);
     }

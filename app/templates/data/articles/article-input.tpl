@@ -11,7 +11,7 @@
         </div>
         
         <div>
-            <input name="file_to_upl" type="file" multiple>
+            <input name="file_to_upl[]" type="file" multiple>
             <label for="file_to_upl">Sadržaj: </label>
         </div>
         

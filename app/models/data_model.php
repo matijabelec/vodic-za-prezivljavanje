@@ -522,7 +522,7 @@ class Data_model extends Model {
            !isset($article['sadrzaj']) || 
            !isset($article['datum_objave']) )
             return false;
-        return Database::insert('INSERT INTO clanci 
+        Database::insert('INSERT INTO clanci 
                                 (id_korisnika, id_podrucja, naslov, sadrzaj, datum_objave, status) 
                                  VALUES(:userid, :areaid, :title, :cdata, :date, 1)', 
                                array('userid'=>$article['id_korisnika'], 
@@ -530,6 +530,9 @@ class Data_model extends Model {
                                      'title'=>$article['naslov'],
                                      'cdata'=>$article['sadrzaj'],
                                      'date'=>$article['datum_objave']) );
+        $id = Database::query('SELECT max(id_clanka) AS br FROM clanci');
+        $val = $id[0];
+        return $val['br'];
     }
     public static function update_article($article) {
         if(!isset($article) || !is_array($article) )
@@ -549,6 +552,22 @@ class Data_model extends Model {
                                      'title'=>$article['naslov'], 
                                      'cdata'=>$article['sadrzaj'], 
                                      'date'=>$article['datum_objave']) );
+    }
+    
+    public static function add_material_for_article($material) {
+        if(!isset($material) )
+            return false;
+        return Database::insert('INSERT INTO materijali 
+                                 (id_tipa_materijala, id_korisnika, id_clanka, 
+                                 naziv_materijala, putanja, datum_objave, status) 
+                                 VALUES(:type, :userid, :articleid, :name, 
+                                 :path, :date, 1)', 
+                                array('name'=>$material['naziv_materijala'],
+                                      'userid'=>$type['id_korisnika'],
+                                      'articleid'=>$type['id_clanka'],
+                                      'type'=>$type['id_tipa_materijala'],
+                                      'path'=>$type['putanja'],
+                                      'date'=>$type['datum_objave']) );
     }
     
     ///////////////////////////////////////////////////////////////////////
