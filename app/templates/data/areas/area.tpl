@@ -1,4 +1,6 @@
 <section class="area-section-detailed">
+    {@more-controls}
+    
     <img class="area-img" src="{@slika}" alt="[slika područja {@naziv_podrucja}]">
     
     <p class="area-desc">{@opis}</p>

@@ -327,9 +327,8 @@ class Data_model extends Model {
             return false;
         Database::insert('UPDATE korisnici 
                           SET id_tipa_korisnika=2 
-                          WHERE id_tipa_korisnika=1 AND 
-                          id_korisnika=:modid AND 
-                          status=2', 
+                          WHERE id_tipa_korisnika=3 AND 
+                          id_korisnika=:modid', 
                           array('modid'=>$moderatorid) );
         $ok = Database::insert('INSERT INTO pretplate 
                                 (id_korisnika, id_podrucja, status) 

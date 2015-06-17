@@ -142,6 +142,7 @@ class Areas_view extends Webpage_view {
         $area['area-controls'] = 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/view">Natrag</a> ';
         
+        $area['more-controls'] = '';
         $body = $this->view_standard($area);
         
         $content = new Template('data/areas/view');
@@ -163,6 +164,8 @@ class Areas_view extends Webpage_view {
             $area['area-controls'] .= ' <a class="btn" href="' . WEBSITE_ROOT_PATH . '/subscribes/create/' . $areaid . '">Pretplati se</a>';
         else
             $area['area-controls'] .= ' <a class="btn" href="' . WEBSITE_ROOT_PATH . '/subscribes/delete/' . $areaid . '">Ukloni pretplatu</a>';
+        
+        $area['more-controls'] = '';
         $body = $this->view_standard($area);
         
         $content = new Template('data/areas/view');
@@ -183,6 +186,7 @@ class Areas_view extends Webpage_view {
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $area['id_podrucja'] . '">Uredi</a>' . 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create/' . $area['id_podrucja'] . '">Novi članak</a>';
         
+        $area['more-controls'] = '';
         $body = $this->view_standard($area);
         
         $content = new Template('data/areas/view');
@@ -202,7 +206,7 @@ class Areas_view extends Webpage_view {
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/view">Natrag</a> ' . 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $area['id_podrucja'] . '">Uredi</a>' . 
             '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/articles/create/' . $area['id_podrucja'] . '">Novi članak</a>';
-        
+        $area['more-controls'] = '<p style="text-align:right"><a href="' . WEBSITE_ROOT_PATH . '/moderators/create/' . $area['id_podrucja'] . '">Dodaj moderatora</a></p>';
         $body = $this->view_standard($area);
         
         $content = new Template('data/areas/view');
@@ -299,23 +303,30 @@ class Areas_view extends Webpage_view {
     
     
     protected function create_menu($data, $areaid=null) {
-        $create = '<p style="text-align:right"><a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create/"' . $areaid . '>Novo</a></p> ';
+        $create = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create">Novo</a> ';
+        $create2 = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/moderators/create/' . $areaid . '">Moderator</a> ';
         $read = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/read/' . $areaid . '">Više</a> ';
         $update = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/update/' . $areaid . '">Uredi</a> ';
         $delete = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/delete/' . $areaid . '">Izbriši</a> ';
         $activate = '<a class="btn" href="' . WEBSITE_ROOT_PATH . '/areas/create/' . $areaid . '">Aktiviraj</a> ';
         
+        $cc = '<p style="text-align:right">';
+        
         $m = '';
+        $c=0;
         if(is_array($data) )
             foreach($data as &$d)
                 switch($d) {
-                    case 'c': $m  .= $create; break;
+                    case 'c': $cc  .= $create; $c=1; break;
+                    case 'c2': $cc  .= $create2; $c=1; break;
                     case 'r': $m  .= $read; break;
                     case 'u': $m  .= $update; break;
                     case 'd': $m  .= $delete; break;
                     case 'a': $m  .= $activate; break;
                     default: break;
                 }
+        if($c)
+            $m = $cc . '<p>';
         return $m;
     }
 }
